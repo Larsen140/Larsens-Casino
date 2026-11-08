@@ -710,6 +710,67 @@ body.upd-new #tab-updates::after{content:'';position:absolute;top:8px;right:calc
 .fb-wrap[data-st=play] .fb-pause{display:grid}
 .fb-wrap.full .fb-pause{right:calc(60px + env(safe-area-inset-right))}
 .fb-pause:active{transform:scale(.92)}
+/* okey */
+.cz-seg:has(button:nth-child(4)){grid-template-columns:repeat(4,1fr)}
+.ok{display:flex;flex-direction:column;gap:10px}
+.ok-t{--w:clamp(24px,calc((100cqw - 40px)/12 - 3px),46px);position:relative;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:var(--w);height:calc(var(--w)*1.36);border-radius:calc(var(--w)*.16);background:linear-gradient(180deg,#fffaf0,#efe6d2);box-shadow:inset 0 -3px 0 rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.35);color:var(--tc);font-family:'JetBrains Mono',ui-monospace,monospace;user-select:none;flex:none;transition:transform .15s,box-shadow .15s}
+.ok-t b{font-size:calc(var(--w)*.52);font-weight:800;line-height:1}
+.ok-t i{width:calc(var(--w)*.2);height:calc(var(--w)*.2);border-radius:50%;background:var(--tc);margin-top:calc(var(--w)*.1);opacity:.85}
+.ok-t em{position:absolute;top:2px;right:2px;font-style:normal;font-size:calc(var(--w)*.2);font-weight:900;color:#a87412;font-family:system-ui,sans-serif}
+.ok-t.ok-wild{background:linear-gradient(180deg,#fff6d1,#f3d77a);box-shadow:inset 0 -3px 0 rgba(140,95,0,.25),0 0 0 2px #f2c230,0 0 12px rgba(242,194,48,.6)}
+.ok-t.ok-fake b{font-size:calc(var(--w)*.56)}
+.ok-t.sm{--w:clamp(18px,calc((100cqw - 60px)/14 - 3px),30px)}
+.ok-rack .ok-t,.ok-slot{cursor:pointer}
+.ok-t.sel{transform:translateY(-8px);box-shadow:inset 0 -3px 0 rgba(0,0,0,.12),0 0 0 3px var(--acc),0 8px 14px rgba(0,0,0,.4)}
+.ok-t.fresh{animation:okIn .4s cubic-bezier(.2,1.4,.4,1)}
+@keyframes okIn{from{transform:translateY(-30px) scale(.7);opacity:0}to{transform:none;opacity:1}}
+.ok-rack{display:grid;grid-template-columns:repeat(12,var(--w));--w:clamp(24px,calc((100cqw - 40px)/12 - 3px),46px);justify-content:center;gap:5px 3px;padding:10px 6px 12px;border-radius:14px;background:linear-gradient(180deg,#7a4a24,#5a3315 55%,#3f230d);box-shadow:inset 0 2px 0 rgba(255,255,255,.15),inset 0 -4px 0 rgba(0,0,0,.35),0 10px 24px rgba(0,0,0,.45)}
+.ok-slot{width:var(--w);height:calc(var(--w)*1.36);border-radius:calc(var(--w)*.16);background:rgba(0,0,0,.22);box-shadow:inset 0 1px 3px rgba(0,0,0,.5)}
+.ok-board{display:grid;grid-template-columns:1fr 1.5fr 1fr;grid-template-rows:auto auto auto;gap:8px;align-items:center;justify-items:center}
+.ok-opp{display:flex;align-items:center;gap:7px;padding:6px 10px 6px 6px;border-radius:999px;background:rgba(0,0,0,.3);color:#fff;transition:box-shadow .2s,background .2s;min-width:0}
+.ok-opp b{font-size:13px;display:block}.ok-opp small{font-size:11px;opacity:.7;white-space:nowrap}
+.ok-opp.on{background:color-mix(in srgb,var(--acc) 35%,rgba(0,0,0,.3));box-shadow:0 0 0 2px var(--acc),0 0 18px color-mix(in srgb,var(--acc) 50%,transparent)}
+.ok-av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:900;color:#fff;background:hsl(var(--h) 65% 45%);flex:none}
+.ok-pile{position:relative;display:grid;place-items:center;min-height:calc(var(--pw,34px)*1.36);--w:34px}
+.ok-pile small{position:absolute;bottom:-6px;right:-8px;font-size:10px;font-weight:800;color:#fff;background:rgba(0,0,0,.5);border-radius:999px;padding:1px 5px}
+.ok-pile .ok-t{--w:34px}
+.ok-empty{width:34px;height:46px;border-radius:6px;border:2px dashed rgba(255,255,255,.18)}
+.ok-pile.can{cursor:pointer;border-radius:10px;box-shadow:0 0 0 3px var(--acc),0 0 18px color-mix(in srgb,var(--acc) 60%,transparent);animation:okPulse 1.2s ease-in-out infinite}
+@keyframes okPulse{50%{box-shadow:0 0 0 3px var(--acc),0 0 4px transparent}}
+.ok-mid{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:16px;background:rgba(0,0,0,.25);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.ok-deck{position:relative;width:38px;height:52px}
+.ok-back{position:absolute;inset:0;border-radius:7px;background:linear-gradient(160deg,#f4ead2,#d9c9a3);box-shadow:inset 0 -3px 0 rgba(0,0,0,.15),0 2px 4px rgba(0,0,0,.4)}
+.ok-back+.ok-back{transform:translate(3px,-3px)}
+.ok-deck small{position:absolute;inset:0;display:grid;place-items:center;font-weight:900;color:#6b5320;font-size:14px;transform:translate(3px,-3px)}
+.ok-deck.can{cursor:pointer;border-radius:8px;box-shadow:0 0 0 3px var(--acc);animation:okPulse 1.2s ease-in-out infinite}
+.ok-ind{display:flex;flex-direction:column;align-items:center;gap:3px;color:rgba(255,255,255,.75);font-size:10.5px;font-weight:700;text-align:center}
+.ok-ind .ok-t{--w:30px}
+.ok-ind b{font-weight:900}
+.ok-status{font-size:12.5px;color:rgba(255,255,255,.85);text-align:center;line-height:1.3;min-height:32px;display:grid;place-items:center}
+.ok-status .ok-go{color:#ffd84a}
+.ok-ctrl{display:grid;grid-template-columns:auto auto 1fr;gap:8px}
+.ok-ctrl .bj-btn.sm{padding-inline:14px}
+.ok-fin{background:linear-gradient(180deg,#ffe07a,#f2b705)!important;color:#3a2600!important;animation:okPulse 1.2s ease-in-out infinite}
+.ok-end{border-radius:16px;padding:14px;text-align:center;background:rgba(0,0,0,.45);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);animation:okIn .35s ease-out}
+.ok-end.win{box-shadow:0 0 0 2px #f2c230,0 0 30px rgba(242,194,48,.35)}
+.ok-end h3{margin:0 0 4px;font-size:20px}.ok-end p{margin:0 0 10px;opacity:.85;font-size:14px}
+.ok-end.win h3{color:#ffd84a}
+.ok-wh{display:flex;flex-wrap:wrap;justify-content:center;gap:3px;margin-bottom:12px}
+.ok-endbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ok-intro{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:10px 6px;color:#fff;flex:1;justify-content:center}
+.ok-intro h3{margin:0;font-size:26px;letter-spacing:.02em}
+.ok-grp{display:inline-flex;gap:2px;margin:0 4px 4px}
+.ok-intro .ok-t{--w:34px}
+.ok-intro p{margin:0;max-width:440px;font-size:13px;opacity:.85;line-height:1.45}
+.ok-intro ul{margin:0;padding-left:18px;max-width:440px;text-align:left;font-size:13px;opacity:.85;line-height:1.45;display:flex;flex-direction:column;gap:4px}
+.ok-logo{display:flex;gap:6px}.ok-logo .ok-t{--w:40px;transform:rotate(calc(var(--r,0)*1deg))}
+.ok-logo .ok-t:nth-child(1){--r:-8}.ok-logo .ok-t:nth-child(2){--r:-3}.ok-logo .ok-t:nth-child(3){--r:3}.ok-logo .ok-t:nth-child(4){--r:8}
+.ok-stakes{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.ok-stakes{flex-wrap:nowrap}.ok-stake{border:0;border-radius:999px;padding:8px 10px;font:inherit;font-weight:800;font-size:12.5px;white-space:nowrap;color:#fff;background:rgba(255,255,255,.1);cursor:pointer}
+.ok-stake[aria-pressed=true]{background:var(--acc);box-shadow:0 0 0 2px rgba(255,255,255,.3)}
+.ok-stake:disabled{opacity:.35}
+.ok-start{min-width:220px}
+@container (min-width:700px){.ok-pile .ok-t,.ok-pile{--w:42px}.ok-opp b{font-size:15px}.ok-status{font-size:14px}}
 /* assistant */
 .ch-view{display:flex;flex-direction:column;gap:10px;max-width:760px;margin:0 auto}
 .ch-card{display:flex;flex-direction:column;height:calc(100dvh - 240px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));min-height:360px;max-height:820px;border-radius:26px;overflow:hidden;background:var(--ch-bg);color:var(--ch-text);border:1px solid color-mix(in srgb,var(--ch-text) 12%,transparent);box-shadow:0 18px 50px -18px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(var(--blur,20px)) saturate(170%);backdrop-filter:blur(var(--blur,20px)) saturate(170%)}
@@ -1254,6 +1315,7 @@ const later=(ms,k)=>setTimeout(()=>sfx(k),ms);
 function bjRender(){
   if(tab==='blackjack'){render();bjAfter()}
   [...BJ.dealer,...BJ.hands.flatMap(h=>h.cards)].forEach(c=>{c.fresh=false;c.flip=false;c.delay=0});
+  if(OK.rack)OK.rack.forEach(t=>{if(t)t.fresh=false});
   BJ.popMsg=false;BJ.dropNew=false;RL.pop=false;RL.lastK=null;SL.pop=false;
 }
 function bjAfter(){
@@ -1439,12 +1501,208 @@ function czAuto(){let a='';try{const cc=currentColors();if(cc&&cc.accent)a=cc.ac
 const CZ_THEMES={auto:{n:'App-Farben',get acc(){return czAuto().acc},get f1(){return czAuto().f1},get f2(){return czAuto().f2},get f3(){return czAuto().f3}},pikass:{n:'Pik Ass',acc:'#e3263b',f1:'#3d0a15',f2:'#120508',f3:'#060607'},gruen:{n:'Klassik Grün',acc:'#d4af37',f1:'#1d6b45',f2:'#0b3d26',f3:'#04170e'},blau:{n:'Royal Blau',acc:'#4da3ff',f1:'#16336b',f2:'#0a1a3a',f3:'#050a17'},lila:{n:'Neon Lila',acc:'#c86bff',f1:'#3d1257',f2:'#1a0726',f3:'#09030f'},gold:{n:'Gold Noir',acc:'#d4af37',f1:'#2b2410',f2:'#100d06',f3:'#050403'},babygold:{n:'Babyblau Gold',acc:'#e9c25a',f1:'#6aa8e0',f2:'#2a5a8c',f3:'#102843'}};
 const CZ_CARDS={rot:{n:'Rot',cf1:'#f0364c',cf2:'#c8162e',cf3:'#9c0f22',inkb:'#160a0c',inkr:'#fff1f3',dot:'rgba(0,0,0,.28)'},weiss:{n:'Klassisch',cf1:'#ffffff',cf2:'#f5f2ec',cf3:'#e4ded3',inkb:'#141414',inkr:'#c8102e',dot:'rgba(0,0,0,.05)'},schwarz:{n:'Schwarz',cf1:'#33333a',cf2:'#18181c',cf3:'#0a0a0c',inkb:'#f2f2f2',inkr:'#ff4d61',dot:'rgba(255,255,255,.07)'},gold:{n:'Gold',cf1:'#f8e08e',cf2:'#d4af37',cf3:'#9c7a1c',inkb:'#1a1408',inkr:'#8b0f1f',dot:'rgba(0,0,0,.14)'}};
 function czVars(){const t=CZ_THEMES[S.settings.czTheme]||CZ_THEMES.pikass,c=CZ_CARDS[S.settings.czCards]||CZ_CARDS.rot;return `--acc:${t.acc};--f1:${t.f1};--f2:${t.f2};--f3:${t.f3};--cf1:${c.cf1};--cf2:${c.cf2};--cf3:${c.cf3};--inkb:${c.inkb};--inkr:${c.inkr};--dot:${c.dot}`}
-const GAMES=[['blackjack','Blackjack'],['roulette','Roulette'],['slots','Slots']];
+const GAMES=[['blackjack','Blackjack'],['roulette','Roulette'],['slots','Slots'],['okey','Okey']];
 function czGame(){return S.settings.casinoGame||'blackjack'}
-function czBusy(){return BJ.phase==='play'||BJ.phase==='dealer'||RL.phase==='spin'||SL.phase==='spin'||SL.free>0}
+function czBusy(){return OK.phase==='play'||BJ.phase==='play'||BJ.phase==='dealer'||RL.phase==='spin'||SL.phase==='spin'||SL.free>0}
+/* ---------- Okey (türkisches Steinspiel): du gegen 3 Computer-Gegner ---------- */
+/* 106 Steine: 4 Farben × 1–13 × 2 + 2 falsche Okeys. Spielrichtung: du → rechts → gegenüber → links → du.
+   Jeder nimmt den zuletzt abgeworfenen Stein seines linken Nachbarn oder zieht aus der Mitte. Gewonnen hat, wer 14 Steine
+   in Reihen (gleiche Farbe, fortlaufend, 12-13-1 erlaubt) und Gruppen (gleiche Zahl, verschiedene Farben) legt
+   oder 7 Paare hat und den 15. Stein ablegt. */
+const OK_COLS=[['Gelb','#e0a400'],['Blau','#1f6fe0'],['Schwarz','#1c1d22'],['Rot','#d8262f']];
+const OK_NAMES=['Du','Mehmet','Ayşe','Can'];
+const OK_SLOTS=24,OK_ROW=12;
+const OK={phase:'intro',stake:50,round:0};
+function okIsWild(t){return t&&!t.f&&OK.okey&&t.c===OK.okey.c&&t.n===OK.okey.n}
+function okEff(t){return t.f?{c:OK.okey.c,n:OK.okey.n}:t}
+function okShuffle(a){for(let i=a.length-1;i>0;i--){const j=rndInt(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+/* can these tiles be split completely into runs and groups? jokers = wild okey tiles */
+function okMeldable(tiles){
+  let J=0;const cnt=Array.from({length:4},()=>Array(14).fill(0));
+  for(const t of tiles){if(okIsWild(t)){J++;continue}const e=okEff(t);cnt[e.c][e.n]++}
+  const memo=new Map();
+  const rec=j=>{
+    let c=-1,n=-1;
+    outer:for(let a=0;a<4;a++)for(let b=1;b<=13;b++)if(cnt[a][b]){c=a;n=b;break outer}
+    if(c<0)return true;
+    const key=cnt.map(r=>r.join('')).join('|')+'/'+j;if(memo.has(key))return memo.get(key);
+    let ok=false;cnt[c][n]--;
+    /* group: same number, different colours, 3–4 tiles */
+    const others=[0,1,2,3].filter(x=>x!==c&&cnt[x][n]>0);
+    for(let m=0;m<(1<<others.length)&&!ok;m++){const pick=others.filter((_,i)=>m>>i&1);
+      for(let jj=Math.max(0,2-pick.length);jj<=Math.min(j,3-pick.length)&&!ok;jj++){pick.forEach(x=>cnt[x][n]--);ok=rec(j-jj);pick.forEach(x=>cnt[x][n]++)}}
+    /* run in colour c starting at n (jokers may stand in front of it and fill gaps) */
+    for(let pre=0;pre<=Math.min(j,n-1)&&!ok;pre++){
+      let jl=j-pre,len=1+pre;const used=[];
+      if(len>=3)ok=rec(jl);
+      for(let k=n+1;k<=14&&!ok;k++){const v=k===14?1:k;if(k===14&&n===1)break;
+        if(cnt[c][v]>0){cnt[c][v]--;used.push(v)}else if(jl>0){jl--;used.push(0)}else break;
+        len++;if(len>=3)ok=rec(jl)}
+      used.forEach(x=>{if(x)cnt[c][x]++})}
+    /* tile 1 as the end of 12-13-1 */
+    if(!ok&&n===1){for(let start=12;start>=2&&!ok;start--){let jl=j,used=[];let fine=true;for(let x=start;x<=13;x++){if(cnt[c][x]>0){cnt[c][x]--;used.push(x)}else if(jl>0)jl--;else{fine=false;break}}
+      if(fine&&14-start+1>=3)ok=rec(jl);used.forEach(x=>cnt[c][x]++)}}
+    cnt[c][n]++;memo.set(key,ok);return ok};
+  return rec(J);
+}
+function okPairs(tiles){let J=0;const m=new Map();for(const t of tiles){if(okIsWild(t)){J++;continue}const e=okEff(t),k=e.c+'-'+e.n;m.set(k,(m.get(k)||0)+1)}let single=0;for(const v of m.values())single+=v%2;return single<=J}
+/* hand of 15: which discard finishes the game? */
+function okFinish(h){
+  let best=null;
+  for(let i=0;i<h.length;i++){const rest=h.filter((_,k)=>k!==i);
+    if(okMeldable(rest)){const r={i,type:okIsWild(h[i])?'okey':'normal'};if(r.type==='okey')return r;best=best||r}
+    else if(!best&&okPairs(rest))best={i,type:'cift'}}
+  return best;
+}
+/* how useful a tile is in a hand (for bots and hints) */
+function okUse(t,h){if(okIsWild(t))return 99;const e=okEff(t);let u=0;const seen=new Set();
+  for(const o of h){if(o===t)continue;if(okIsWild(o)){u+=1;continue}const f=okEff(o);
+    if(f.c===e.c){const d=Math.abs(f.n-e.n);if(d===1||d===12)u+=3;else if(d===2)u+=1}
+    else if(f.n===e.n&&!seen.has(f.c)){seen.add(f.c);u+=3}}
+  return u}
+function okNew(){
+  const st=bjS();if(st.bal<OK.stake){toast('Nicht genug Guthaben.');return}
+  st.bal=Math.round((st.bal-OK.stake)*100)/100;saveSettings();
+  let id=0;const deck=[];for(let c=0;c<4;c++)for(let n=1;n<=13;n++)for(let k=0;k<2;k++)deck.push({id:id++,c,n});deck.push({id:id++,f:1},{id:id++,f:1});
+  okShuffle(deck);
+  let ind=deck.findIndex(t=>!t.f);const indicator=deck.splice(ind,1)[0];
+  OK.ind=indicator;OK.okey={c:indicator.c,n:indicator.n%13+1};
+  const start=OK.round%4;OK.round++;
+  OK.hands=[[],[],[],[]];for(let p=0;p<4;p++)for(let k=0;k<(p===start?15:14);k++)OK.hands[p].push(deck.pop());
+  OK.deck=deck;OK.disc=[[],[],[],[]];OK.turn=start;OK.phase='play';OK.sel=null;OK.win=null;OK.lastTaken=null;
+  OK.rack=Array(OK_SLOTS).fill(null);okArrange('runs',true);
+  OK.need=start===0?'discard':'draw';
+  sfx('riffle');bjRender();
+  if(start!==0)okBotLoop();
+}
+function okHandFromRack(){return OK.rack.filter(Boolean)}
+function okPlace(t){let i=-1;for(let k=OK_SLOTS-1;k>=0;k--)if(!OK.rack[k]){i=k;break}
+  /* prefer the first free slot after the last tile */
+  const last=OK.rack.map((x,k)=>x?k:-1).reduce((a,b)=>Math.max(a,b),-1);if(last+1<OK_SLOTS&&!OK.rack[last+1])i=last+1;
+  if(i>=0)OK.rack[i]=t}
+/* sort the rack: 'runs' = melds first (runs, then groups), 'pairs' = identical tiles side by side */
+function okBlocks(h,mode){
+  const wild=h.filter(okIsWild),rest=h.filter(t=>!okIsWild(t));
+  const blocks=[];let left=rest.slice();
+  if(mode==='pairs'){const m=new Map();left.forEach(t=>{const e=okEff(t),k=e.c*20+e.n;(m.get(k)||m.set(k,[]).get(k)).push(t)});
+    const ps=[],ss=[];[...m.entries()].sort((a,b)=>a[0]-b[0]).forEach(([,a])=>{while(a.length>=2)ps.push(a.splice(0,2));ss.push(...a)});
+    ps.forEach(p=>blocks.push(p));if(ss.length)blocks.push(ss);if(wild.length)blocks.push(wild)}
+  else{
+    for(let c=0;c<4;c++){const col=left.filter(t=>okEff(t).c===c).sort((a,b)=>okEff(a).n-okEff(b).n);const used=new Set();let run=[];
+      const flush=()=>{if(run.length>=3){blocks.push(run.slice());run.forEach(t=>used.add(t))}run=[]};
+      for(const t of col){const n=okEff(t).n;if(!run.length||n===okEff(run[run.length-1]).n+1)run.push(t);else if(n===okEff(run[run.length-1]).n)continue;else{flush();run=[t]}}flush();
+      left=left.filter(t=>!used.has(t))}
+    for(let n=1;n<=13;n++){const g=[];const cs=new Set();left.forEach(t=>{const e=okEff(t);if(e.n===n&&!cs.has(e.c)){cs.add(e.c);g.push(t)}});if(g.length>=3){blocks.push(g);left=left.filter(t=>!g.includes(t))}}
+    left.sort((a,b)=>okEff(a).c-okEff(b).c||okEff(a).n-okEff(b).n);
+    if(left.length)blocks.push(left);if(wild.length)blocks.push(wild)}
+  return blocks}
+function okArrange(mode,quiet){
+  const h=okHandFromRack().length?okHandFromRack():OK.hands[0].slice();
+  const blocks=okBlocks(h,mode);
+  const rack=Array(OK_SLOTS).fill(null);let pos=0;
+  for(const b of blocks){const row=Math.floor(pos/OK_ROW),room=(row+1)*OK_ROW-pos;if(b.length<=OK_ROW&&b.length>room&&row===0)pos=OK_ROW;
+    for(const t of b){if(pos>=OK_SLOTS)break;rack[pos++]=t}if(pos<OK_SLOTS&&pos%OK_ROW)pos++}
+  /* anything that did not fit (very rare) goes into the remaining gaps */
+  const placed=new Set(rack.filter(Boolean));h.filter(t=>!placed.has(t)).forEach(t=>{const i=rack.indexOf(null);if(i>=0)rack[i]=t});
+  OK.rack=rack;OK.sel=null;if(!quiet){sfx('stack');bjRender()}
+}
+function okSync(){OK.hands[0]=okHandFromRack()}
+function okDraw(from){
+  if(OK.phase!=='play'||OK.turn!==0||OK.need!=='draw')return;
+  let t;if(from==='disc'){t=OK.disc[3].pop();if(!t)return}else{if(!OK.deck.length){okEnd(-1);return}t=OK.deck.pop()}
+  t.fresh=true;OK.lastTaken=t;okPlace(t);okSync();OK.need='discard';sfx('card');bjRender();
+}
+function okDiscard(){
+  if(OK.phase!=='play'||OK.turn!==0||OK.need!=='discard'||OK.sel==null)return;
+  const t=OK.rack[OK.sel];if(!t)return;
+  const rest=okHandFromRack().filter(x=>x!==t);
+  if(okMeldable(rest)){OK.rack[OK.sel]=null;okSync();okEnd(0,okIsWild(t)?'okey':'normal',t);return}
+  if(okPairs(rest)){OK.rack[OK.sel]=null;okSync();okEnd(0,'cift',t);return}
+  OK.rack[OK.sel]=null;OK.sel=null;okSync();OK.disc[0].push(t);sfx('chip');
+  OK.turn=1;OK.need='draw';bjRender();okBotLoop();
+}
+function okFinishNow(){if(OK.phase!=='play'||OK.turn!==0||OK.need!=='discard')return;const h=okHandFromRack(),f=okFinish(h);if(!f){toast('Noch nicht fertig.');return}OK.sel=OK.rack.indexOf(h[f.i]);okDiscard()}
+function okBotLoop(){
+  if(OK.phase!=='play'||OK.turn===0)return;
+  const i=OK.turn,wait=calm()?250:850+rndInt(500);
+  clearTimeout(OK.timer);OK.timer=setTimeout(()=>{if(OK.phase!=='play'||OK.turn!==i)return;okBot(i)},wait);
+}
+function okBot(i){
+  const h=OK.hands[i],prev=(i+3)%4;
+  if(h.length===14){
+    const top=OK.disc[prev][OK.disc[prev].length-1];
+    if(top&&(okIsWild(top)||okUse(top,h)>=6||(Math.random()<.7&&okFinish(h.concat([top]))))){h.push(OK.disc[prev].pop())}
+    else{if(!OK.deck.length){okEnd(-1);return}h.push(OK.deck.pop())}
+  }
+  const f=okFinish(h);if(f){const t=h.splice(f.i,1)[0];okEnd(i,f.type,t);return}
+  const cand=h.map((t,k)=>({k,v:okIsWild(t)?1e9:okUse(t,h)+Math.random()*.5})).sort((a,b)=>a.v-b.v);
+  const worst=cand[Math.random()<.3?Math.min(rndInt(3),cand.length-1):0].k;
+  const t=h.splice(worst,1)[0];OK.disc[i].push(t);sfx('chip');
+  OK.turn=(i+1)%4;OK.need='draw';bjRender();okBotLoop();
+}
+function okEnd(w,type,t){
+  clearTimeout(OK.timer);OK.phase='end';const st=bjS();OK.win={w,type,t};
+  if(w===0){const mult=type==='okey'||type==='cift'?8:4,ret=OK.stake*mult;czCredit(st,ret);OK.win.ret=ret;OK.win.net=ret-OK.stake;BJ.fx='bj';sfx(type==='normal'?'win':'bj');if(!calm()&&typeof confetti==='function')try{confetti(110)}catch(e){}}
+  else if(w<0){czCredit(st,OK.stake);OK.win.net=0;sfx('push')}
+  else{OK.win.net=-OK.stake;sfx('rllose')}
+  saveSettings();bjRender();
+}
+function okTileHTML(t,extra,attrs){
+  if(!t)return '';const wild=okIsWild(t),col=t.f?OK_COLS[OK.okey.c][1]:OK_COLS[t.c][1];
+  return `<span class="ok-t${wild?' ok-wild':''}${t.f?' ok-fake':''}${extra||''}" style="--tc:${col}" ${attrs||''}><b>${t.f?'★':t.n}</b><i></i>${wild?'<em>OK</em>':''}</span>`}
+function okStatus(){
+  if(OK.phase!=='play')return '';
+  if(OK.turn!==0)return `<b>${OK_NAMES[OK.turn]}</b> ist dran…`;
+  if(OK.need==='draw')return 'Du bist dran: Nimm den Stein links oder zieh aus der Mitte.';
+  const f=okFinish(okHandFromRack());
+  return f?'<b class="ok-go">Du kannst fertig machen!</b>':(OK.sel==null?'Wähle einen Stein zum Abwerfen.':'Tippe „Abwerfen“ oder auf deinen Ablageplatz rechts.');
+}
+function vOkey(){
+  const st=bjS();
+  if(OK.phase==='intro'||!OK.hands){
+    return `<section class="bj-table ok" style="${czVars()}" aria-label="Okey-Tisch">${czTop()}${czSwitch()}
+      <div class="ok-intro"><div class="ok-logo">${[0,1,2,3].map(c=>`<span class="ok-t" style="--tc:${OK_COLS[c][1]}"><b>${[1,7,13,5][c]}</b><i></i></span>`).join('')}</div>
+      <h3>Okey</h3><p>Das türkische Steinspiel gegen Mehmet, Ayşe und Can. Bilde Reihen (gleiche Farbe, fortlaufend) und Gruppen (gleiche Zahl, verschiedene Farben) aus deinen 14 Steinen oder sammle 7 Paare.</p>
+      <div class="ok-stakes">${[10,50,100,500,1000].map(v=>`<button class="ok-stake" data-act="ok-stake" data-v="${v}" aria-pressed="${OK.stake===v}" ${v>st.bal?'disabled':''}>${fmtC(v)}</button>`).join('')}</div>
+      <button class="bj-btn ok-start" data-act="ok-new" ${OK.stake>st.bal?'disabled':''}>Spielen · ${fmtC(OK.stake)}</button>
+      ${st.bal<10?`<button class="bj-btn" data-act="bj-refill">1.000 € nachfüllen</button>`:''}
+      <ul><li>Nimm den Stein deines linken Nachbarn oder zieh aus der Mitte, dann wirf einen ab.</li><li>Der <b>Okey</b> (gleiche Farbe, eine Zahl höher als der Anzeiger) ist ein Joker, der ★ zählt als Okey-Stein.</li><li>Gewinn: <b>4× Einsatz</b>, mit Okey abgeworfen oder 7 Paare: <b>8× Einsatz</b>.</li></ul></div></section>`;
+  }
+  const opp=i=>{const on=OK.phase==='play'&&OK.turn===i;return `<div class="ok-opp${on?' on':''}"><span class="ok-av" style="--h:${[0,200,320,30][i]}">${OK_NAMES[i][0]}</span><div><b>${OK_NAMES[i]}</b><small>${OK.hands[i].length} Steine${on?' · denkt…':''}</small></div></div>`};
+  const pile=(i,cls,act)=>{const d=OK.disc[i],t=d[d.length-1];return `<div class="ok-pile ${cls}"${act?` data-act="${act}" role="button" tabindex="0"`:''}>${t?okTileHTML(t):'<span class="ok-empty"></span>'}${d.length>1?`<small>${d.length}</small>`:''}</div>`};
+  const myTurn=OK.phase==='play'&&OK.turn===0,canDraw=myTurn&&OK.need==='draw',canDisc=myTurn&&OK.need==='discard';
+  const hand=okHandFromRack(),fin=canDisc&&okFinish(hand);
+  const rack=OK.rack.map((t,i)=>t?okTileHTML(t,(OK.sel===i?' sel':'')+(t.fresh?' fresh':''),`data-act="ok-slot" data-i="${i}" role="button" tabindex="0"`):`<span class="ok-slot" data-act="ok-slot" data-i="${i}"></span>`);
+  let end='';
+  if(OK.phase==='end'){const w=OK.win;const wh=w.w>0?OK.hands[w.w]:null;
+    end=`<div class="ok-end ${w.w===0?'win':w.w<0?'draw':'lose'}"><h3>${w.w===0?(w.type==='okey'?'Okey! Mit dem Okey beendet':w.type==='cift'?'Gewonnen mit 7 Paaren!':'Gewonnen!'):w.w<0?'Unentschieden':OK_NAMES[w.w]+' hat gewonnen'}</h3>
+      <p>${w.w===0?`+${fmtC(w.ret)} (${w.type==='normal'?'4×':'8×'} Einsatz)`:w.w<0?'Die Mitte ist leer, dein Einsatz kommt zurück.':`Dein Einsatz von ${fmtC(OK.stake)} ist weg.`}</p>
+      ${wh?`<div class="ok-wh">${okBlocks(wh,okMeldable(wh)?'runs':'pairs').map(b=>`<span class="ok-grp">${b.map(t=>okTileHTML(t,' sm')).join('')}</span>`).join('')}</div>`:''}
+      <div class="ok-endbtns"><button class="bj-btn" data-act="ok-new" ${OK.stake>st.bal?'disabled':''}>Nochmal · ${fmtC(OK.stake)}</button><button class="bj-btn ghost" data-act="ok-intro">Einsatz ändern</button></div></div>`}
+  return `<section class="bj-table ok" style="${czVars()}" aria-label="Okey-Tisch">${czTop()}${czSwitch()}
+    <div class="ok-board">
+      ${pile(2,'tl')}${opp(2)}${pile(1,'tr')}
+      ${opp(3)}<div class="ok-mid"><div class="ok-deck${canDraw?' can':''}" ${canDraw?'data-act="ok-deck" role="button" tabindex="0"':''}><span class="ok-back"></span><span class="ok-back"></span><small>${OK.deck.length}</small></div>
+        <div class="ok-ind"><small>Anzeiger</small>${okTileHTML(OK.ind)}<small>Okey: <b style="color:${OK_COLS[OK.okey.c][1]==='#1c1d22'?'#cfd3dc':OK_COLS[OK.okey.c][1]}">${OK_COLS[OK.okey.c][0]} ${OK.okey.n}</b></small></div></div>${opp(1)}
+      ${pile(3,'bl'+(canDraw&&OK.disc[3].length?' can':''),canDraw&&OK.disc[3].length?'ok-take':'')}<div class="ok-status">${okStatus()}</div>${pile(0,'br'+(canDisc&&OK.sel!=null?' can':''),canDisc?'ok-disc':'')}
+    </div>
+    ${end}
+    <div class="ok-rack">${rack.slice(0,OK_ROW).join('')}${rack.slice(OK_ROW).join('')}</div>
+    ${OK.phase==='play'?`<div class="ok-ctrl"><button class="bj-btn ghost sm" data-act="ok-sort" data-m="runs" ${OK.phase!=='play'?'disabled':''}>Reihen</button><button class="bj-btn ghost sm" data-act="ok-sort" data-m="pairs" ${OK.phase!=='play'?'disabled':''}>Paare</button>
+      ${fin?`<button class="bj-btn ok-fin" data-act="ok-finish">Fertig machen</button>`:`<button class="bj-btn" data-act="ok-disc" ${canDisc&&OK.sel!=null?'':'disabled'}>Abwerfen</button>`}</div>`:''}
+    <div class="bj-foot">Okey · Einsatz ${fmtC(OK.stake)} · Gewinn 4× (mit Okey oder Paaren 8×)</div></section>`;
+}
+function okSlot(i){
+  if(OK.phase!=='play')return;const t=OK.rack[i];
+  if(OK.sel==null){if(t){OK.sel=i;sfx('tap')}}
+  else if(OK.sel===i)OK.sel=null;
+  else{const a=OK.rack[OK.sel];OK.rack[OK.sel]=OK.rack[i];OK.rack[i]=a;OK.sel=null;sfx('tap')}
+  OK.rack.forEach(x=>{if(x)x.fresh=false});bjRender();
+}
+
 function czSwitch(){const g=czGame(),busy=czBusy();return `<div class="cz-seg" role="tablist" aria-label="Spiel">${GAMES.map(([k,l])=>`<button role="tab" data-act="cz-game" data-g="${k}" aria-selected="${g===k}" ${busy&&g!==k?'disabled':''}>${l}</button>`).join('')}</div>`}
 function czTop(){const st=bjS();return `<div class="bj-top"><div class="bj-balance"><small>Guthaben</small><b id="bj-bal">${fmtC(BJ.balFrom!=null?BJ.balFrom:st.bal)}</b></div><div class="bj-tools">${czRecPill()}<button class="bj-ico" data-act="bj-sound" aria-pressed="${!!st.sound}" aria-label="Ton"><svg viewBox="0 0 24 24" aria-hidden="true">${st.sound?BJI.on:BJI.off}</svg></button></div></div>`}
-function vCasino(){const g=czGame();return g==='roulette'?vRoulette():g==='slots'?vSlots():vBlackjack()}
+function vCasino(){const g=czGame();return g==='okey'?vOkey():g==='roulette'?vRoulette():g==='slots'?vSlots():vBlackjack()}
 function czCredit(st,ret){BJ.balFrom=st.bal;st.bal=Math.round((st.bal+ret)*100)/100;czRecord(st)}
 /* highscore: the highest balance ever reached; survives a balance reset */
 let recordUntil=0;
@@ -2178,6 +2436,7 @@ const CH_FAQ=[
   [['roulette','kessel','rot','schwarz','zahl','null','dutzend','gerade','ungerade'],()=>'**Roulette** (europäisch, eine Null):\n• Wähle einen Chip und tippe auf Felder, um zu setzen.\n• Rot/Schwarz, Gerade/Ungerade, 1–18/19–36 zahlen 1 zu 1.\n• Dutzende (1–12, 13–24, 25–36) zahlen 2 zu 1.\n• Eine einzelne Zahl zahlt 35 zu 1.\n• Bei 0 verlieren alle Außenwetten.\nMit Wiederholen setzt du die letzte Runde nochmal.'],
   [['flying','bird','vogel','flug','fliegen','figur','charakter','character','saeule','pinguin','drache','rakete','ufo','melone','skin','vollbild'],()=>'**Flying Bird:** Tippe (am PC Leertaste), um zu fliegen, und weiche den Säulen aus. Unterwegs sammelst du Geld: Münze 2 €, Geldbündel 10 €, Diamant 50 €. Alles landet direkt in deinem Casino-Guthaben. Vor dem Start wählst du eine von 9 Figuren, z. B. Spatz, Drache, Rakete, Ufo, Geldsack oder Wassermelone, und für jede Figur eine eigene Farbe. Mit dem Vollbild-Knopf (am PC Taste F) spielst du im Vollbild. Power-ups: Magnet zieht Geld an, Schild rettet dich einmal, Doppelgeld verdoppelt 8 Sekunden lang. Combos ab 5 Teilen hintereinander zahlen ×2, ab 10 ×3. Ab 10 Punkten gibt es Medaillen. Je weiter du kommst, desto schneller wird es, später bewegen sich Säulen. Das Spiel läuft im Blockwelt-3D-Look. In den Einstellungen wählst du die Map: Wiese, Wüste, Schnee, Vulkan oder Weltraum.'],
   [['was ist neu','neuigkeit','changelog','patch','neue version','updates'],()=>'Alle Neuerungen stehen im Tab **Updates** unten in der Leiste, mit Datum und Version. Aktuell: v'+UPDATES[0].v+' – '+UPDATES[0].t+'.'],
+  [['okey','okay','stein','steine','istaka','gosterge','anzeiger','tuerkisch'],()=>'**Okey** ist das türkische Steinspiel im Casino (4. Spiel neben Blackjack, Roulette, Slots). Du spielst gegen Mehmet, Ayşe und Can.\n• Du hast 14 Steine. Nimm den Stein deines linken Nachbarn (links unten) oder zieh aus der Mitte, dann wirf einen ab (rechts unten).\n• Ziel: alle 14 Steine in Reihen (gleiche Farbe, fortlaufend, auch 12-13-1) und Gruppen (gleiche Zahl, verschiedene Farben, 3–4 Steine) oder 7 Paare.\n• Der **Okey** ist ein Joker: gleiche Farbe wie der Anzeiger, eine Zahl höher. Der ★-Stein zählt als dieser Okey-Wert.\n• Antippen wählt einen Stein, nochmal antippen auf einen Platz verschiebt ihn. „Reihen“ und „Paare“ sortieren automatisch.\n• Gewinn 4× Einsatz, mit Okey abgeworfen oder 7 Paaren 8× Einsatz.'],
   [['freispiel','free spin','freespin','free'],()=>'**Freispiele:** Landet das FREE-Symbol auf allen drei Walzen, bekommst du **10 Freispiele**. Sie kosten nichts und jeder Gewinn darin zählt **doppelt**. Sie laufen automatisch nacheinander ab.'],
   [['slot','automat','walze','spielautomat','symbol','gewinnlinie','linie','777','bar'],()=>'**Slots:** Wähle deinen Einsatz und tippe auf Drehen. Es gibt 5 Gewinnlinien (3 waagerecht, 2 schräg).\n• 7 7 7 zahlt am meisten, danach BAR, Ass und die Kartenfarben.\n• Drei gleiche Farben (z. B. ♥ ♥ ♥) zahlen ebenfalls.\n• 3× FREE startet 10 Freispiele mit doppeltem Gewinn.\nDie genauen Gewinne stehen neben den Walzen.'],
   [['highscore','rekord','bestwert','pokal'],()=>'Der **Highscore** ist dein höchster Kontostand aller Zeiten, gezählt wird nur Geld aus Blackjack, Roulette und Slots. Geld aus Flying Bird landet zwar im Guthaben, zählt aber nicht zum Casino-Highscore. Flying Bird hat einen eigenen Rekord nach Punkten. Du siehst ihn oben im Casino und in den '+'Optionen'+'. Er bleibt erhalten, auch wenn du dein Guthaben zurücksetzt.'],
@@ -2211,7 +2470,7 @@ function faqAnswer(q){
 }
 const CH_RULES=`Du bist "Larsens Assistent", der freundliche Hilfe-Chat in der privaten Web-App "Larsens World". Antworte auf Deutsch, kurz (höchstens 6 Sätze oder eine kurze Liste mit •), locker und hilfreich. Nutze **fett** sparsam, sonst kein Markdown.
 Die App: Notizen (anheften, suchen, Farben), To-dos (Priorität, Fälligkeit, Filter), Termine (Export als .ics in den iPhone-Kalender), Trading Journal (Gewinn, Trefferquote, Kurve), Angebote (jeden Montag werden Prospekte von Aldi, Lidl, Rewe, Edeka etc. für die Merkliste durchsucht; neue Produkte werden sofort gesucht; "Jetzt suchen" startet manuell), Casino, Bird (Flying Bird), Optionen (App-Themes wie Babyblau Gold, eigene Farben, Unschärfe, Animationen, App-Größe am PC, Tisch- und Kartendesigns, Casino-Sounds, Assistent-Farben). Daten liegen privat im Claude-Konto.
-Casino: Spielgeld, keine Echtgeld-Ein- oder Auszahlung. Start 1.000 €, alle Spiele teilen ein Guthaben, "1.000 € nachfüllen" wenn pleite, Highscore = höchster Kontostand aller Zeiten ohne Geld aus Flying Bird (Bird hat eigenen Punkte-Rekord). Blackjack: 6 Decks, Dealer steht auf Soft 17, Blackjack zahlt 3 zu 2, Ziehen/Halten/Doppeln/Teilen, Glühbirne zeigt Basic-Strategy-Tipps, keine Versicherung. Roulette: europäisch mit einer Null; Rot/Schwarz, Gerade/Ungerade, 1–18/19–36 zahlen 1:1, Dutzende 2:1, Einzelzahl 35:1. Slots: 3 Walzen, 5 Gewinnlinien, 7-7-7 zahlt am meisten, dann BAR, Ass, drei gleiche Kartenfarben; 3× FREE = 10 Freispiele mit doppeltem Gewinn; Auszahlungsquote ca. 94 %. Flying Bird (eigener Tab "Bird"): tippen bzw. Leertaste zum Fliegen, Säulen ausweichen, Münzen 2 €, Geldbündel 10 €, Diamanten 50 € sammeln, das Geld geht direkt ins Casino-Guthaben; 9 Figuren (Blauer Spatz, Goldvogel, Nachteule, Mini-Drache, Rakete, Ufo, Geldsack, Pinguin, Wassermelone), für jede Figur eine eigene Farbe wählbar (Original oder 10 Farben); Vollbild-Knopf oben rechts, am PC Taste F; Rekord = meiste Punkte; Power-ups Magnet (7 s), Schild (rettet einmal), Doppelgeld (8 s); Combo ab 5 Teilen ×2, ab 10 ×3; Medaillen Bronze 10, Silber 25, Gold 50, Diamant 100; ab 12 Punkten bewegliche Säulen; Pause mit P oder Esc am PC; wird mit der Zeit schneller, Himmel wechselt von Tag zu Abend zu Nacht; Grafik im Blockwelt-3D-Look (Voxel); 5 Maps in den Einstellungen unter Flying Bird: Wiese, Wüste (Staub), Schnee (Schneefall), Vulkan (Glut), Weltraum (Sternschnuppen).
+Casino: Spielgeld, keine Echtgeld-Ein- oder Auszahlung. Start 1.000 €, alle Spiele teilen ein Guthaben, "1.000 € nachfüllen" wenn pleite, Highscore = höchster Kontostand aller Zeiten ohne Geld aus Flying Bird (Bird hat eigenen Punkte-Rekord). Blackjack: 6 Decks, Dealer steht auf Soft 17, Blackjack zahlt 3 zu 2, Ziehen/Halten/Doppeln/Teilen, Glühbirne zeigt Basic-Strategy-Tipps, keine Versicherung. Roulette: europäisch mit einer Null; Rot/Schwarz, Gerade/Ungerade, 1–18/19–36 zahlen 1:1, Dutzende 2:1, Einzelzahl 35:1. Slots: 3 Walzen, 5 Gewinnlinien, 7-7-7 zahlt am meisten, dann BAR, Ass, drei gleiche Kartenfarben; 3× FREE = 10 Freispiele mit doppeltem Gewinn; Okey: türkisches Steinspiel gegen 3 Computer (Mehmet, Ayşe, Can), 14 Steine, Reihen und Gruppen oder 7 Paare, Okey = Joker (Farbe des Anzeigers, Zahl +1), ★ = falscher Okey mit dessen Wert, Gewinn 4× Einsatz, mit Okey abgeworfen oder 7 Paaren 8×, links unten nehmen, rechts unten abwerfen, Sortier-Knöpfe Reihen/Paare. Auszahlungsquote ca. 94 %. Flying Bird (eigener Tab "Bird"): tippen bzw. Leertaste zum Fliegen, Säulen ausweichen, Münzen 2 €, Geldbündel 10 €, Diamanten 50 € sammeln, das Geld geht direkt ins Casino-Guthaben; 9 Figuren (Blauer Spatz, Goldvogel, Nachteule, Mini-Drache, Rakete, Ufo, Geldsack, Pinguin, Wassermelone), für jede Figur eine eigene Farbe wählbar (Original oder 10 Farben); Vollbild-Knopf oben rechts, am PC Taste F; Rekord = meiste Punkte; Power-ups Magnet (7 s), Schild (rettet einmal), Doppelgeld (8 s); Combo ab 5 Teilen ×2, ab 10 ×3; Medaillen Bronze 10, Silber 25, Gold 50, Diamant 100; ab 12 Punkten bewegliche Säulen; Pause mit P oder Esc am PC; wird mit der Zeit schneller, Himmel wechselt von Tag zu Abend zu Nacht; Grafik im Blockwelt-3D-Look (Voxel); 5 Maps in den Einstellungen unter Flying Bird: Wiese, Wüste (Staub), Schnee (Schneefall), Vulkan (Glut), Weltraum (Sternschnuppen).
 Kontakt zum Entwickler Larsen: ${CHAT_MAIL}. Verweise auf diese E-Mail bei Fehlern, Update-Vorschlägen, Wünschen oder wenn du etwas nicht sicher weißt. Erfinde keine Funktionen. Bei Fragen ohne Bezug zur App darfst du kurz und freundlich antworten.`;
 let chSample;
 async function chAsk(q){
@@ -2252,6 +2511,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'1.8',d:'08.11.2026',t:'Neues Spiel: Okey',items:['Okey, das türkische Steinspiel, als viertes Casino-Spiel: du gegen Mehmet, Ayşe und Can.','Einsatz von 10 € bis 1.000 €, Gewinn 4× oder mit Okey bzw. 7 Paaren 8×.','Steine per Antippen verschieben, automatisch nach Reihen oder Paaren sortieren.']},
   {v:'1.7',d:'08.11.2026',t:'Maps, Animationen und Farben',items:['Flying Bird hat jetzt 5 Maps: Wiese, Wüste, Schnee, Vulkan und Weltraum. Auswahl in den Einstellungen unter „Flying Bird“.','Jede Map mit eigenem Wetter: Schneefall, Wüstenstaub, Glut und Sternschnuppen.','Bessere Animationen: Figuren blinzeln, flattern weicher, stauchen sich beim Flügelschlag und überschlagen sich beim Absturz.','Flying Bird läuft flüssiger, weil der Hintergrund der App beim Spielen anhält.','Das Casino übernimmt jetzt dein Farbthema (neues Tischdesign „App-Farben“).','Pause-Knopf oben rechts in Flying Bird.','Neuer Tab „Updates“ mit allen Änderungen.']},
   {v:'1.6',d:'08.11.2026',t:'Getrennte Highscores',items:['Geld aus Flying Bird zählt nicht mehr zum Casino-Highscore.','Flying Bird hat einen eigenen Rekord nach Punkten.']},
   {v:'1.5',d:'08.11.2026',t:'Vollbild, Melone und Farben',items:['Vollbild-Modus für Flying Bird (am PC Taste F).','Neue Figur: Wassermelone.','Für jede Figur eine eigene Farbe wählbar.','Flying Bird läuft nur noch im Blockwelt-Look.']},
@@ -2487,6 +2747,15 @@ document.addEventListener('click',ev=>{
     case'ch-preset':chS().preset=el.dataset.k;chS().acc=null;saveSettings();render();break;
     case'ch-acc-reset':chS().acc=null;saveSettings();render();break;
     case'ch-go':go('chat');break;
+    case'ok-stake':OK.stake=+el.dataset.v;sfx('chip');bjRender();break;
+    case'ok-new':okNew();break;
+    case'ok-intro':OK.phase='intro';bjRender();break;
+    case'ok-deck':okDraw('deck');break;
+    case'ok-take':okDraw('disc');break;
+    case'ok-disc':okDiscard();break;
+    case'ok-slot':okSlot(+el.dataset.i);break;
+    case'ok-sort':okArrange(el.dataset.m);break;
+    case'ok-finish':okFinishNow();break;
     case'cz-game':{const g=el.dataset.g;if(g===czGame()||czBusy())break;S.settings.casinoGame=g;saveSettings();animNext=true;sfx('tap');render();break}
     case'cz-theme':S.settings.czTheme=el.dataset.k;saveSettings();render();break;
     case'cz-cards':S.settings.czCards=el.dataset.k;saveSettings();render();break;
