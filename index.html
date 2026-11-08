@@ -2964,6 +2964,8 @@ function updBusy(){try{return (typeof czBusy==='function'&&czBusy())||(typeof FB
 let updSnap=null;
 function updTakeSnap(){try{if(updBusy())return;updSnap={bj:JSON.stringify(S.settings.bj||null),wheel:JSON.stringify(S.settings.wheel||null)}}catch(e){}}
 ['pointerdown','click','keydown','touchstart'].forEach(t=>document.addEventListener(t,updTakeSnap,{capture:true,passive:true}));
+/* Code-Feld: immer Großbuchstaben */
+document.addEventListener('input',e=>{const t=e.target;if(t&&t.id==='code-in'){const p=t.selectionStart,u=t.value.toUpperCase();if(u!==t.value){t.value=u;try{t.setSelectionRange(p,p)}catch(x){}}}});
 function updApply(){
   if(!updPending)return;
   try{const last=+sessionStorage.getItem('lc:upd')||0;if(Date.now()-last<60000)return;sessionStorage.setItem('lc:upd',Date.now())}catch(e){}
@@ -2989,6 +2991,7 @@ if(!ON_OLD_HOST&&location.protocol!=='file:'){setTimeout(updCheck,1500);setInter
    Codes stehen nur als SHA-256-Fingerabdruck hier ("LC-CODE:" + Code in Großbuchstaben, nur Buchstaben/Zahlen),
    damit man sie im Quelltext nicht lesen kann. Neuer Code: {h:'<hash>',amt:<Euro>,until:'JJJJ-MM-TT' (optional)} */
 const CODES=[
+  {h:'2561d48401c33897617fd8db0eb3438d644ee8db7a96c6abeee855e8ee11fe14',amt:10000},
   {h:'54151ce9595961749149232fe69422de90b8e576f480a40b29a15108bc780c92',amt:10000,note:'Test'}
 ];
 function codeNorm(c){return String(c||'').toUpperCase().replace(/[^A-Z0-9ÄÖÜ]/g,'')}
@@ -3044,7 +3047,7 @@ function vSettings(){
   </section>
   <section class="panel glass set-sec"><h3>Code einlösen</h3>
     <p class="note-txt">Hast du einen Code von Larsen bekommen? Gib ihn hier ein und das Geld landet sofort auf deinem Konto. Jeder Code geht einmal pro Gerät. Guthaben: <b id="code-bal">${fmtC(bjS().bal)}</b></p>
-    <div class="code-row"><input id="code-in" class="code-in" type="text" placeholder="z. B. CASINO2026" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="40"><button class="btn sm" data-act="code-redeem">Einlösen</button></div>
+    <div class="code-row"><input id="code-in" class="code-in" type="text" placeholder="CODE EINGEBEN" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="40"><button class="btn sm" data-act="code-redeem">Einlösen</button></div>
     <p id="code-msg" class="code-msg" aria-live="polite"></p>
   </section>
   <section class="panel glass set-sec"><h3>Spielstand</h3>
