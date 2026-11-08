@@ -893,6 +893,11 @@ body.gated .app,body.gated .liquid{visibility:hidden}
 .wf-hist span{font-size:11.5px;font-weight:800;padding:3px 8px;border-radius:999px;font-family:'JetBrains Mono',ui-monospace,monospace}
 .wf-hist .g{background:color-mix(in srgb,var(--accent) 22%,transparent);color:var(--text)}
 .wf-hist .b{background:rgba(127,127,127,.18);color:var(--muted)}
+.code-row{display:flex;gap:8px;align-items:stretch}
+.code-in{flex:1;min-width:0;font:inherit;font-family:var(--f-mono,ui-monospace,monospace);font-size:16px;letter-spacing:.06em;text-transform:uppercase;padding:10px 12px;border-radius:12px;border:1px solid color-mix(in srgb,var(--text) 18%,transparent);background:color-mix(in srgb,var(--bg) 70%,transparent);color:var(--text)}
+.code-in:focus{outline:2px solid var(--accent);outline-offset:1px}
+.code-msg{margin:8px 0 0;min-height:1.2em;font-size:13.5px;font-weight:700}
+.code-msg.ok{color:#18a957}.code-msg.bad{color:#e3263b}
 .wf-info{margin:0;font-size:12px;color:var(--muted);text-align:center}
 /* assistant */
 .ch-view{display:flex;flex-direction:column;gap:10px;max-width:760px;margin:0 auto}
@@ -2573,6 +2578,7 @@ const CH_FAQ=[
   [['okey','okay','oki','verschieb','sortier','antipp','tauschen','bewegen','platz','markier','auswaehl','reihen knopf','paare knopf'],()=>'**Bedienung bei Okey** 👆\n• **Stein antippen**, er hebt sich an. **Noch ein Feld oder Stein antippen**, und er wird dorthin verschoben oder getauscht.\n• Nochmal auf denselben Stein tippen hebt die Auswahl auf.\n• **„Reihen“** sortiert deine Steine automatisch nach Reihen und Gruppen, **„Paare“** nach Paaren.\n• Leuchtet links unten oder die Mitte, darfst du ziehen. Leuchtet rechts unten, darfst du abwerfen.'],
   [['okey','okay','oki','tipp','tipps','strategie','trick','besser','schwer','gegner','bots'],()=>'**Okey-Tipps** 💡\n1. Tippe nach jedem Ziehen auf **„Reihen“**. So siehst du sofort, was dir noch fehlt.\n2. Wirf zuerst **einzelne Steine** ab, die zu nichts passen, z. B. eine 🟡 2, wenn du keine anderen gelben Steine hast.\n3. **Okey-Steine nie abwerfen.** Sie füllen jede Lücke.\n4. Achte darauf, was deine Nachbarn abwerfen. Braucht der rechte Nachbar Rot, gib ihm lieber keine roten Steine.\n5. Hast du schon viele doppelte Steine, versuch es mit **7 Paaren**, das zahlt sogar 8×.'],
   [['okey','okay','oki','einsatz','setzen','kosten','wieviel','geld'],()=>'**Einsatz bei Okey:** Vor dem Spiel wählst du 10 €, 50 €, 100 €, 500 € oder 1.000 €. Er wird vom Guthaben abgezogen. Gewinnst du, bekommst du 4× (mit Okey oder 7 Paaren 8×) zurück. Okey lässt sich in den Optionen unter „Casino“ auch ausblenden.'],
+  [['code','einlös','einlos','gutschein','promo'],()=>'**Codes einlösen:** Geh zu **Optionen → Code einlösen**, tipp den Code ein und drück **Einlösen**. Das Geld landet sofort auf deinem Konto.\n• Jeder Code geht einmal pro Gerät.\n• Groß- und Kleinschreibung und Leerzeichen sind egal.\n• Codes gibt es von Larsen.'],
   [['gluecksrad','glucksrad','rad','drehen','wheel','10k','10.000'],()=>'**Glücksrad:** Ein Dreh kostet **10.000 €**. Das Rad hat 50 Felder: 25 Gewinne und 25 Nieten.\n• Gewinne: 11.000 € bis 100.000 € (goldene Felder sind die großen), **Gratis** (nächster Dreh kostenlos) und **×2** (dein nächster Geldgewinn zählt doppelt).\n• Nieten: nichts, ein kleiner Trostpreis oder bis zu 5.000 € Abzug.\n• Die Farben passen sich deinem App-Thema an.'],
   [['freispiel','free spin','freespin','free'],()=>'**Freispiele:** Landet das FREE-Symbol auf allen drei Walzen, bekommst du **10 Freispiele**. Sie kosten nichts und jeder Gewinn darin zählt **doppelt**. Sie laufen automatisch nacheinander ab.'],
   [['slot','automat','walze','spielautomat','symbol','gewinnlinie','linie','777','bar'],()=>'**Slots:** Wähle deinen Einsatz und tippe auf Drehen. Es gibt 5 Gewinnlinien (3 waagerecht, 2 schräg).\n• 7 7 7 zahlt am meisten, danach BAR, Ass und die Kartenfarben.\n• Drei gleiche Farben (z. B. ♥ ♥ ♥) zahlen ebenfalls.\n• 3× FREE startet 10 Freispiele mit doppeltem Gewinn.\nDie genauen Gewinne stehen neben den Walzen.'],
@@ -2648,6 +2654,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'2.7',d:'08.11.2026',t:'Codes einlösen',items:[['n','In den Optionen kannst du jetzt Codes einlösen und bekommst sofort Geld aufs Konto. Jeder Code geht einmal pro Gerät.']]},
   {v:'2.6',d:'08.11.2026',t:'Updates sofort',items:[['n','Neue Versionen werden jetzt sofort geladen, auch mitten in einer Runde.'],['n','Die Runde wird dann abgebrochen und alles auf den Stand davor zurückgesetzt: Du verlierst nichts und gewinnst nichts.']]},
   {v:'2.5',d:'08.11.2026',t:'Glücksrad 2.0',items:[['n','Neue Sounds: Ratsche beim Aufziehen, echtes Klacken am Zeiger, Wind beim Drehen, Fanfare mit Münzregen beim Gewinn und Posaune bei Nieten.'],['n','Neue Effekte: Lichterkette läuft beim Drehen, Lichtstrahlen, Funken, Münzen, Konfetti und Rauch je nach Ergebnis, Gewinnfeld leuchtet auf.'],['n','Neue Animation: Das Rad holt aus, dreht verwischt, rollt am Ende ein Stück zurück, der Zeiger federt an jedem Stift. Beim Jackpot bebt das Rad.'],['n','Guthaben zählt nach einem Gewinn sichtbar hoch.']]},
   {v:'2.4',d:'08.11.2026',t:'Ladebildschirm',items:[['n','Beim Öffnen erscheint kurz ein Ladebildschirm mit dem Casino-Logo, bis alles bereit ist.']]},
@@ -2978,6 +2985,30 @@ async function updCheck(){
 if(!ON_OLD_HOST&&location.protocol!=='file:'){setTimeout(updCheck,1500);setInterval(updCheck,UPD_CHECK_MS);
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)updCheck()});window.addEventListener('focus',()=>updCheck())}
 
+/* ---------- Codes einlösen: Larsen gibt Codes aus, jeder Code bringt Geld (einmal pro Gerät) ----------
+   Codes stehen nur als SHA-256-Fingerabdruck hier ("LC-CODE:" + Code in Großbuchstaben, nur Buchstaben/Zahlen),
+   damit man sie im Quelltext nicht lesen kann. Neuer Code: {h:'<hash>',amt:<Euro>,until:'JJJJ-MM-TT' (optional)} */
+const CODES=[
+  {h:'54151ce9595961749149232fe69422de90b8e576f480a40b29a15108bc780c92',amt:10000,note:'Test'}
+];
+function codeNorm(c){return String(c||'').toUpperCase().replace(/[^A-Z0-9ÄÖÜ]/g,'')}
+async function codeHash(c){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('LC-CODE:'+codeNorm(c)));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}
+let codeFails=0,codeWait=0,codeBusy=false;
+async function codeRedeem(){
+  if(codeBusy)return;const raw=val('code-in');const msg=document.getElementById('code-msg');const say=(t,ok)=>{if(msg){msg.textContent=t;msg.className='code-msg '+(ok?'ok':'bad')}};
+  if(!codeNorm(raw)){say('Gib zuerst einen Code ein.');return}
+  if(Date.now()<codeWait){say('Zu viele falsche Versuche. Warte '+Math.ceil((codeWait-Date.now())/1000)+' Sekunden.');return}
+  codeBusy=true;let h='';try{h=await codeHash(raw)}catch(e){codeBusy=false;say('Code konnte nicht geprüft werden.');return}codeBusy=false;
+  const c=CODES.find(x=>x.h===h),used=S.settings.codes||(S.settings.codes=[]);
+  if(!c){codeFails++;if(codeFails>=5){codeFails=0;codeWait=Date.now()+30000}say('Diesen Code gibt es nicht.');if(typeof sfx==='function')sfx('rllose');return}
+  if(c.until&&new Date(c.until+'T23:59:59')<new Date()){say('Dieser Code ist abgelaufen.');return}
+  if(used.includes(h)){say('Diesen Code hast du schon eingelöst.');return}
+  codeFails=0;const st=bjS();used.push(h);czCredit(st,c.amt);czRecord(st);saveSettings();
+  if(bjS().sound)unlockAudio();try{if(typeof wfSndWin==='function')wfSndWin(c.amt>=50000);else sfx('win')}catch(e){}
+  const inp=document.getElementById('code-in');if(inp)inp.value='';say('Eingelöst! +'+fmtC(c.amt)+' sind auf deinem Konto.',true);toast('Code eingelöst: +'+fmtC(c.amt));
+  const b=document.getElementById('code-bal');if(b)b.textContent=fmtC(st.bal);
+}
+
 function vSettings(){
   const c=currentColors()||{bg:'#eef2f7',text:'#121722',accent:'#0a84ff',blob1:'#7dd3fc',blob2:'#f9a8d4',blob3:'#a7f3d0'};
   const fields=[['bg','Hintergrund'],['text','Text'],['accent','Akzent / Buttons'],['blob1','Farbfleck 1'],['blob2','Farbfleck 2'],['blob3','Farbfleck 3']];
@@ -3010,6 +3041,11 @@ function vSettings(){
     <div class="rec-box">${TROPHY}<div><small>Dein Highscore</small><b>${fmtC(bjS().best)}</b><span>${bjS().bestAt?'erreicht am '+new Date(bjS().bestAt).toLocaleDateString('de-DE',{day:'numeric',month:'long',year:'numeric'})+' um '+new Date(bjS().bestAt).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' Uhr':'Noch kein Rekord über dem Startguthaben'}</span></div></div>
     <p class="note-txt">Der Highscore bleibt auch erhalten, wenn du dein Guthaben zurücksetzt.</p>
     <div class="chips"><button class="btn ghost sm" data-act="cz-reset">Guthaben auf 1.000 € zurücksetzen</button></div>
+  </section>
+  <section class="panel glass set-sec"><h3>Code einlösen</h3>
+    <p class="note-txt">Hast du einen Code von Larsen bekommen? Gib ihn hier ein und das Geld landet sofort auf deinem Konto. Jeder Code geht einmal pro Gerät. Guthaben: <b id="code-bal">${fmtC(bjS().bal)}</b></p>
+    <div class="code-row"><input id="code-in" class="code-in" type="text" placeholder="z. B. CASINO2026" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="40"><button class="btn sm" data-act="code-redeem">Einlösen</button></div>
+    <p id="code-msg" class="code-msg" aria-live="polite"></p>
   </section>
   <section class="panel glass set-sec"><h3>Spielstand</h3>
     <p class="note-txt">Dein Spielstand wird nur auf diesem Gerät gespeichert, ohne Konto. Mit dem Sicherungscode nimmst du ihn auf ein anderes Gerät mit oder holst ihn zurück, falls die Browserdaten gelöscht wurden.</p>
@@ -3185,6 +3221,7 @@ document.addEventListener('click',ev=>{
     case'bk-copy':{const code=bkCode();
       const fallback=()=>{const t=$('#bk-in');if(t){t.value=code;t.focus();t.select()}toast('Code markiert. Bitte jetzt kopieren.')};
       try{navigator.clipboard.writeText(code).then(()=>toast('Sicherungscode kopiert'),fallback)}catch(e){fallback()}break}
+    case'code-redeem':codeRedeem();break;
     case'bk-load':{const data=bkParse(val('bk-in'));
       if(!data){toast('Das ist kein gültiger Sicherungscode. Kopiere ihn auf der alten Seite nochmal komplett.');break}
       if(!el.dataset.confirm){el.dataset.confirm='1';el.textContent='Aktuellen Spielstand ersetzen? Nochmal tippen';break}
@@ -3237,6 +3274,7 @@ document.addEventListener('click',ev=>{
 });
 document.addEventListener('keydown',ev=>{
   if(ev.key==='Escape'&&sheetData){closeSheet();return}
+  if(ev.key==='Enter'&&ev.target.id==='code-in'){ev.preventDefault();codeRedeem();return}
   if((ev.key==='Enter'||ev.key===' ')&&ev.target.matches('[role=button][data-act]')){ev.preventDefault();ev.target.click()}
 });
 document.addEventListener('submit',ev=>{
