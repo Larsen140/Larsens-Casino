@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="de">
 <head>
+<script>/* first paint already in your colours: hide the page until the app has applied your theme */try{var b=localStorage.getItem('lc:bg');if(b)document.documentElement.style.background=b}catch(e){}document.documentElement.classList.add('booting');setTimeout(function(){document.documentElement.classList.remove('booting')},3000);</script>
+<style>html.booting body{visibility:hidden}</style>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="description" content="Blackjack, Roulette und Slots mit Spielgeld. Dein Spielstand bleibt auf deinem Gerät.">
@@ -1077,7 +1080,7 @@ function autoZoom(){if(!isDesk())return 100;return innerWidth>=1500&&innerHeight
 function curZoom(){return S.settings.uiZoom||autoZoom()}
 function lum(hex){const h=hex.replace('#','');const n=parseInt(h.length===3?h.split('').map(c=>c+c).join(''):h,16);const r=(n>>16)/255,g=(n>>8&255)/255,b=(n&255)/255;const f=c=>c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4);return .2126*f(r)+.7152*f(g)+.0722*f(b)}
 function currentColors(){const s=S.settings;if(s.custom)return s.custom;const p=PRESETS[s.preset];return p&&p.v}
-function applyTheme(){
+function applyTheme(){setTimeout(()=>{try{localStorage.setItem('lc:bg',getComputedStyle(document.documentElement).getPropertyValue('--bg').trim())}catch(e){}},0);
   const root=document.documentElement, st=root.style;
   ['--bg','--text','--accent','--blob1','--blob2','--blob3','--glass','--glass-strong','--edge','--shade','--on-accent','color-scheme'].forEach(p=>st.removeProperty(p));
   const c=currentColors();
@@ -3090,6 +3093,8 @@ try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}ca
 if(updNew())document.body.classList.add('upd-new');
 applyTheme();render();bkImportFromHash();bkRestoreFromHash();routeHash();
 gateInit();setSync('Lokal gespeichert');
+try{localStorage.setItem('lc:bg',getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()||getComputedStyle(document.body).backgroundColor)}catch(e){}
+requestAnimationFrame(()=>document.documentElement.classList.remove('booting'));
 })();
 </script>
 </body>
