@@ -777,6 +777,24 @@ body.upd-new #tab-updates::after{content:'';position:absolute;top:8px;right:calc
 .bk-banner{position:fixed;left:50%;transform:translateX(-50%);top:calc(8px + env(safe-area-inset-top));z-index:400;width:min(520px,calc(100% - 24px));display:flex;align-items:center;gap:10px;padding:8px 8px 8px 14px;border-radius:16px;background:linear-gradient(135deg,#ffd84a,#ff9f1c);color:#3a2600;font-size:13.5px;box-shadow:0 10px 28px rgba(0,0,0,.35)}
 .bk-banner span{flex:1;line-height:1.3}
 .bk-banner button{border:0;border-radius:12px;padding:9px 14px;font:inherit;font-weight:900;background:#3a2600;color:#ffd84a;cursor:pointer;white-space:nowrap}
+.gate{position:fixed;inset:0;z-index:1000;display:flex;overflow:auto;padding:calc(16px + env(safe-area-inset-top)) 16px calc(16px + env(safe-area-inset-bottom));background:radial-gradient(circle at 30% 10%,#3d0a15,#120508 55%,#060607);color:#fff}
+body.gated{overflow:hidden}
+body.gated .app,body.gated .liquid{visibility:hidden}
+.gate-card{margin:auto;width:min(440px,100%);text-align:center;padding:24px 20px;border-radius:26px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),0 24px 60px rgba(0,0,0,.5)}
+.gate-card h2{margin:10px 0 8px;font-size:24px;letter-spacing:-.01em}
+.gate-card p{margin:0 0 14px;font-size:15px;line-height:1.45;color:rgba(255,255,255,.82)}
+.gate-card ol{text-align:left;margin:0 0 16px;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.4}
+.gate-logo{width:76px;height:76px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.gate-ico{font-size:52px}
+.gate-share{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.15);font-size:13px}
+.gate-btn{display:block;width:100%;border:0;border-radius:16px;padding:14px;font:inherit;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(180deg,#ffe07a,#f2b705);color:#3a2600;box-shadow:0 6px 0 #a87412;margin:4px 0 12px}
+.gate-btn:active{transform:translateY(3px);box-shadow:0 3px 0 #a87412}
+.gate-btn.ghost{background:rgba(255,255,255,.12);color:#fff;box-shadow:none}
+.gate-link{border:0;background:none;color:rgba(255,255,255,.65);font:inherit;font-size:14px;text-decoration:underline;cursor:pointer;padding:6px}
+.gate-small{font-size:12.5px!important;color:rgba(255,255,255,.55)!important;margin:4px 0 0!important}
+.gate-save{display:flex;flex-direction:column;gap:6px;padding:14px;margin:0 0 12px;border-radius:18px;background:rgba(242,194,48,.12);box-shadow:inset 0 0 0 1.5px rgba(242,194,48,.45);text-align:left}
+.gate-save span{font-size:13.5px;color:rgba(255,255,255,.75)}
+.gate-in{width:100%;box-sizing:border-box;min-height:64px;margin:0 0 10px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.3);color:#fff;font:12px ui-monospace,Menlo,monospace;padding:10px;-webkit-user-select:text;user-select:text}
 /* assistant */
 .ch-view{display:flex;flex-direction:column;gap:10px;max-width:760px;margin:0 auto}
 .ch-card{display:flex;flex-direction:column;height:calc(100dvh - 240px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));min-height:360px;max-height:820px;border-radius:26px;overflow:hidden;background:var(--ch-bg);color:var(--ch-text);border:1px solid color-mix(in srgb,var(--ch-text) 12%,transparent);box-shadow:0 18px 50px -18px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(var(--blur,20px)) saturate(170%);backdrop-filter:blur(var(--blur,20px)) saturate(170%)}
@@ -2519,6 +2537,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'2.0',d:'08.11.2026',t:'Nur noch als App',items:['Auf dem Handy spielst du Larsens Casino jetzt nur noch als App vom Home-Bildschirm. Die Seite zeigt dir, wie du sie hinzufügst.','Deinen Spielstand kopierst du vorher und fügst ihn in der App mit einem Tipp wieder ein.','Die alte Netlify-Adresse ist gesperrt und leitet mit deinem Spielstand auf die neue Seite.']},
   {v:'1.9',d:'08.11.2026',t:'Neue Adresse',items:['Larsens Casino läuft jetzt unter larsen140.github.io/Larsens-Casino.','Auf der alten Seite nimmt der Knopf „Mit Spielstand zur neuen Seite“ deinen Spielstand automatisch mit.','Sicherungscodes werden jetzt auch mit Leerzeichen oder Zeilenumbrüchen erkannt.']},
   {v:'1.8',d:'08.11.2026',t:'Neues Spiel: Okey',items:['Okey lässt sich in den Optionen unter „Casino“ ausblenden.','Okey, das türkische Steinspiel, als viertes Casino-Spiel: du gegen Mehmet, Ayşe und Can.','Einsatz von 10 € bis 1.000 €, Gewinn 4× oder mit Okey bzw. 7 Paaren 8×.','Steine per Antippen verschieben, automatisch nach Reihen oder Paaren sortieren.']},
   {v:'1.7',d:'08.11.2026',t:'Maps, Animationen und Farben',items:['Flying Bird hat jetzt 5 Maps: Wiese, Wüste, Schnee, Vulkan und Weltraum. Auswahl in den Einstellungen unter „Flying Bird“.','Jede Map mit eigenem Wetter: Schneefall, Wüstenstaub, Glut und Sternschnuppen.','Bessere Animationen: Figuren blinzeln, flattern weicher, stauchen sich beim Flügelschlag und überschlagen sich beim Absturz.','Flying Bird läuft flüssiger, weil der Hintergrund der App beim Spielen anhält.','Das Casino übernimmt jetzt dein Farbthema (neues Tischdesign „App-Farben“).','Pause-Knopf oben rechts in Flying Bird.','Neuer Tab „Updates“ mit allen Änderungen.']},
@@ -2560,6 +2579,45 @@ function bkImportFromHash(){
   const bal=data.settings.bj&&data.settings.bj.bal,fresh=!S.settings.bj||(S.settings.bj.bal===1000&&!S.settings.bj.played);
   if(fresh||window.confirm('Spielstand von der alten Seite übernehmen'+(bal!=null?' ('+fmtC(bal)+')':'')+'? Dein Spielstand hier wird ersetzt.')){bkApply(data);setTimeout(()=>toast('Spielstand übernommen'+(bal!=null?': '+fmtC(bal):'')),400)}
 }
+/* ---------- Zugang: alte Adresse gesperrt, auf Handys nur als Home-Bildschirm-App spielbar ---------- */
+const IS_STANDALONE=(()=>{try{return navigator.standalone===true||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches}catch(e){return false}})();
+const UA=navigator.userAgent||'';
+const IS_IOS=/iPhone|iPad|iPod/i.test(UA)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const IS_ANDROID=/Android/i.test(UA);
+const IS_MOBILE=IS_IOS||IS_ANDROID;
+const IN_APP_BROWSER=/Instagram|FBAN|FBAV|Snapchat|TikTok|Line\/|WhatsApp|GSA\//i.test(UA);
+function gateHTML(){
+  if(ON_OLD_HOST)return `<div class="gate-card"><div class="gate-ico">🎰</div><h2>Larsens Casino ist umgezogen</h2>
+    <p>Diese Seite wird nicht mehr genutzt. Tippe auf den Knopf, dein Spielstand kommt automatisch mit.</p>
+    <button class="gate-btn" data-act="bk-move">Mit Spielstand umziehen</button>
+    <p class="gate-small">Neue Adresse: larsen140.github.io/Larsens-Casino</p></div>`;
+  const hasSave=S.settings.bj&&(S.settings.bj.played>0||S.settings.bj.bal!==1000);
+  const steps=IN_APP_BROWSER?`<ol><li>Tippe oben rechts auf <b>•••</b> bzw. das Menü.</li><li>Wähle <b>„Im Browser öffnen“</b> (Safari oder Chrome).</li><li>Dort geht es weiter.</li></ol>`
+    :IS_IOS?`<ol><li>Tippe unten in Safari auf <b>Teilen</b> <span class="gate-share">⬆︎</span>.</li><li>Scrolle runter und wähle <b>„Zum Home-Bildschirm“</b>.</li><li>Tippe auf <b>„Hinzufügen“</b>.</li><li>Öffne Larsens Casino über das neue <b>grüne $-Symbol</b> auf deinem Home-Bildschirm.</li></ol>`
+    :`<ol><li>Tippe oben rechts auf das Menü <b>⋮</b>.</li><li>Wähle <b>„App installieren“</b> oder <b>„Zum Startbildschirm hinzufügen“</b>.</li><li>Öffne Larsens Casino über das neue <b>grüne $-Symbol</b>.</li></ol>`;
+  return `<div class="gate-card"><img class="gate-logo" src="icon-180.png" alt=""><h2>Erst als App hinzufügen</h2>
+    ${hasSave?`<div class="gate-save"><b>1. Dein Spielstand: ${fmtC(S.settings.bj.bal)}</b><span>Kopiere ihn zuerst. Die App hat einen eigenen Speicher, dort fügst du ihn gleich wieder ein.</span><button class="gate-btn" data-act="gate-copy">Spielstand kopieren</button></div><p><b>${IN_APP_BROWSER?'2. Im Browser öffnen':'2. Als App hinzufügen'}:</b></p>`:'<p>Larsens Casino spielst du als App auf deinem Home-Bildschirm. So geht\'s:</p>'}${steps}
+    <p class="gate-small">Die App öffnet im Vollbild und speichert deinen Spielstand auf diesem Gerät.</p></div>`;
+}
+function welcomeHTML(){
+  return `<div class="gate-card"><img class="gate-logo" src="icon-180.png" alt=""><h2>Willkommen in der App!</h2>
+    <p>Hast du deinen Spielstand von der Seite kopiert? Dann hol ihn jetzt rein.</p>
+    <button class="gate-btn" data-act="gate-paste">Spielstand einfügen</button>
+    <textarea id="gate-in" class="gate-in" placeholder="Oder Code hier einfügen (LC1:…)" spellcheck="false" autocapitalize="off" autocorrect="off"></textarea>
+    <button class="gate-btn ghost" data-act="gate-load">Code laden</button>
+    <button class="gate-link" data-act="gate-skip">Ohne Spielstand starten</button></div>`;
+}
+function gateShow(html){let g=document.getElementById('gate');if(!g){g=document.createElement('div');g.id='gate';g.className='gate';document.body.appendChild(g)}g.innerHTML=html;document.body.classList.add('gated')}
+function gateClose(){const g=document.getElementById('gate');if(g)g.remove();document.body.classList.remove('gated')}
+function gateInit(){
+  if(ON_OLD_HOST){gateShow(gateHTML());return}
+  if(IS_MOBILE&&!IS_STANDALONE){gateShow(gateHTML());return}
+  if(IS_STANDALONE&&!S.settings.welcomed){const fresh=!S.settings.bj||(S.settings.bj.bal===1000&&!S.settings.bj.played);
+    if(fresh){gateShow(welcomeHTML());return}S.settings.welcomed=true;saveLocal()}
+}
+function gateLoad(raw){const data=bkParse(raw);if(!data){toast('Kein gültiger Spielstand gefunden. Kopiere ihn auf der Seite nochmal.');return false}
+  bkApply(data);S.settings.welcomed=true;saveLocal();gateClose();toast('Spielstand geladen: '+fmtC(bjS().bal));return true}
+if('serviceWorker' in navigator&&!ON_OLD_HOST&&location.protocol==='https:'){try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}}
 
 function vSettings(){
   const c=currentColors()||{bg:'#eef2f7',text:'#121722',accent:'#0a84ff',blob1:'#7dd3fc',blob2:'#f9a8d4',blob3:'#a7f3d0'};
@@ -2754,6 +2812,12 @@ document.addEventListener('click',ev=>{
     case'bj-hint':{const s=bjS();s.hint=!s.hint;saveSettings();bjRender();toast(s.hint?'Strategie-Tipps an':'Strategie-Tipps aus');break}
     case'bj-sound':{const s=bjS();s.sound=!s.sound;saveSettings();bjRender();if(s.sound){unlockAudio();sfx('chip')}else releaseAudio();toast(s.sound?'Ton an':'Ton aus');break}
     case'bj-refill':{const s=bjS();BJ.balFrom=s.bal;s.bal+=1000;saveSettings();sfx('refill');toast('1.000\u00a0\u20ac nachgef\u00fcllt');bjRender();break}
+    case'gate-copy':{const code=bkCode(),box=el.closest('.gate-save');
+      const fb=()=>{if(box&&!box.querySelector('textarea')){box.insertAdjacentHTML('beforeend','<textarea class="gate-in" readonly></textarea>');}const t=box&&box.querySelector('textarea');if(t){t.value=code;t.focus();t.select()}toast('Code markiert. Tippe auf „Kopieren“.')};
+      try{navigator.clipboard.writeText(code).then(()=>{toast('Spielstand kopiert');el.textContent='Kopiert ✓'},fb)}catch(e){fb()}break}
+    case'gate-paste':{try{navigator.clipboard.readText().then(t=>{if(!gateLoad(t)){const i=$('#gate-in');if(i)i.focus()}},()=>{toast('Bitte den Code unten ins Feld einfügen.');const i=$('#gate-in');if(i)i.focus()})}catch(e){toast('Bitte den Code unten ins Feld einfügen.')}break}
+    case'gate-load':gateLoad(val('gate-in'));break;
+    case'gate-skip':S.settings.welcomed=true;saveLocal();gateClose();break;
     case'bk-move':{saveLocal();location.href=NEW_HOME+'#import='+encodeURIComponent(bkCode().slice(4));break}
     case'bk-copy':{const code=bkCode();
       const fallback=()=>{const t=$('#bk-in');if(t){t.value=code;t.focus();t.select()}toast('Code markiert. Bitte jetzt kopieren.')};
@@ -2847,7 +2911,7 @@ if(!loadLocal())saveLocal();
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 if(updNew())document.body.classList.add('upd-new');
 applyTheme();render();bkImportFromHash();routeHash();
-if(ON_OLD_HOST)document.body.insertAdjacentHTML('beforeend','<div class="bk-banner" role="status"><span><b>Neue Adresse!</b> Nimm deinen Spielstand mit.</span><button data-act="bk-move">Umziehen</button></div>');setSync('Lokal gespeichert');
+gateInit();setSync('Lokal gespeichert');
 })();
 </script>
 </body>
