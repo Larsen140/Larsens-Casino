@@ -833,9 +833,49 @@ body.gated .app,body.gated .liquid{visibility:hidden}
 .wf-bulb.o{animation-delay:-.55s}
 @keyframes wfBulb{0%{fill:#fff3b0;filter:drop-shadow(0 0 3px #ffd84a)}50%{fill:#6b5320;filter:none}}
 .wf-view.spinning .wf-bulb{animation-duration:.22s}
-#wf-ptr{transform-origin:0 -112px;transform-box:view-box}
-#wf-ptr.flick{animation:wfFlick .12s ease-out}
-@keyframes wfFlick{40%{transform:rotate(-14deg)}}
+/* glücksrad v2: lights, rays, flash, highlight, particles */
+.wf-view.spinning .wf-bulb{animation:wfChase .5s linear infinite;animation-delay:calc(var(--i)*-.01667s)}
+@keyframes wfChase{0%,22%{fill:#fffbe0}23%,100%{fill:#5c4719}}
+.wf-view.fx-win .wf-bulb{animation:wfWinB .26s steps(1) infinite}.wf-view.fx-win .wf-bulb.o{animation-delay:-.13s}
+@keyframes wfWinB{0%{fill:#fffbe0}50%{fill:var(--accent)}}
+.wf-view.fx-jack .wf-bulb{animation:wfJackB .14s steps(1) infinite}.wf-view.fx-jack .wf-bulb.o{animation-delay:-.07s}
+@keyframes wfJackB{0%{fill:#fff}50%{fill:#ffcf3a}}
+.wf-view.fx-lose .wf-bulb{animation:none;fill:#3d3014}
+.wf-rays{position:absolute;left:50%;top:50.86%;width:170%;aspect-ratio:1;translate:-50% -50%;z-index:-1;pointer-events:none;border-radius:50%;opacity:0;transition:opacity .6s;
+  background:repeating-conic-gradient(from 0deg,color-mix(in srgb,var(--accent) 60%,transparent) 0deg 5deg,transparent 5deg 15deg);
+  -webkit-mask:radial-gradient(circle,#000 22%,transparent 66%);mask:radial-gradient(circle,#000 22%,transparent 66%);animation:wfRays 16s linear infinite}
+@keyframes wfRays{to{rotate:360deg}}
+.wf-view.fx-win .wf-rays{opacity:.75}
+.wf-view.fx-jack .wf-rays{opacity:1;background:repeating-conic-gradient(from 0deg,rgba(255,207,58,.85) 0deg 5deg,transparent 5deg 15deg);animation-duration:5s}
+.wf-stage::after{content:'';position:absolute;left:50%;top:50.86%;width:95%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;pointer-events:none;opacity:0;background:radial-gradient(circle,rgba(255,255,255,.95),rgba(255,255,255,0) 62%)}
+.wf-view.fx-win .wf-stage::after{animation:wfFlash .55s ease-out}
+.wf-view.fx-jack .wf-stage::after{animation:wfFlash .9s ease-out;background:radial-gradient(circle,#fff,rgba(255,215,80,.7) 35%,rgba(255,215,80,0) 68%)}
+@keyframes wfFlash{0%{opacity:0;scale:.6}15%{opacity:1}100%{opacity:0;scale:1.25}}
+.wf-view.fx-jack .wf-stage{animation:wfQuake .7s cubic-bezier(.36,.07,.19,.97)}
+@keyframes wfQuake{10%,90%{translate:-2px 1px}20%,80%{translate:4px -2px}30%,50%,70%{translate:-7px 3px}40%,60%{translate:7px -3px}}
+.wf-view.fx-lose .wf-stage{animation:wfSad 1.4s ease-out}
+@keyframes wfSad{0%{filter:drop-shadow(0 18px 40px rgba(0,0,0,.35))}25%{filter:drop-shadow(0 18px 40px rgba(0,0,0,.35)) grayscale(.75) brightness(.8)}100%{filter:drop-shadow(0 18px 40px rgba(0,0,0,.35))}}
+.wf-hl{pointer-events:none;stroke-linejoin:round}
+.wf-hl.win,.wf-hl.jack{fill:#fff;stroke:#fff;stroke-width:1.8;animation:wfHl .55s ease-in-out infinite alternate}
+.wf-hl.jack{stroke:#ffcf3a;stroke-width:2.4}
+.wf-hl.lose{fill:rgba(0,0,0,.28);stroke:rgba(255,255,255,.55);stroke-width:1.2}
+@keyframes wfHl{from{fill-opacity:.05}to{fill-opacity:.38}}
+.wf-hubg{transform-box:fill-box;transform-origin:center}
+.wf-view.fx-win .wf-hubg{animation:wfHubPop .7s cubic-bezier(.2,1.8,.4,1)}
+@keyframes wfHubPop{0%{scale:1}35%{scale:1.35}100%{scale:1}}
+.wf-res.win,.wf-res.jack{position:relative;overflow:hidden}
+.wf-res.win::after,.wf-res.jack::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%);translate:-100% 0;animation:wfShine 1.1s .25s ease-out}
+@keyframes wfShine{to{translate:100% 0}}
+.wf-res .wf-jk{display:block;font-size:12px;font-weight:900;letter-spacing:.3em;color:#d99a00;animation:wfJk .5s steps(1) 4}
+@keyframes wfJk{50%{opacity:.2}}
+.wf-res.jack b{animation:wfBig .7s cubic-bezier(.2,1.8,.4,1)}
+@keyframes wfBig{0%{scale:.3}60%{scale:1.25}100%{scale:1}}
+.wf-bal b.bump{color:var(--accent);text-shadow:0 0 14px color-mix(in srgb,var(--accent) 60%,transparent);transition:color .3s,text-shadow .3s}
+.wf-spinbtn{position:relative;overflow:hidden}
+.wf-spinbtn:not(:disabled)::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.5) 50%,transparent 70%);translate:-120% 0;animation:wfBtn 3.2s ease-in-out infinite}
+@keyframes wfBtn{0%,60%{translate:-120% 0}100%{translate:120% 0}}
+.wf-fx{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:60}
+@media (prefers-reduced-motion:reduce){.wf-rays,.wf-spinbtn::after{animation:none}}
 .wf-res{min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px 16px;border-radius:18px;width:100%;max-width:460px;box-sizing:border-box;font-size:14.5px;color:var(--muted)}
 .wf-res b{font-size:24px;color:var(--text);font-family:'JetBrains Mono',ui-monospace,monospace}
 .wf-res.win,.wf-res.jack{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--text);animation:wfPop .5s cubic-bezier(.2,1.6,.4,1)}
@@ -2608,6 +2648,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'2.5',d:'08.11.2026',t:'Glücksrad 2.0',items:[['n','Neue Sounds: Ratsche beim Aufziehen, echtes Klacken am Zeiger, Wind beim Drehen, Fanfare mit Münzregen beim Gewinn und Posaune bei Nieten.'],['n','Neue Effekte: Lichterkette läuft beim Drehen, Lichtstrahlen, Funken, Münzen, Konfetti und Rauch je nach Ergebnis, Gewinnfeld leuchtet auf.'],['n','Neue Animation: Das Rad holt aus, dreht verwischt, rollt am Ende ein Stück zurück, der Zeiger federt an jedem Stift. Beim Jackpot bebt das Rad.'],['n','Guthaben zählt nach einem Gewinn sichtbar hoch.']]},
   {v:'2.4',d:'08.11.2026',t:'Ladebildschirm',items:[['n','Beim Öffnen erscheint kurz ein Ladebildschirm mit dem Casino-Logo, bis alles bereit ist.']]},
   {v:'2.3',d:'08.11.2026',t:'Updates ohne Neustart',items:[['n','Neue Versionen werden automatisch geladen, du musst die App nicht mehr schließen.'],['n','Das passiert nie mitten in einer Runde, sondern erst, wenn gerade kein Spiel läuft.']]},
   {v:'2.2',d:'08.11.2026',t:'Neu: Glücksrad',items:[['n','Neuer Tab „Glücksrad“: 10.000 € pro Dreh, 50 Felder mit 25 Gewinnen und 25 Nieten.'],['n','Gewinne bis 100.000 €, Gratis-Drehs und ×2 für den nächsten Gewinn.'],['n','Lichterkette, Klick-Sound bei jedem Feld, Konfetti und Farben passend zu deinem App-Thema.']]},
@@ -2737,57 +2778,148 @@ function wfSVG(){
     const jack=s.good&&s.d[2]>=60000&&s.d[1]==='money',fill=jack?'#ffcf3a':s.good?(i%4===0?c.a:c.a2):(i%4===1?c.b1:c.b2),tc=jack?'#3a2600':s.good?c.on:'rgba(255,255,255,.72)';
     sl+=`<path d="M0 0L${x0} ${y0}A${R} ${R} 0 0 1 ${x1} ${y1}Z" fill="${fill}" stroke="rgba(0,0,0,.35)" stroke-width=".4"/>`;
     const flip=i*WF_STEP>180;sl+=`<g transform="rotate(${i*WF_STEP})"><text x="0" y="-60" transform="rotate(${flip?90:-90} 0 -60)" fill="${tc}" font-size="${s.d[0].length>5?5.2:6.2}" font-weight="800" text-anchor="middle" dominant-baseline="central">${s.d[0]}</text></g>`});
-  let bulbs='';for(let i=0;i<30;i++){const [x,y]=p(i*12,106.5);bulbs+=`<circle class="wf-bulb ${i%2?'o':'e'}" cx="${x}" cy="${y}" r="2.4"/>`}
+  let bulbs='';for(let i=0;i<30;i++){const [x,y]=p(i*12,106.5);bulbs+=`<circle class="wf-bulb ${i%2?'o':'e'}" style="--i:${i}" cx="${x}" cy="${y}" r="2.4"/>`}
+  const [h0x,h0y]=p(-WF_STEP/2,R),[h1x,h1y]=p(WF_STEP/2,R);
+  if(WF.res&&!WF.spinning&&WF.pick!=null)sl+=`<path class="wf-hl ${WF.res.cls}" d="M0 0L${h0x} ${h0y}A${R} ${R} 0 0 1 ${h1x} ${h1y}Z" transform="rotate(${WF.pick*WF_STEP})"/>`;
   return `<svg class="wf-svg" viewBox="-114 -118 228 232" aria-hidden="true">
     <defs><radialGradient id="wfHub" cx="40%" cy="35%"><stop offset="0" stop-color="#fff7d6"/><stop offset=".55" stop-color="#ffcf3a"/><stop offset="1" stop-color="#a87412"/></radialGradient>
+      <radialGradient id="wfBlurG"><stop offset=".14" stop-color="${c.b2}" stop-opacity="0"/><stop offset=".5" stop-color="${c.a}" stop-opacity=".85"/><stop offset=".97" stop-color="${c.b1}" stop-opacity=".95"/></radialGradient>
       <radialGradient id="wfShine" cx="50%" cy="20%" r="80%"><stop offset="0" stop-color="rgba(255,255,255,.28)"/><stop offset=".6" stop-color="rgba(255,255,255,0)"/></radialGradient></defs>
     <circle r="111" fill="${c.rim}" stroke="${c.a}" stroke-width="2.5"/>${bulbs}
     <g id="wf-rot" transform="rotate(${WF.angle.toFixed(3)})">${sl}</g>
+    <circle id="wf-blur" r="100" fill="url(#wfBlurG)" opacity="0" pointer-events="none"/>
     <circle r="100" fill="url(#wfShine)" pointer-events="none"/>
-    <circle r="15" fill="url(#wfHub)" stroke="#7a5200" stroke-width="1.2"/><text y="1" font-size="15" font-weight="900" text-anchor="middle" dominant-baseline="central" fill="#5a3d00">$</text>
-    <g id="wf-ptr"><path d="M0 -94 L-9 -116 L9 -116 Z" fill="#fff" stroke="#3a2600" stroke-width="1.6" stroke-linejoin="round"/><circle cx="0" cy="-112" r="3.2" fill="#e3263b"/></g>
+    <g class="wf-hubg"><circle r="15" fill="url(#wfHub)" stroke="#7a5200" stroke-width="1.2"/><text y="1" font-size="15" font-weight="900" text-anchor="middle" dominant-baseline="central" fill="#5a3d00">$</text></g>
+    <g id="wf-ptr" transform="rotate(${(WF.pa||0).toFixed(2)} 0 -112)"><path d="M0 -94 L-9 -116 L9 -116 Z" fill="#fff" stroke="#3a2600" stroke-width="1.6" stroke-linejoin="round"/><circle cx="0" cy="-112" r="3.2" fill="#e3263b"/></g>
   </svg>`;
 }
 function wfIdxAt(angle){const a=((-angle)%360+360)%360;return Math.round(a/WF_STEP)%WF_N}
-function wfTick(){if(!bjS().sound)return;const a=audio();if(!a||!MASTER)return;try{const t=a.currentTime+.002,o=a.createOscillator(),g=a.createGain(),f=a.createBiquadFilter();
-  o.type='square';o.frequency.setValueAtTime(2400+Math.random()*300,t);o.frequency.exponentialRampToValueAtTime(900,t+.025);f.type='highpass';f.frequency.value=700;
-  g.gain.setValueAtTime(.12,t);g.gain.exponentialRampToValueAtTime(.0001,t+.035);o.connect(f);f.connect(g);g.connect(MASTER);o.start(t);o.stop(t+.04)}catch(e){}}
+/* ---- Glücksrad-Sounds (alles live erzeugt, kein Download nötig) ---- */
+function wfA(){if(!bjS().sound)return null;const a=audio();return a&&MASTER?a:null}
+function wfNB(a){if(!WF.nb||WF.nb.sampleRate!==a.sampleRate){const b=a.createBuffer(1,a.sampleRate*2,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;WF.nb=b}return WF.nb}
+function wfTone(a,o){try{const t=o.t,dur=o.dur||.3,os=a.createOscillator(),g=a.createGain();os.type=o.type||'sine';os.frequency.setValueAtTime(o.f,t);if(o.f2)os.frequency.exponentialRampToValueAtTime(o.f2,t+(o.glide||dur));if(o.det)os.detune.value=o.det;
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(o.v||.2,t+(o.att||.006));if(o.hold)g.gain.setValueAtTime(o.v||.2,t+o.hold);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  let n=os;if(o.lp){const f=a.createBiquadFilter();f.type='lowpass';f.frequency.setValueAtTime(o.lp,t);if(o.lp2)f.frequency.exponentialRampToValueAtTime(o.lp2,t+dur);f.Q.value=o.q||.8;os.connect(f);n=f}
+  if(o.vib){const l=a.createOscillator(),lg=a.createGain();l.frequency.value=o.vib;lg.gain.value=o.vibD||12;l.connect(lg);lg.connect(os.detune);l.start(t);l.stop(t+dur+.05)}
+  n.connect(g);g.connect(MASTER);os.start(t);os.stop(t+dur+.05)}catch(e){}}
+function wfNoise(a,o){try{const t=o.t,dur=o.dur||.1,s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=wfNB(a);f.type=o.ft||'bandpass';f.frequency.setValueAtTime(o.f||2000,t);if(o.f2)f.frequency.exponentialRampToValueAtTime(o.f2,t+dur);f.Q.value=o.q||1;
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(o.v||.2,t+(o.att||.003));g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(f);f.connect(g);g.connect(MASTER);s.start(t,Math.random()*.8);s.stop(t+dur+.02)}catch(e){}}
+/* ein Klack vom Zeiger: Holz-Klopfen + Klick; langsamer = lauter und tiefer (Spannung) */
+function wfTick(sp){const a=wfA();if(!a)return;const t=a.currentTime+.002,slow=1-(sp||0);
+  wfNoise(a,{t,dur:.028,v:.14+.08*slow,f:2800+Math.random()*700,q:5});
+  wfTone(a,{t,f:520-160*slow,f2:150,type:'triangle',v:.12+.14*slow,dur:.07+.05*slow,glide:.05})}
+function wfWindStart(){const a=wfA();if(!a)return;try{const s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=wfNB(a);s.loop=true;f.type='bandpass';f.Q.value=.9;f.frequency.value=300;g.gain.value=.0001;s.connect(f);f.connect(g);g.connect(MASTER);s.start();WF.wind={s,f,g}}catch(e){}}
+function wfWindSet(sp){const w=WF.wind,a=AC;if(!w||!a)return;const t=a.currentTime;w.g.gain.setTargetAtTime(.0001+.11*sp*sp,t,.05);w.f.frequency.setTargetAtTime(260+2200*sp,t,.05)}
+function wfWindStop(){const w=WF.wind;WF.wind=null;if(!w||!AC)return;try{w.g.gain.setTargetAtTime(.0001,AC.currentTime,.08);w.s.stop(AC.currentTime+.5)}catch(e){}}
+/* Aufziehen (Ratsche) und Loslassen (Wusch + Schlag) */
+function wfSndStart(wind){const a=wfA();if(!a)return;const t=a.currentTime+.01,w=wind/1000;
+  for(let i=0;i<7;i++){const ti=t+w*(i/7);wfNoise(a,{t:ti,dur:.025,v:.16,f:1800+i*220,q:6});wfTone(a,{t:ti,f:300+i*40,type:'square',v:.035,dur:.03,lp:1600})}
+  const r=t+w;wfNoise(a,{t:r,dur:.6,v:.28,f:350,f2:3200,q:.8,att:.04});wfTone(a,{t:r,f:120,f2:45,v:.35,dur:.35});wfTone(a,{t:r,f:880,f2:1760,type:'triangle',v:.06,dur:.25})}
+function wfCoins(a,t,n,spread){for(let i=0;i<n;i++){const ti=t+Math.random()*spread,f=2200+Math.random()*2400;wfTone(a,{t:ti,f,v:.05+Math.random()*.05,dur:.22,type:'sine'});wfTone(a,{t:ti,f:f*2.76,v:.025,dur:.12})}}
+function wfChord(a,t,fs,dur,v){fs.forEach(f=>{[-7,7].forEach(d=>wfTone(a,{t,f,type:'sawtooth',det:d,v:v/fs.length,dur,att:.02,lp:900,lp2:4200,hold:dur*.4}));wfTone(a,{t,f:f/2,type:'triangle',v:v/fs.length*.8,dur,att:.02})})}
+function wfSndWin(big){const a=wfA();if(!a)return;const t=a.currentTime+.02;
+  const arp=big?[392,523.25,659.25,783.99,1046.5]:[523.25,659.25,783.99,1046.5];
+  arp.forEach((f,i)=>{[-6,6].forEach(d=>wfTone(a,{t:t+i*.085,f,type:'sawtooth',det:d,v:.07,dur:.22,lp:3000}));wfTone(a,{t:t+i*.085,f:f*2,v:.03,dur:.15})});
+  const ct=t+arp.length*.085;
+  if(big){wfTone(a,{t,f:90,f2:38,v:.45,dur:.9});wfNoise(a,{t,dur:1.4,v:.12,ft:'highpass',f:6000,att:.2});wfChord(a,ct,[523.25,659.25,783.99,1046.5],1.5,.32);
+    wfChord(a,ct+.55,[587.33,739.99,880,1174.66],1.2,.24);wfChord(a,ct+1.05,[659.25,830.61,987.77,1318.5],1.8,.3);wfCoins(a,ct,34,2.2);
+    for(let i=0;i<14;i++)wfTone(a,{t:ct+1.05+i*.045,f:1318.5*Math.pow(2,i/7),v:.035,dur:.3})}
+  else{wfChord(a,ct,[523.25,659.25,783.99],.9,.26);wfCoins(a,ct,16,1)}}
+function wfSndMagic(){const a=wfA();if(!a)return;const t=a.currentTime+.02,pent=[0,2,4,7,9];
+  for(let i=0;i<14;i++){const f=523.25*Math.pow(2,(pent[i%5]+12*Math.floor(i/5))/12);wfTone(a,{t:t+i*.05,f,v:.07,dur:.5,type:'triangle'});wfTone(a,{t:t+i*.05,f:f*2,v:.02,dur:.3})}
+  wfNoise(a,{t,dur:1,v:.08,ft:'highpass',f:5000,att:.3});wfChord(a,t+.7,[659.25,987.77,1318.5],1.1,.18)}
+function wfSndLose(kind){const a=wfA();if(!a)return;const t=a.currentTime+.03;
+  if(kind==='plus'){wfTone(a,{t,f:659.25,type:'triangle',v:.12,dur:.18});wfTone(a,{t:t+.12,f:523.25,type:'triangle',v:.12,dur:.35});wfCoins(a,t+.1,4,.3);return}
+  wfTone(a,{t,f:70,f2:40,v:.3,dur:.4});
+  [[392,370],[370,349.2],[349.2,329.6],[329.6,277.2]].forEach(([f,f2],i)=>{const last=i===3;
+    wfTone(a,{t:t+.1+i*.36,f,f2,type:'sawtooth',v:.11,dur:last?1.1:.32,glide:last?1:.3,att:.03,lp:700,lp2:last?250:600,q:3,vib:last?6:0,vibD:30,hold:last?.5:.15})});
+  if(kind==='minus')for(let i=0;i<6;i++)wfTone(a,{t:t+.25+i*.11,f:2600-i*260,v:.05,dur:.15})}
+/* ---- Partikel-Ebene über dem Rad ---- */
+const WFX={c:null,x:null,p:[],raf:0,d:1};
+function wfxCv(){if(!WFX.c||!WFX.c.isConnected){const c=document.createElement('canvas');c.className='wf-fx';document.body.appendChild(c);WFX.c=c;WFX.x=c.getContext('2d');
+  const rs=()=>{WFX.d=Math.min(2,devicePixelRatio||1);c.width=innerWidth*WFX.d;c.height=innerHeight*WFX.d};rs();if(!WFX.rs){WFX.rs=1;addEventListener('resize',()=>{if(WFX.c){WFX.d=Math.min(2,devicePixelRatio||1);WFX.c.width=innerWidth*WFX.d;WFX.c.height=innerHeight*WFX.d}})}}return WFX}
+function wfGeo(){const st=document.getElementById('wf-stage');if(!st)return null;const r=st.getBoundingClientRect();return{cx:r.left+r.width*.5,cy:r.top+r.height*(118/232),R:r.width*(100/228),px:r.left+r.width*.5,py:r.top+r.height*(26/232)}}
+function wfxAdd(p){wfxCv();WFX.p.push(p);if(!WFX.raf)WFX.raf=requestAnimationFrame(wfxLoop)}
+function wfxLoop(now){const X=wfxCv(),x=X.x,d=X.d;x.setTransform(d,0,0,d,0,0);x.clearRect(0,0,innerWidth,innerHeight);
+  X.p=X.p.filter(p=>{p.age++;if(p.age>p.life)return false;const k=p.age/p.life;p.vx*=p.drag||.985;p.vy=p.vy*(p.drag||.985)+(p.g||0);p.x+=p.vx;p.y+=p.vy;p.rot+=(p.vr||0);
+    x.save();x.globalAlpha=Math.max(0,p.fade===false?1-Math.pow(k,6):1-k*k);
+    if(p.t==='spark'){x.globalCompositeOperation='lighter';x.strokeStyle=p.c;x.lineWidth=p.w;x.lineCap='round';x.beginPath();x.moveTo(p.x,p.y);x.lineTo(p.x-p.vx*p.len,p.y-p.vy*p.len);x.stroke()}
+    else if(p.t==='coin'){x.translate(p.x,p.y);const sx=Math.abs(Math.cos(p.rot))*.85+.15;x.scale(sx,1);x.fillStyle='#b8860b';x.beginPath();x.arc(0,0,p.s,0,7);x.fill();x.fillStyle=Math.cos(p.rot)>0?'#ffd84a':'#f2b705';x.beginPath();x.arc(0,0,p.s*.8,0,7);x.fill();x.fillStyle='rgba(255,255,255,.7)';x.beginPath();x.arc(-p.s*.3,-p.s*.3,p.s*.25,0,7);x.fill()}
+    else if(p.t==='conf'){x.translate(p.x,p.y);x.rotate(p.rot);x.scale(1,Math.cos(p.rot*1.7));x.fillStyle=p.c;x.fillRect(-p.s,-p.s*.45,p.s*2,p.s*.9)}
+    else if(p.t==='ring'){x.globalCompositeOperation='lighter';x.strokeStyle=p.c;x.lineWidth=p.w*(1-k);x.beginPath();x.arc(p.x,p.y,p.r0+(p.r1-p.r0)*(1-Math.pow(1-k,3)),0,7);x.stroke()}
+    else if(p.t==='smoke'){x.fillStyle=p.c;x.beginPath();x.arc(p.x,p.y,p.s*(1+k*2.2),0,7);x.fill()}
+    else if(p.t==='glow'){x.globalCompositeOperation='lighter';const r=p.s*(1+k*.5),gr=x.createRadialGradient(p.x,p.y,0,p.x,p.y,r);gr.addColorStop(0,p.c);gr.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=gr;x.beginPath();x.arc(p.x,p.y,r,0,7);x.fill()}
+    x.restore();return true});
+  WFX.raf=X.p.length?requestAnimationFrame(wfxLoop):0;if(!WFX.raf)x.clearRect(0,0,innerWidth,innerHeight)}
+function wfSparkAtPtr(sp){const g=wfGeo();if(!g||calm())return;const n=sp>.7?3:sp>.4?2:1;
+  for(let i=0;i<n;i++){const a=-Math.PI/2+(Math.random()-.2)*1.4;wfxAdd({t:'spark',x:g.px,y:g.py+6,vx:Math.cos(a)*(2+sp*6)+sp*3,vy:Math.sin(a)*(2+sp*5),g:.25,life:14+Math.random()*10,age:0,c:Math.random()<.5?'#ffe9a0':'#fff',w:1.6,len:2.2,rot:0})}}
+function wfBurst(kind){const g=wfGeo();if(!g)return;const acc=czAuto().acc,few=calm();
+  if(kind==='lose'||kind==='minus'){for(let i=0;i<(few?4:14);i++){const a=-Math.PI/2+(Math.random()-.5)*1.6;wfxAdd({t:'smoke',x:g.px+(Math.random()-.5)*14,y:g.py+12,vx:Math.cos(a)*1.1,vy:Math.sin(a)*1.4-.3,g:-.01,drag:.97,life:60+Math.random()*30,age:0,s:5+Math.random()*6,c:'rgba(120,120,130,.35)',rot:0})}return}
+  if(kind==='plus'){for(let i=0;i<(few?3:9);i++){const a=-Math.PI/2+(Math.random()-.5)*1.4,s=4+Math.random()*4;wfxAdd({t:'coin',x:g.px,y:g.py+20,vx:Math.cos(a)*s,vy:Math.sin(a)*s,g:.4,drag:.99,life:60,age:0,s:4+Math.random()*2,rot:Math.random()*6,vr:.25,fade:false})}return}
+  const big=kind==='jack',magic=kind==='free'||kind==='dbl',nc=few?8:big?90:magic?0:40,ns=few?10:big?70:40,cols=big?['#ffd84a','#fff','#ffcf3a','#ffe9a0']:[acc,'#fff',fbShade(acc,.35),'#ffe9a0'];
+  wfxAdd({t:'glow',x:g.cx,y:g.cy,vx:0,vy:0,life:big?50:32,age:0,s:g.R*(big?1.6:1.1),c:big?'rgba(255,220,120,.7)':'rgba(255,255,255,.45)',rot:0});
+  wfxAdd({t:'ring',x:g.cx,y:g.cy,vx:0,vy:0,life:big?42:30,age:0,r0:g.R*.15,r1:g.R*(big?1.9:1.4),w:big?10:6,c:big?'rgba(255,215,90,.9)':acc,rot:0});
+  if(big)setTimeout(()=>wfxAdd({t:'ring',x:g.cx,y:g.cy,vx:0,vy:0,life:40,age:0,r0:g.R*.1,r1:g.R*2.3,w:8,c:'rgba(255,255,255,.8)',rot:0}),220);
+  for(let i=0;i<ns;i++){const a=Math.random()*Math.PI*2,s=(big?6:4)+Math.random()*(big?12:8);wfxAdd({t:'spark',x:g.cx+Math.cos(a)*g.R*.15,y:g.cy+Math.sin(a)*g.R*.15,vx:Math.cos(a)*s,vy:Math.sin(a)*s,g:.12,drag:.95,life:24+Math.random()*24,age:0,c:cols[i%cols.length],w:2.2,len:2.5,rot:0})}
+  for(let i=0;i<nc;i++){const a=-Math.PI/2+(Math.random()-.5)*2.6,s=6+Math.random()*(big?13:9);wfxAdd({t:'coin',x:g.cx,y:g.cy,vx:Math.cos(a)*s,vy:Math.sin(a)*s-3,g:.42,drag:.99,life:80+Math.random()*40,age:0,s:5+Math.random()*4,rot:Math.random()*6,vr:.2+Math.random()*.3,fade:false})}
+  if(magic||big)for(let i=0;i<(few?6:big?60:36);i++){const a=Math.random()*Math.PI*2,s=3+Math.random()*7;wfxAdd({t:'conf',x:g.cx,y:g.cy,vx:Math.cos(a)*s,vy:Math.sin(a)*s-4,g:.16,drag:.985,life:90+Math.random()*40,age:0,s:3+Math.random()*3,rot:Math.random()*6,vr:(Math.random()-.5)*.4,c:magic?['#c4a7ff','#7dd3fc','#fff',acc][i%4]:cols[i%cols.length]})}}
+/* ---- Zeiger mit Feder: wird von den Stiften weggeschubst und schwingt zurück ---- */
+function wfPtrKick(sp){WF.pa=Math.max(-34,Math.min(WF.pa||0,0)-(10+sp*20));WF.pv=0}
+function wfPtrStep(){const p=document.getElementById('wf-ptr');WF.pv=((WF.pv||0)-(WF.pa||0)*.32)*.62;WF.pa=(WF.pa||0)+WF.pv;if(Math.abs(WF.pa)<.05&&Math.abs(WF.pv)<.05){WF.pa=0;WF.pv=0}
+  if(p)p.setAttribute('transform','rotate('+WF.pa.toFixed(2)+' 0 -112)');return WF.pa!==0}
 function wfPick(){
   const good=Math.random()<WF_P,idx=WF_SLICES.map((s,i)=>s.good===good?i:-1).filter(i=>i>=0);
   if(!good)return idx[rndInt(idx.length)];
   const tot=idx.reduce((a,i)=>a+WF_SLICES[i].d[3],0);let r=Math.random()*tot;for(const i of idx){r-=WF_SLICES[i].d[3];if(r<=0)return i}return idx[0];
 }
+const wfEIO=k=>-(Math.cos(Math.PI*k)-1)/2;
 function wfSpin(){
   if(WF.spinning)return;const st=bjS(),w=wfS(),free=w.free>0;
   if(!free&&st.bal<WF_COST){toast('Für einen Dreh brauchst du 10.000 €.');return}
   if(bjS().sound)unlockAudio();
   if(free)w.free--;else st.bal=Math.round((st.bal-WF_COST)*100)/100;
-  saveSettings();WF.res=null;WF.paid=!free;
-  const i=wfPick(),cur=WF.angle,target=((-i*WF_STEP)%360+360)%360,jit=(Math.random()-.5)*WF_STEP*.7;
-  const delta=((target-((cur%360)+360)%360)+360)%360,end=cur+360*(calm()?2:7+rndInt(2))+delta+jit,dur=calm()?1500:6200+rndInt(700),t0=performance.now();
+  saveSettings();WF.res=null;WF.fx=null;WF.paid=!free;
+  const i=wfPick(),cur=WF.angle,target=((-i*WF_STEP)%360+360)%360,jit=(Math.random()-.5)*WF_STEP*.7,c=calm();
+  const delta=((target-((cur%360)+360)%360)+360)%360,end=cur+360*(c?2:7+rndInt(2))+delta+jit,dur=c?1500:6400+rndInt(800);
+  /* Ausholen nach hinten, langer Dreh, kurz über das Ziel hinaus und zurückrollen */
+  const wind=c?0:420,back=c?0:11,over=c?0:WF_STEP*(.22+Math.random()*.3),settle=c?0:650,from=cur-back,n=4.2,peak=n*(end+over-from)/dur;
   WF.spinning=true;WF.lastIdx=wfIdxAt(cur);WF.pick=i;document.body.classList.add('wf-spin');
-  fbWhoosh&&fbWhoosh();bjRender();
-  const step=now=>{const k=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-k,4);WF.angle=cur+(end-cur)*e;
-    const g=document.getElementById('wf-rot');if(g)g.setAttribute('transform','rotate('+WF.angle.toFixed(3)+')');
-    const idx=wfIdxAt(WF.angle);if(idx!==WF.lastIdx){WF.lastIdx=idx;wfTick();const p=document.getElementById('wf-ptr');if(p){p.classList.remove('flick');void p.getBBox();p.classList.add('flick')}}
-    if(k<1)WF.raf=requestAnimationFrame(step);else wfDone()};
+  wfSndStart(wind);setTimeout(()=>{if(WF.spinning)wfWindStart()},wind);bjRender();
+  const t0=performance.now();let lastA=cur,lastT=t0;
+  const step=now=>{const t=now-t0;let ang;
+    if(t<wind)ang=cur-back*wfEIO(t/wind);
+    else if(t<wind+dur){const k=(t-wind)/dur;ang=from+(end+over-from)*(1-Math.pow(1-k,n))}
+    else if(t<wind+dur+settle){ang=end+over-over*wfEIO((t-wind-dur)/settle)}
+    else ang=end;
+    const dt=Math.max(1,now-lastT),v=Math.abs(ang-lastA)/dt,sp=Math.min(1,v/peak);lastA=ang;lastT=now;
+    WF.angle=ang;const g=document.getElementById('wf-rot');if(g)g.setAttribute('transform','rotate('+ang.toFixed(3)+')');
+    const bl=document.getElementById('wf-blur');if(bl)bl.setAttribute('opacity',(Math.max(0,sp-.15)*.7).toFixed(3));
+    wfWindSet(t<wind?0:sp);
+    const idx=wfIdxAt(ang);if(idx!==WF.lastIdx){WF.lastIdx=idx;wfTick(sp);wfPtrKick(sp);if(sp>.25)wfSparkAtPtr(sp)}
+    wfPtrStep();
+    if(t<wind+dur+settle)WF.raf=requestAnimationFrame(step);else wfDone()};
   WF.raf=requestAnimationFrame(step);
 }
+function wfCount(from,to){const el=document.querySelector('.wf-bal b');if(!el||calm()||from===to)return;const t0=performance.now(),D=Math.min(1600,500+Math.abs(to-from)/60);el.classList.add('bump');
+  const f=now=>{const k=Math.min(1,(now-t0)/D),e=1-Math.pow(1-k,3),cur=document.querySelector('.wf-bal b');if(!cur)return;cur.textContent=fmtC(Math.round(from+(to-from)*e));if(k<1)requestAnimationFrame(f);else{cur.textContent=fmtC(bjS().bal);setTimeout(()=>cur.classList.remove('bump'),500)}};requestAnimationFrame(f)}
 function wfDone(){
-  WF.spinning=false;document.body.classList.remove('wf-spin');WF.angle=WF.angle%360;
-  const s=WF_SLICES[WF.pick],w=wfS(),st=bjS();let msg='',amt=0,cls='lose';
-  if(s.good){cls='win';
+  WF.spinning=false;document.body.classList.remove('wf-spin');WF.angle=WF.angle%360;wfWindStop();
+  const s=WF_SLICES[WF.pick],w=wfS(),st=bjS(),before=st.bal;let msg='',amt=0,cls='lose',fx='lose';
+  if(s.good){cls='win';fx='win';
     if(s.d[1]==='money'){amt=s.d[2]*(w.dbl?2:1);msg=(w.dbl?'Doppelt! ':'')+'+'+fmtC(amt);w.dbl=false;czCredit(st,amt);w.won+=amt;if(amt>w.best)w.best=amt;
-      if(amt>=60000){cls='jack';sfx('bj');bell(0,.6);bell(.12,.55);bell(.24,.5);setTimeout(()=>play('register1',.8,0,1),350)}else{sfx('win');setTimeout(()=>play('register1',.7,0,1.05),250)}
-      if(!calm()&&typeof confetti==='function')try{confetti(amt>=60000?220:100)}catch(e){}}
-    else if(s.d[1]==='free'){w.free++;msg='Gratis-Dreh! Der nächste Dreh kostet nichts.';sfx('win')}
-    else{w.dbl=true;msg='×2! Dein nächster Geldgewinn zählt doppelt.';sfx('win')}}
+      if(amt>=60000){cls='jack';fx='jack';wfSndWin(true);bell(.5,.5);bell(.65,.45);bell(.8,.4);setTimeout(()=>play('register1',.8,0,1),500)}else{wfSndWin(false);setTimeout(()=>play('register1',.6,0,1.05),380)}}
+    else if(s.d[1]==='free'){w.free++;msg='Gratis-Dreh! Der nächste Dreh kostet nichts.';fx='free';wfSndMagic()}
+    else{w.dbl=true;msg='×2! Dein nächster Geldgewinn zählt doppelt.';fx='dbl';wfSndMagic()}}
   else{
-    if(s.d[1]==='plus'){amt=s.d[2];czCredit(st,amt);msg='Trostpreis: +'+fmtC(amt);sfx('push')}
-    else if(s.d[1]==='minus'){amt=Math.min(s.d[2],st.bal);st.bal=Math.round((st.bal-amt)*100)/100;w.lost+=amt;msg='Autsch: −'+fmtC(amt);sfx('rllose')}
-    else{msg=s.d[0]==='Fast!'?'Fast! Knapp daneben.':s.d[0]+'. Diesmal leider nichts.';sfx('rllose')}}
+    if(s.d[1]==='plus'){amt=s.d[2];czCredit(st,amt);msg='Trostpreis: +'+fmtC(amt);fx='plus';wfSndLose('plus')}
+    else if(s.d[1]==='minus'){amt=Math.min(s.d[2],st.bal);st.bal=Math.round((st.bal-amt)*100)/100;w.lost+=amt;msg='Autsch: −'+fmtC(amt);fx='minus';wfSndLose('minus')}
+    else{msg=s.d[0]==='Fast!'?'Fast! Knapp daneben.':s.d[0]+'. Diesmal leider nichts.';wfSndLose('none')}}
   w.spins++;w.hist=[{l:s.d[0],g:s.good}].concat(w.hist||[]).slice(0,10);
-  WF.res={msg,cls,label:s.d[0]};czRecord(st);saveSettings();bjRender();
+  WF.res={msg,cls,label:s.d[0]};WF.fx=cls==='jack'?'jack':cls;czRecord(st);saveSettings();bjRender();
+  wfBurst(fx);wfCount(before,st.bal);
+  clearTimeout(WF.fxT);WF.fxT=setTimeout(()=>{WF.fx=null;const v=document.querySelector('.wf-view');if(v)v.classList.remove('fx-win','fx-jack','fx-lose')},cls==='jack'?3200:2200);
+  /* Zeiger schwingt nach dem Stopp noch kurz aus */
+  WF.pa=(WF.pa||0)-6;const ps=()=>{if(wfPtrStep())requestAnimationFrame(ps)};requestAnimationFrame(ps);
 }
 /* size the wheel so it, the result and the spin button fit above the tab bar */
 function wfFit(){const st=$('#wf-stage'),nav=$('#tabs');if(!st||!nav)return;st.style.width='';
@@ -2798,12 +2930,12 @@ function wfFit(){const st=$('#wf-stage'),nav=$('#tabs');if(!st||!nav)return;st.s
 window.addEventListener('resize',()=>{if(tab==='rad')wfFit()});
 function vWheel(){
   const st=bjS(),w=wfS(),free=w.free>0,can=!WF.spinning&&(free||st.bal>=WF_COST);
-  return `<section class="wf-view${WF.spinning?' spinning':''}">
+  return `<section class="wf-view${WF.spinning?' spinning':''}${WF.fx==='jack'?' fx-win fx-jack':WF.fx==='win'?' fx-win':WF.fx==='lose'?' fx-lose':''}">
     <div class="wf-top"><div class="wf-bal glass"><small>Guthaben</small><b>${fmtC(st.bal)}</b></div>
       <div class="wf-tags">${free?`<span class="wf-tag">🎟️ ${w.free}× gratis</span>`:''}${w.dbl?'<span class="wf-tag gold">×2 aktiv</span>':''}
       <button class="fb-ico glass" data-act="bj-sound" aria-pressed="${!!st.sound}" aria-label="Ton"><svg viewBox="0 0 24 24" aria-hidden="true">${st.sound?BJI.on:BJI.off}</svg></button></div></div>
-    <div class="wf-main"><div class="wf-stage" id="wf-stage">${wfSVG()}</div><div class="wf-side">
-    <div class="wf-res ${WF.res?WF.res.cls:''}" aria-live="polite">${WF.res?`<b>${esc(WF.res.label)}</b><span>${esc(WF.res.msg)}</span>`:WF.spinning?'<span>Das Rad dreht sich…</span>':'<span>25 Gewinne, 25 Nieten. Viel Glück!</span>'}</div>
+    <div class="wf-main"><div class="wf-stage" id="wf-stage"><div class="wf-rays"></div>${wfSVG()}</div><div class="wf-side">
+    <div class="wf-res ${WF.res?WF.res.cls:''}" aria-live="polite">${WF.res?`${WF.res.cls==='jack'?'<span class="wf-jk">JACKPOT</span>':''}<b>${esc(WF.res.label)}</b><span>${esc(WF.res.msg)}</span>`:WF.spinning?'<span>Das Rad dreht sich…</span>':'<span>25 Gewinne, 25 Nieten. Viel Glück!</span>'}</div>
     <button class="wf-spinbtn" data-act="wf-spin" ${can?'':'disabled'}>${WF.spinning?'Dreht…':free?'Gratis drehen':'Drehen · '+fmtC(WF_COST)}</button>
     ${!WF.spinning&&!free&&st.bal<WF_COST?`<p class="wf-note">Zu wenig Guthaben für einen Dreh.${st.bal<5?' <button class="btn sm" data-act="bj-refill">1.000 € nachfüllen</button>':''}</p>`:''}
     <div class="wf-hist">${(w.hist||[]).map(h=>`<span class="${h.g?'g':'b'}">${esc(h.l)}</span>`).join('')}</div>
