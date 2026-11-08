@@ -2586,13 +2586,16 @@ const IS_IOS=/iPhone|iPad|iPod/i.test(UA)||(navigator.platform==='MacIntel'&&nav
 const IS_ANDROID=/Android/i.test(UA);
 const IS_MOBILE=IS_IOS||IS_ANDROID;
 const IN_APP_BROWSER=/Instagram|FBAN|FBAV|Snapchat|TikTok|Line\/|WhatsApp|GSA\//i.test(UA);
+/* opened through the move button of the old address (maybe still inside the old home-screen app): installing is required in any case */
+const CAME_FROM_OLD=/^#import=/.test(location.hash)||/netlify\.app/i.test(document.referrer||'');
 function gateHTML(){
   if(ON_OLD_HOST)return `<div class="gate-card"><div class="gate-ico">🎰</div><h2>Larsens Casino ist umgezogen</h2>
     <p>Diese Seite wird nicht mehr genutzt. Tippe auf den Knopf, dein Spielstand kommt automatisch mit.</p>
     <button class="gate-btn" data-act="bk-move">Mit Spielstand umziehen</button>
     <p class="gate-small">Neue Adresse: larsen140.github.io/Larsens-Casino</p></div>`;
   const hasSave=S.settings.bj&&(S.settings.bj.played>0||S.settings.bj.bal!==1000);
-  const steps=IN_APP_BROWSER?`<ol><li>Tippe oben rechts auf <b>•••</b> bzw. das Menü.</li><li>Wähle <b>„Im Browser öffnen“</b> (Safari oder Chrome).</li><li>Dort geht es weiter.</li></ol>`
+  const steps=IS_STANDALONE&&CAME_FROM_OLD?`<ol><li>Du bist noch in der <b>alten App</b>. Tippe unten rechts auf das <b>Safari-Symbol</b> (Kompass), damit die Seite in Safari öffnet.</li><li>In Safari unten auf <b>Teilen</b> <span class="gate-share">⬆︎</span> tippen.</li><li><b>„Zum Home-Bildschirm“</b> und <b>„Hinzufügen“</b> wählen.</li><li>Neue App über das <b>$-Symbol</b> öffnen. Das alte Symbol kannst du löschen.</li></ol>`
+    :IN_APP_BROWSER?`<ol><li>Tippe oben rechts auf <b>•••</b> bzw. das Menü.</li><li>Wähle <b>„Im Browser öffnen“</b> (Safari oder Chrome).</li><li>Dort geht es weiter.</li></ol>`
     :IS_IOS?`<ol><li>Tippe unten in Safari auf <b>Teilen</b> <span class="gate-share">⬆︎</span>.</li><li>Scrolle runter und wähle <b>„Zum Home-Bildschirm“</b>.</li><li>Tippe auf <b>„Hinzufügen“</b>.</li><li>Öffne Larsens Casino über das neue <b>grüne $-Symbol</b> auf deinem Home-Bildschirm.</li></ol>`
     :`<ol><li>Tippe oben rechts auf das Menü <b>⋮</b>.</li><li>Wähle <b>„App installieren“</b> oder <b>„Zum Startbildschirm hinzufügen“</b>.</li><li>Öffne Larsens Casino über das neue <b>grüne $-Symbol</b>.</li></ol>`;
   return `<div class="gate-card"><img class="gate-logo" src="icon-180.png" alt=""><h2>Erst als App hinzufügen</h2>
@@ -2611,7 +2614,7 @@ function gateShow(html){let g=document.getElementById('gate');if(!g){g=document.
 function gateClose(){const g=document.getElementById('gate');if(g)g.remove();document.body.classList.remove('gated')}
 function gateInit(){
   if(ON_OLD_HOST){gateShow(gateHTML());return}
-  if(IS_MOBILE&&!IS_STANDALONE){gateShow(gateHTML());return}
+  if(IS_MOBILE&&(!IS_STANDALONE||CAME_FROM_OLD)){gateShow(gateHTML());return}
   if(IS_STANDALONE&&!S.settings.welcomed){const fresh=!S.settings.bj||(S.settings.bj.bal===1000&&!S.settings.bj.played);
     if(fresh){gateShow(welcomeHTML());return}S.settings.welcomed=true;saveLocal()}
 }
@@ -2818,7 +2821,9 @@ document.addEventListener('click',ev=>{
     case'gate-paste':{try{navigator.clipboard.readText().then(t=>{if(!gateLoad(t)){const i=$('#gate-in');if(i)i.focus()}},()=>{toast('Bitte den Code unten ins Feld einfügen.');const i=$('#gate-in');if(i)i.focus()})}catch(e){toast('Bitte den Code unten ins Feld einfügen.')}break}
     case'gate-load':gateLoad(val('gate-in'));break;
     case'gate-skip':S.settings.welcomed=true;saveLocal();gateClose();break;
-    case'bk-move':{saveLocal();location.href=NEW_HOME+'#import='+encodeURIComponent(bkCode().slice(4));break}
+    case'bk-move':{saveLocal();const url=NEW_HOME+'#import='+encodeURIComponent(bkCode().slice(4));
+      /* inside the old home-screen app a new window opens real Safari, so the new page can be added to the home screen */
+      if(IS_STANDALONE){let w=null;try{w=window.open(url,'_blank')}catch(e){}if(!w)location.href=url}else location.href=url;break}
     case'bk-copy':{const code=bkCode();
       const fallback=()=>{const t=$('#bk-in');if(t){t.value=code;t.focus();t.select()}toast('Code markiert. Bitte jetzt kopieren.')};
       try{navigator.clipboard.writeText(code).then(()=>toast('Sicherungscode kopiert'),fallback)}catch(e){fallback()}break}
