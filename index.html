@@ -1039,7 +1039,7 @@ let tab='blackjack', noteFilter='alle', noteQuery='', todoFilter='offen', calMon
 let db=null, coll=null, online=false, connecting=true;
 const LS='larsenscasino:v1';
 function loadLocal(){try{const raw=localStorage.getItem(LS);if(!raw)return false;const d=JSON.parse(raw);KINDS.forEach(k=>S[k]=Array.isArray(d[k])?d[k]:[]);S.settings=Object.assign(defaultSettings(),d.settings||{});return true}catch(e){return false}}
-function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
+function saveLocal(){if(window.__updLock)return;try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
 const queue=new Map(), busy=new Set();
 function persist(id,body){ // body null = delete
   saveLocal();
@@ -2648,6 +2648,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'2.6',d:'08.11.2026',t:'Updates sofort',items:[['n','Neue Versionen werden jetzt sofort geladen, auch mitten in einer Runde.'],['n','Die Runde wird dann abgebrochen und alles auf den Stand davor zurückgesetzt: Du verlierst nichts und gewinnst nichts.']]},
   {v:'2.5',d:'08.11.2026',t:'Glücksrad 2.0',items:[['n','Neue Sounds: Ratsche beim Aufziehen, echtes Klacken am Zeiger, Wind beim Drehen, Fanfare mit Münzregen beim Gewinn und Posaune bei Nieten.'],['n','Neue Effekte: Lichterkette läuft beim Drehen, Lichtstrahlen, Funken, Münzen, Konfetti und Rauch je nach Ergebnis, Gewinnfeld leuchtet auf.'],['n','Neue Animation: Das Rad holt aus, dreht verwischt, rollt am Ende ein Stück zurück, der Zeiger federt an jedem Stift. Beim Jackpot bebt das Rad.'],['n','Guthaben zählt nach einem Gewinn sichtbar hoch.']]},
   {v:'2.4',d:'08.11.2026',t:'Ladebildschirm',items:[['n','Beim Öffnen erscheint kurz ein Ladebildschirm mit dem Casino-Logo, bis alles bereit ist.']]},
   {v:'2.3',d:'08.11.2026',t:'Updates ohne Neustart',items:[['n','Neue Versionen werden automatisch geladen, du musst die App nicht mehr schließen.'],['n','Das passiert nie mitten in einer Runde, sondern erst, wenn gerade kein Spiel läuft.']]},
@@ -2952,12 +2953,22 @@ async function updStamp(){
   try{const r=await fetch(url,{cache:'no-store'});if(!r.ok)return null;const x=await r.text();let h=5381;for(let i=0;i<x.length;i+=7)h=((h<<5)+h+x.charCodeAt(i))|0;return 'h'+h+'-'+x.length}catch(e){return null}
 }
 function updBusy(){try{return (typeof czBusy==='function'&&czBusy())||(typeof FB!=='undefined'&&(FB.state==='play'||FB.state==='ready'))||(typeof WF!=='undefined'&&WF.spinning)||document.body.classList.contains('gated')&&false}catch(e){return false}}
+/* Stand vor jeder Runde merken: bei jedem Tippen/Klicken/Tastendruck, solange kein Spiel läuft */
+let updSnap=null;
+function updTakeSnap(){try{if(updBusy())return;updSnap={bj:JSON.stringify(S.settings.bj||null),wheel:JSON.stringify(S.settings.wheel||null)}}catch(e){}}
+['pointerdown','click','keydown','touchstart'].forEach(t=>document.addEventListener(t,updTakeSnap,{capture:true,passive:true}));
 function updApply(){
-  if(!updPending)return;if(updBusy()){setTimeout(updApply,3000);return}
+  if(!updPending)return;
   try{const last=+sessionStorage.getItem('lc:upd')||0;if(Date.now()-last<60000)return;sessionStorage.setItem('lc:upd',Date.now())}catch(e){}
+  let cut=false;
+  /* läuft gerade eine Runde: abbrechen und alles auf den Stand davor zurücksetzen (kein Gewinn, kein Verlust) */
+  if(updBusy()&&updSnap){try{const b=JSON.parse(updSnap.bj),w=JSON.parse(updSnap.wheel);if(b)S.settings.bj=b;if(w)S.settings.wheel=w;else delete S.settings.wheel;cut=true}catch(e){}}
   try{saveLocal()}catch(e){}
-  toast('Neue Version wird geladen…');setTimeout(()=>location.reload(),1200);
+  window.__updLock=true;  /* noch laufende Spiel-Timer dürfen jetzt nichts mehr speichern */
+  try{if(cut)sessionStorage.setItem('lc:updcut','1')}catch(e){}
+  toast(cut?'Neue Version: Runde abgebrochen, Einsatz zurück.':'Neue Version wird geladen…');setTimeout(()=>location.reload(),cut?700:900);
 }
+try{if(sessionStorage.getItem('lc:updcut')){sessionStorage.removeItem('lc:updcut');setTimeout(()=>toast('Update geladen. Deine Runde wurde abgebrochen, du hast nichts verloren und nichts gewonnen.'),1400)}}catch(e){}
 async function updCheck(){
   if(ON_OLD_HOST||location.protocol==='file:'||updPending)return;
   const st=await updStamp();if(!st)return;
