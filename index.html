@@ -771,6 +771,12 @@ body.upd-new #tab-updates::after{content:'';position:absolute;top:8px;right:calc
 .ok-stake:disabled{opacity:.35}
 .ok-start{min-width:220px}
 @container (min-width:700px){.ok-pile .ok-t,.ok-pile{--w:42px}.ok-opp b{font-size:15px}.ok-status{font-size:14px}}
+.bk-move{display:flex;flex-direction:column;gap:6px;padding:12px 14px;margin:6px 0 10px;border-radius:16px;background:color-mix(in srgb,var(--accent) 14%,transparent);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--accent) 45%,transparent)}
+.bk-move span{font-size:13.5px;color:var(--muted)}
+.bk-move .btn{align-self:flex-start}
+.bk-banner{position:fixed;left:50%;transform:translateX(-50%);top:calc(8px + env(safe-area-inset-top));z-index:400;width:min(520px,calc(100% - 24px));display:flex;align-items:center;gap:10px;padding:8px 8px 8px 14px;border-radius:16px;background:linear-gradient(135deg,#ffd84a,#ff9f1c);color:#3a2600;font-size:13.5px;box-shadow:0 10px 28px rgba(0,0,0,.35)}
+.bk-banner span{flex:1;line-height:1.3}
+.bk-banner button{border:0;border-radius:12px;padding:9px 14px;font:inherit;font-weight:900;background:#3a2600;color:#ffd84a;cursor:pointer;white-space:nowrap}
 /* assistant */
 .ch-view{display:flex;flex-direction:column;gap:10px;max-width:760px;margin:0 auto}
 .ch-card{display:flex;flex-direction:column;height:calc(100dvh - 240px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));min-height:360px;max-height:820px;border-radius:26px;overflow:hidden;background:var(--ch-bg);color:var(--ch-text);border:1px solid color-mix(in srgb,var(--ch-text) 12%,transparent);box-shadow:0 18px 50px -18px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(var(--blur,20px)) saturate(170%);backdrop-filter:blur(var(--blur,20px)) saturate(170%)}
@@ -2513,6 +2519,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'1.9',d:'08.11.2026',t:'Neue Adresse',items:['Larsens Casino läuft jetzt unter larsen140.github.io/Larsens-Casino.','Auf der alten Seite nimmt der Knopf „Mit Spielstand zur neuen Seite“ deinen Spielstand automatisch mit.','Sicherungscodes werden jetzt auch mit Leerzeichen oder Zeilenumbrüchen erkannt.']},
   {v:'1.8',d:'08.11.2026',t:'Neues Spiel: Okey',items:['Okey lässt sich in den Optionen unter „Casino“ ausblenden.','Okey, das türkische Steinspiel, als viertes Casino-Spiel: du gegen Mehmet, Ayşe und Can.','Einsatz von 10 € bis 1.000 €, Gewinn 4× oder mit Okey bzw. 7 Paaren 8×.','Steine per Antippen verschieben, automatisch nach Reihen oder Paaren sortieren.']},
   {v:'1.7',d:'08.11.2026',t:'Maps, Animationen und Farben',items:['Flying Bird hat jetzt 5 Maps: Wiese, Wüste, Schnee, Vulkan und Weltraum. Auswahl in den Einstellungen unter „Flying Bird“.','Jede Map mit eigenem Wetter: Schneefall, Wüstenstaub, Glut und Sternschnuppen.','Bessere Animationen: Figuren blinzeln, flattern weicher, stauchen sich beim Flügelschlag und überschlagen sich beim Absturz.','Flying Bird läuft flüssiger, weil der Hintergrund der App beim Spielen anhält.','Das Casino übernimmt jetzt dein Farbthema (neues Tischdesign „App-Farben“).','Pause-Knopf oben rechts in Flying Bird.','Neuer Tab „Updates“ mit allen Änderungen.']},
   {v:'1.6',d:'08.11.2026',t:'Getrennte Highscores',items:['Geld aus Flying Bird zählt nicht mehr zum Casino-Highscore.','Flying Bird hat einen eigenen Rekord nach Punkten.']},
@@ -2530,6 +2537,28 @@ function vUpdates(){
   ${UPDATES.map((u,i)=>`<article class="panel glass upd${i===0?' upd-top':''}"><div class="upd-meta"><span class="upd-v">v${u.v}</span><span class="upd-d">${u.d}</span>${i===0?'<span class="upd-badge">Neu</span>':''}</div><h3>${esc(u.t)}</h3><ul>${u.items.map(x=>`<li>${chFmt(x)}</li>`).join('')}</ul></article>`).join('')}</div>`;
   if(seen!==UPDATES[0].v){S.settings.seenUpd=UPDATES[0].v;saveSettings();setTimeout(()=>document.body.classList.remove('upd-new'),0)}
   return html;
+}
+
+/* ---------- Spielstand: Sicherungscode und Umzug auf die neue Adresse ---------- */
+const NEW_HOME='https://larsen140.github.io/Larsens-Casino/';
+const ON_OLD_HOST=/netlify\.app$/i.test(location.hostname);
+function bkCode(){return 'LC1:'+btoa(unescape(encodeURIComponent(JSON.stringify({v:1,at:Date.now(),settings:S.settings}))))}
+/* forgiving reader: ignores spaces, line breaks, quotes and text around the code, accepts URL-safe characters and missing padding */
+function bkParse(raw){
+  try{let t=String(raw||'');try{t=decodeURIComponent(t)}catch(e){}
+    t=t.replace(/\s+/g,'');const i=t.indexOf('LC1:');let b=i>=0?t.slice(i+4):t;
+    b=(b.match(/^[A-Za-z0-9+/=_-]+/)||[''])[0].replace(/-/g,'+').replace(/_/g,'/').replace(/=+$/,'');
+    if(b.length<8)return null;while(b.length%4)b+='=';
+    const data=JSON.parse(decodeURIComponent(escape(atob(b))));
+    if(!data||typeof data.settings!=='object')return null;return data}catch(e){return null}}
+function bkApply(data){S.settings=Object.assign(defaultSettings(),data.settings);if(!S.settings.bj)bjS();saveLocal();applyTheme();render()}
+/* arriving with #import=… from the old address */
+function bkImportFromHash(){
+  const m=location.hash.match(/^#import=(.+)$/);if(!m)return;
+  try{history.replaceState(null,'',location.pathname+location.search)}catch(e){location.hash=''}
+  const data=bkParse(m[1]);if(!data){setTimeout(()=>toast('Der Spielstand konnte nicht übernommen werden. Nutze den Sicherungscode.'),400);return}
+  const bal=data.settings.bj&&data.settings.bj.bal,fresh=!S.settings.bj||(S.settings.bj.bal===1000&&!S.settings.bj.played);
+  if(fresh||window.confirm('Spielstand von der alten Seite übernehmen'+(bal!=null?' ('+fmtC(bal)+')':'')+'? Dein Spielstand hier wird ersetzt.')){bkApply(data);setTimeout(()=>toast('Spielstand übernommen'+(bal!=null?': '+fmtC(bal):'')),400)}
 }
 
 function vSettings(){
@@ -2567,6 +2596,7 @@ function vSettings(){
   </section>
   <section class="panel glass set-sec"><h3>Spielstand</h3>
     <p class="note-txt">Dein Spielstand wird nur auf diesem Gerät gespeichert, ohne Konto. Mit dem Sicherungscode nimmst du ihn auf ein anderes Gerät mit oder holst ihn zurück, falls die Browserdaten gelöscht wurden.</p>
+    ${ON_OLD_HOST?`<div class="bk-move"><b>Larsens Casino ist umgezogen!</b><span>Ein Tipp und dein Spielstand kommt mit auf die neue Seite.</span><button class="btn sm" data-act="bk-move">Mit Spielstand zur neuen Seite</button></div>`:''}
     <div class="chips"><button class="btn sm" data-act="bk-copy">Sicherungscode kopieren</button></div>
     <div class="field"><label for="bk-in">Sicherungscode einfügen</label><textarea id="bk-in" style="min-height:70px;font-family:var(--f-mono);font-size:12px" placeholder="LC1:…" spellcheck="false"></textarea></div>
     <div class="chips"><button class="btn ghost sm" data-act="bk-load">Spielstand laden</button></div>
@@ -2724,13 +2754,14 @@ document.addEventListener('click',ev=>{
     case'bj-hint':{const s=bjS();s.hint=!s.hint;saveSettings();bjRender();toast(s.hint?'Strategie-Tipps an':'Strategie-Tipps aus');break}
     case'bj-sound':{const s=bjS();s.sound=!s.sound;saveSettings();bjRender();if(s.sound){unlockAudio();sfx('chip')}else releaseAudio();toast(s.sound?'Ton an':'Ton aus');break}
     case'bj-refill':{const s=bjS();BJ.balFrom=s.bal;s.bal+=1000;saveSettings();sfx('refill');toast('1.000\u00a0\u20ac nachgef\u00fcllt');bjRender();break}
-    case'bk-copy':{const code='LC1:'+btoa(unescape(encodeURIComponent(JSON.stringify({v:1,at:Date.now(),settings:S.settings}))));
+    case'bk-move':{saveLocal();location.href=NEW_HOME+'#import='+encodeURIComponent(bkCode().slice(4));break}
+    case'bk-copy':{const code=bkCode();
       const fallback=()=>{const t=$('#bk-in');if(t){t.value=code;t.focus();t.select()}toast('Code markiert. Bitte jetzt kopieren.')};
       try{navigator.clipboard.writeText(code).then(()=>toast('Sicherungscode kopiert'),fallback)}catch(e){fallback()}break}
-    case'bk-load':{const raw=(val('bk-in')||'').trim();let data=null;
-      try{if(!raw.startsWith('LC1:'))throw 0;data=JSON.parse(decodeURIComponent(escape(atob(raw.slice(4)))));if(!data||!data.settings||!data.settings.bj)throw 0}catch(e){toast('Das ist kein gültiger Sicherungscode.');break}
+    case'bk-load':{const data=bkParse(val('bk-in'));
+      if(!data){toast('Das ist kein gültiger Sicherungscode. Kopiere ihn auf der alten Seite nochmal komplett.');break}
       if(!el.dataset.confirm){el.dataset.confirm='1';el.textContent='Aktuellen Spielstand ersetzen? Nochmal tippen';break}
-      S.settings=Object.assign(defaultSettings(),data.settings);saveLocal();applyTheme();render();toast('Spielstand geladen: '+fmtC(bjS().bal));break}
+      bkApply(data);toast('Spielstand geladen: '+fmtC(bjS().bal));break}
     case'ui-zoom':{const z=Math.min(160,Math.max(70,curZoom()+(+el.dataset.d)));S.settings.uiZoom=z;applyTheme();saveSettings();render();break}
     case'ui-zoom-auto':S.settings.uiZoom=null;applyTheme();saveSettings();render();toast('Größe passt sich wieder automatisch an');break;
     case'fb-start':fbStart();break;
@@ -2815,7 +2846,8 @@ document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&['+','-','=',
 if(!loadLocal())saveLocal();
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 if(updNew())document.body.classList.add('upd-new');
-applyTheme();render();routeHash();setSync('Lokal gespeichert');
+applyTheme();render();bkImportFromHash();routeHash();
+if(ON_OLD_HOST)document.body.insertAdjacentHTML('beforeend','<div class="bk-banner" role="status"><span><b>Neue Adresse!</b> Nimm deinen Spielstand mit.</span><button data-act="bk-move">Umziehen</button></div>');setSync('Lokal gespeichert');
 })();
 </script>
 </body>
