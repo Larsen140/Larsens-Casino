@@ -1,8 +1,16 @@
 <!doctype html>
 <html lang="de">
 <head>
+<script>/* loading screen: stays at least 0.7 s, fades out once the app is ready (safety: after 4 s at the latest) */var BS_T0=Date.now();function bsHide(){setTimeout(function(){var e=document.getElementById('boot-splash');if(!e)return;e.classList.add('out');setTimeout(function(){e.remove()},400)},Math.max(0,700-(Date.now()-BS_T0)))}setTimeout(bsHide,4000);</script>
 <script>/* first paint already in your colours: hide the page until the app has applied your theme */try{var b=localStorage.getItem('lc:bg');if(b)document.documentElement.style.background=b}catch(e){}document.documentElement.classList.add('booting');setTimeout(function(){document.documentElement.classList.remove('booting')},3000);</script>
-<style>html.booting body{visibility:hidden}</style>
+<style>html.booting body{visibility:hidden}
+#boot-splash{position:fixed;inset:0;z-index:99999;visibility:visible;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#0b0d12;color:#fff;font-family:system-ui,-apple-system,sans-serif;transition:opacity .35s}
+#boot-splash.out{opacity:0;pointer-events:none}
+#boot-splash img{width:84px;height:84px;border-radius:22px;box-shadow:0 0 0 1px rgba(43,212,107,.25),0 0 40px rgba(43,212,107,.3);animation:bsPulse 1.4s ease-in-out infinite}
+#boot-splash b{font-weight:800;letter-spacing:.02em;opacity:.85}
+.bs-dots{display:flex;gap:6px}.bs-dots i{width:7px;height:7px;border-radius:50%;background:#fff;opacity:.3;animation:bsDot 1s infinite}.bs-dots i:nth-child(2){animation-delay:.15s}.bs-dots i:nth-child(3){animation-delay:.3s}
+@keyframes bsPulse{50%{transform:scale(1.06)}}@keyframes bsDot{50%{opacity:1;transform:translateY(-3px)}}
+</style>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
@@ -913,6 +921,7 @@ button,a,[data-act],[data-tab]{touch-action:manipulation;-webkit-tap-highlight-c
 </style>
 </head>
 <body>
+<div id="boot-splash" aria-label="Lädt"><img src="icon-180.png" alt=""><b>Larsens Casino</b><div class="bs-dots"><i></i><i></i><i></i></div></div>
 
 <div class="liquid" aria-hidden="true"><i></i><i></i><i></i></div>
 
@@ -2599,6 +2608,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'2.4',d:'08.11.2026',t:'Ladebildschirm',items:[['n','Beim Öffnen erscheint kurz ein Ladebildschirm mit dem Casino-Logo, bis alles bereit ist.']]},
   {v:'2.3',d:'08.11.2026',t:'Updates ohne Neustart',items:[['n','Neue Versionen werden automatisch geladen, du musst die App nicht mehr schließen.'],['n','Das passiert nie mitten in einer Runde, sondern erst, wenn gerade kein Spiel läuft.']]},
   {v:'2.2',d:'08.11.2026',t:'Neu: Glücksrad',items:[['n','Neuer Tab „Glücksrad“: 10.000 € pro Dreh, 50 Felder mit 25 Gewinnen und 25 Nieten.'],['n','Gewinne bis 100.000 €, Gratis-Drehs und ×2 für den nächsten Gewinn.'],['n','Lichterkette, Klick-Sound bei jedem Feld, Konfetti und Farben passend zu deinem App-Thema.']]},
   {v:'2.1',d:'08.11.2026',t:'Spielstand kommt automatisch mit',items:[['n','Fügst du die App von der Seite mit deinem Spielstand hinzu, ist er beim ersten Öffnen der App automatisch drin.'],['n','Kopieren und Einfügen unter Optionen geht weiterhin als Notlösung.']]},
@@ -3125,7 +3135,7 @@ if(updNew())document.body.classList.add('upd-new');
 applyTheme();render();bkImportFromHash();bkRestoreFromHash();routeHash();
 gateInit();setSync('Lokal gespeichert');
 try{localStorage.setItem('lc:bg',getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()||getComputedStyle(document.body).backgroundColor)}catch(e){}
-requestAnimationFrame(()=>document.documentElement.classList.remove('booting'));
+requestAnimationFrame(()=>document.documentElement.classList.remove('booting'));bsHide();
 })();
 </script>
 </body>
