@@ -2599,6 +2599,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'2.3',d:'08.11.2026',t:'Updates ohne Neustart',items:[['n','Neue Versionen werden automatisch geladen, du musst die App nicht mehr schließen.'],['n','Das passiert nie mitten in einer Runde, sondern erst, wenn gerade kein Spiel läuft.']]},
   {v:'2.2',d:'08.11.2026',t:'Neu: Glücksrad',items:[['n','Neuer Tab „Glücksrad“: 10.000 € pro Dreh, 50 Felder mit 25 Gewinnen und 25 Nieten.'],['n','Gewinne bis 100.000 €, Gratis-Drehs und ×2 für den nächsten Gewinn.'],['n','Lichterkette, Klick-Sound bei jedem Feld, Konfetti und Farben passend zu deinem App-Thema.']]},
   {v:'2.1',d:'08.11.2026',t:'Spielstand kommt automatisch mit',items:[['n','Fügst du die App von der Seite mit deinem Spielstand hinzu, ist er beim ersten Öffnen der App automatisch drin.'],['n','Kopieren und Einfügen unter Optionen geht weiterhin als Notlösung.']]},
   {v:'2.0',d:'08.11.2026',t:'Nur noch als App',items:[['n','Auf dem Handy spielst du Larsens Casino jetzt nur noch als App vom Home-Bildschirm. Die Seite zeigt dir, wie du sie hinzufügst.'],['n','Deinen Spielstand kopierst du vorher und fügst ihn in der App unter Optionen mit „Aus Zwischenablage einfügen“ wieder ein.'],['n','Die alte Netlify-Adresse ist gesperrt und leitet mit deinem Spielstand auf die neue Seite.']]},
@@ -2799,6 +2800,30 @@ function vWheel(){
     <p class="wf-info">Gewinnchance pro Dreh: ${Math.round(WF_P*100)} % · ${w.spins} Drehs · ${fmtC(w.won)} gewonnen${w.best?` · bester Gewinn ${fmtC(w.best)}`:''}</p>
     </div></div></section>`;
 }
+
+/* ---------- Auto-Update: neue Versionen ohne App-Neustart ---------- */
+/* asks the server every 2 minutes and whenever the app comes back to the foreground; reloads only when no game is running */
+const UPD_CHECK_MS=120000;let updBase=null,updPending=false;
+async function updStamp(){
+  const url=location.pathname+(location.pathname.endsWith('/')?'':'')+'?u='+Date.now();
+  try{const r=await fetch(url,{method:'HEAD',cache:'no-store'});const t=r.headers.get('etag')||r.headers.get('last-modified');if(r.ok&&t)return t}catch(e){}
+  try{const r=await fetch(url,{cache:'no-store'});if(!r.ok)return null;const x=await r.text();let h=5381;for(let i=0;i<x.length;i+=7)h=((h<<5)+h+x.charCodeAt(i))|0;return 'h'+h+'-'+x.length}catch(e){return null}
+}
+function updBusy(){try{return (typeof czBusy==='function'&&czBusy())||(typeof FB!=='undefined'&&(FB.state==='play'||FB.state==='ready'))||(typeof WF!=='undefined'&&WF.spinning)||document.body.classList.contains('gated')&&false}catch(e){return false}}
+function updApply(){
+  if(!updPending)return;if(updBusy()){setTimeout(updApply,3000);return}
+  try{const last=+sessionStorage.getItem('lc:upd')||0;if(Date.now()-last<60000)return;sessionStorage.setItem('lc:upd',Date.now())}catch(e){}
+  try{saveLocal()}catch(e){}
+  toast('Neue Version wird geladen…');setTimeout(()=>location.reload(),1200);
+}
+async function updCheck(){
+  if(ON_OLD_HOST||location.protocol==='file:'||updPending)return;
+  const st=await updStamp();if(!st)return;
+  if(updBase===null){updBase=st;return}
+  if(st!==updBase){updPending=true;updApply()}
+}
+if(!ON_OLD_HOST&&location.protocol!=='file:'){setTimeout(updCheck,1500);setInterval(updCheck,UPD_CHECK_MS);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)updCheck()});window.addEventListener('focus',()=>updCheck())}
 
 function vSettings(){
   const c=currentColors()||{bg:'#eef2f7',text:'#121722',accent:'#0a84ff',blob1:'#7dd3fc',blob2:'#f9a8d4',blob3:'#a7f3d0'};
