@@ -2537,7 +2537,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
-  {v:'2.0',d:'08.11.2026',t:'Nur noch als App',items:['Auf dem Handy spielst du Larsens Casino jetzt nur noch als App vom Home-Bildschirm. Die Seite zeigt dir, wie du sie hinzufügst.','Deinen Spielstand kopierst du vorher und fügst ihn in der App mit einem Tipp wieder ein.','Die alte Netlify-Adresse ist gesperrt und leitet mit deinem Spielstand auf die neue Seite.']},
+  {v:'2.0',d:'08.11.2026',t:'Nur noch als App',items:['Auf dem Handy spielst du Larsens Casino jetzt nur noch als App vom Home-Bildschirm. Die Seite zeigt dir, wie du sie hinzufügst.','Deinen Spielstand kopierst du vorher und fügst ihn in der App unter Optionen mit „Aus Zwischenablage einfügen“ wieder ein.','Die alte Netlify-Adresse ist gesperrt und leitet mit deinem Spielstand auf die neue Seite.']},
   {v:'1.9',d:'08.11.2026',t:'Neue Adresse',items:['Larsens Casino läuft jetzt unter larsen140.github.io/Larsens-Casino.','Auf der alten Seite nimmt der Knopf „Mit Spielstand zur neuen Seite“ deinen Spielstand automatisch mit.','Sicherungscodes werden jetzt auch mit Leerzeichen oder Zeilenumbrüchen erkannt.']},
   {v:'1.8',d:'08.11.2026',t:'Neues Spiel: Okey',items:['Okey lässt sich in den Optionen unter „Casino“ ausblenden.','Okey, das türkische Steinspiel, als viertes Casino-Spiel: du gegen Mehmet, Ayşe und Can.','Einsatz von 10 € bis 1.000 €, Gewinn 4× oder mit Okey bzw. 7 Paaren 8×.','Steine per Antippen verschieben, automatisch nach Reihen oder Paaren sortieren.']},
   {v:'1.7',d:'08.11.2026',t:'Maps, Animationen und Farben',items:['Flying Bird hat jetzt 5 Maps: Wiese, Wüste, Schnee, Vulkan und Weltraum. Auswahl in den Einstellungen unter „Flying Bird“.','Jede Map mit eigenem Wetter: Schneefall, Wüstenstaub, Glut und Sternschnuppen.','Bessere Animationen: Figuren blinzeln, flattern weicher, stauchen sich beim Flügelschlag und überschlagen sich beim Absturz.','Flying Bird läuft flüssiger, weil der Hintergrund der App beim Spielen anhält.','Das Casino übernimmt jetzt dein Farbthema (neues Tischdesign „App-Farben“).','Pause-Knopf oben rechts in Flying Bird.','Neuer Tab „Updates“ mit allen Änderungen.']},
@@ -2599,7 +2599,7 @@ function gateHTML(){
     :IS_IOS?`<ol><li>Tippe unten in Safari auf <b>Teilen</b> <span class="gate-share">⬆︎</span>.</li><li>Scrolle runter und wähle <b>„Zum Home-Bildschirm“</b>.</li><li>Tippe auf <b>„Hinzufügen“</b>.</li><li>Öffne Larsens Casino über das neue <b>grüne $-Symbol</b> auf deinem Home-Bildschirm.</li></ol>`
     :`<ol><li>Tippe oben rechts auf das Menü <b>⋮</b>.</li><li>Wähle <b>„App installieren“</b> oder <b>„Zum Startbildschirm hinzufügen“</b>.</li><li>Öffne Larsens Casino über das neue <b>grüne $-Symbol</b>.</li></ol>`;
   return `<div class="gate-card"><img class="gate-logo" src="icon-180.png" alt=""><h2>Erst als App hinzufügen</h2>
-    ${hasSave?`<div class="gate-save"><b>1. Dein Spielstand: ${fmtC(S.settings.bj.bal)}</b><span>Kopiere ihn zuerst. Die App hat einen eigenen Speicher, dort fügst du ihn gleich wieder ein.</span><button class="gate-btn" data-act="gate-copy">Spielstand kopieren</button></div><p><b>${IN_APP_BROWSER?'2. Im Browser öffnen':'2. Als App hinzufügen'}:</b></p>`:'<p>Larsens Casino spielst du als App auf deinem Home-Bildschirm. So geht\'s:</p>'}${steps}
+    ${hasSave?`<div class="gate-save"><b>1. Dein Spielstand: ${fmtC(S.settings.bj.bal)}</b><span>Kopiere ihn zuerst. Die App hat einen eigenen Speicher. Dort tippst du unten auf <b>Optionen</b>, dann bei <b>Spielstand</b> auf <b>„Aus Zwischenablage einfügen“</b>.</span><button class="gate-btn" data-act="gate-copy">Spielstand kopieren</button></div><p><b>${IN_APP_BROWSER?'2. Im Browser öffnen':'2. Als App hinzufügen'}:</b></p>`:'<p>Larsens Casino spielst du als App auf deinem Home-Bildschirm. So geht\'s:</p>'}${steps}
     <p class="gate-small">Die App öffnet im Vollbild und speichert deinen Spielstand auf diesem Gerät.</p></div>`;
 }
 function welcomeHTML(){
@@ -2615,8 +2615,6 @@ function gateClose(){const g=document.getElementById('gate');if(g)g.remove();doc
 function gateInit(){
   if(ON_OLD_HOST){gateShow(gateHTML());return}
   if(IS_MOBILE&&(!IS_STANDALONE||CAME_FROM_OLD)){gateShow(gateHTML());return}
-  if(IS_STANDALONE&&!S.settings.welcomed){const fresh=!S.settings.bj||(S.settings.bj.bal===1000&&!S.settings.bj.played);
-    if(fresh){gateShow(welcomeHTML());return}S.settings.welcomed=true;saveLocal()}
 }
 function gateLoad(raw){const data=bkParse(raw);if(!data){toast('Kein gültiger Spielstand gefunden. Kopiere ihn auf der Seite nochmal.');return false}
   bkApply(data);S.settings.welcomed=true;saveLocal();gateClose();toast('Spielstand geladen: '+fmtC(bjS().bal));return true}
@@ -2658,7 +2656,7 @@ function vSettings(){
   <section class="panel glass set-sec"><h3>Spielstand</h3>
     <p class="note-txt">Dein Spielstand wird nur auf diesem Gerät gespeichert, ohne Konto. Mit dem Sicherungscode nimmst du ihn auf ein anderes Gerät mit oder holst ihn zurück, falls die Browserdaten gelöscht wurden.</p>
     ${ON_OLD_HOST?`<div class="bk-move"><b>Larsens Casino ist umgezogen!</b><span>Ein Tipp und dein Spielstand kommt mit auf die neue Seite.</span><button class="btn sm" data-act="bk-move">Mit Spielstand zur neuen Seite</button></div>`:''}
-    <div class="chips"><button class="btn sm" data-act="bk-copy">Sicherungscode kopieren</button></div>
+    <div class="chips"><button class="btn sm" data-act="bk-paste">Aus Zwischenablage einfügen</button><button class="btn ghost sm" data-act="bk-copy">Sicherungscode kopieren</button></div>
     <div class="field"><label for="bk-in">Sicherungscode einfügen</label><textarea id="bk-in" style="min-height:70px;font-family:var(--f-mono);font-size:12px" placeholder="LC1:…" spellcheck="false"></textarea></div>
     <div class="chips"><button class="btn ghost sm" data-act="bk-load">Spielstand laden</button></div>
     <p class="note-txt"><b>Als App aufs iPhone:</b> Seite in Safari öffnen, Teilen-Symbol antippen, dann „Zum Home-Bildschirm“.</p>
@@ -2821,6 +2819,8 @@ document.addEventListener('click',ev=>{
     case'gate-paste':{try{navigator.clipboard.readText().then(t=>{if(!gateLoad(t)){const i=$('#gate-in');if(i)i.focus()}},()=>{toast('Bitte den Code unten ins Feld einfügen.');const i=$('#gate-in');if(i)i.focus()})}catch(e){toast('Bitte den Code unten ins Feld einfügen.')}break}
     case'gate-load':gateLoad(val('gate-in'));break;
     case'gate-skip':S.settings.welcomed=true;saveLocal();gateClose();break;
+    case'bk-paste':{const ask=()=>{toast('Bitte den Code unten ins Feld einfügen.');const i=$('#bk-in');if(i)i.focus()};
+      try{navigator.clipboard.readText().then(t=>{const d=bkParse(t);if(!d){ask();return}const bal=d.settings.bj&&d.settings.bj.bal;bkApply(d);toast('Spielstand geladen'+(bal!=null?': '+fmtC(bal):''))},ask)}catch(e){ask()}break}
     case'bk-move':{saveLocal();const url=NEW_HOME+'#import='+encodeURIComponent(bkCode().slice(4));
       /* inside the old home-screen app a new window opens real Safari, so the new page can be added to the home screen */
       if(IS_STANDALONE){let w=null;try{w=window.open(url,'_blank')}catch(e){}if(!w)location.href=url}else location.href=url;break}
