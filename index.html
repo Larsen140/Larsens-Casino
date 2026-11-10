@@ -1588,13 +1588,13 @@ function vBlackjack(){
   const adv=st.hint&&play?bjAdvice():null;
   const slots='<div class="pc slot"></div><div class="pc slot"></div>';
   const tc=t=>t>21?' over':t===21?' t21':'';
-  const dv=hval(BJ.dealer).t;
+  const dh=hval(BJ.dealer),dv=dh.t,dvs=dh.soft&&dv<17&&BJ.phase!=='done'?(dv-10)+' / '+dv:dv;
   const rate=st.played?Math.round(st.won/st.played*100):0;
   const top=`<div class="bj-top"><div class="bj-balance"><small>Guthaben</small><b id="bj-bal">${fmtC(BJ.balFrom!=null?BJ.balFrom:st.bal)}</b></div>
     <div class="bj-tools">${st.streak>=2?`<span class="bj-pill${st.streak>=3?' hot':''}">Serie <b>${st.streak}</b></span>`:''}${czRecPill()}
     <button class="bj-ico" data-act="bj-hint" aria-pressed="${!!st.hint}" aria-label="Strategie-Tipps">${'<svg viewBox="0 0 24 24" aria-hidden="true">'+BJI.bulb+'</svg>'}</button>
     <button class="bj-ico" data-act="bj-sound" aria-pressed="${!!st.sound}" aria-label="Ton">${'<svg viewBox="0 0 24 24" aria-hidden="true">'+(st.sound?BJI.on:BJI.off)+'</svg>'}</button></div></div>`;
-  const dealer=`<div class="bj-zone dealer"><div class="bj-shoe" aria-hidden="true"><i></i><i></i><i></i></div><div class="bj-lbl">Dealer${BJ.dealer.length?` <span class="bj-tot${tc(dv)}">${dv}</span>`:''}</div><div class="bj-cards">${BJ.dealer.length?BJ.dealer.map(c=>bjCard(c)).join(''):slots}</div></div>`;
+  const dealer=`<div class="bj-zone dealer"><div class="bj-shoe" aria-hidden="true"><i></i><i></i><i></i></div><div class="bj-lbl">Dealer${BJ.dealer.length?` <span class="bj-tot${tc(dv)}">${dvs}</span>`:''}</div><div class="bj-cards">${BJ.dealer.length?BJ.dealer.map(c=>bjCard(c)).join(''):slots}</div></div>`;
   const multi=BJ.hands.length>1;
   const hands=BJ.hands.length?BJ.hands.map((h,i)=>{const v=hval(h.cards),t=v.t,shown=v.soft&&t<21&&play&&!h.done?(t-10)+' / '+t:t;
     return `<div class="bj-hand${play&&multi&&i===BJ.active?' on':''}"><div class="bj-cards">${h.cards.map(c=>bjCard(c,h.result==='bj')).join('')}</div>
@@ -2654,6 +2654,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'2.8',d:'10.11.2026',t:'Blackjack: Dealer-Punkte',items:[['f','Hat der Dealer ein Ass, siehst du jetzt beide möglichen Werte (z. B. 3 / 13), genau wie bei deinen Karten. Vorher sah die Zahl manchmal falsch aus, weil das Ass von 11 auf 1 wechselt.']]},
   {v:'2.7',d:'08.11.2026',t:'Codes einlösen',items:[['n','In den Optionen kannst du jetzt Codes einlösen und bekommst sofort Geld aufs Konto. Jeder Code geht einmal pro Gerät.']]},
   {v:'2.6',d:'08.11.2026',t:'Updates sofort',items:[['n','Neue Versionen werden jetzt sofort geladen, auch mitten in einer Runde.'],['n','Die Runde wird dann abgebrochen und alles auf den Stand davor zurückgesetzt: Du verlierst nichts und gewinnst nichts.']]},
   {v:'2.5',d:'08.11.2026',t:'Glücksrad 2.0',items:[['n','Neue Sounds: Ratsche beim Aufziehen, echtes Klacken am Zeiger, Wind beim Drehen, Fanfare mit Münzregen beim Gewinn und Posaune bei Nieten.'],['n','Neue Effekte: Lichterkette läuft beim Drehen, Lichtstrahlen, Funken, Münzen, Konfetti und Rauch je nach Ergebnis, Gewinnfeld leuchtet auf.'],['n','Neue Animation: Das Rad holt aus, dreht verwischt, rollt am Ende ein Stück zurück, der Zeiger federt an jedem Stift. Beim Jackpot bebt das Rad.'],['n','Guthaben zählt nach einem Gewinn sichtbar hoch.']]},
