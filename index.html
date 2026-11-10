@@ -855,6 +855,8 @@ body.gated .app,body.gated .liquid{visibility:hidden}
 @keyframes wfQuake{10%,90%{translate:-2px 1px}20%,80%{translate:4px -2px}30%,50%,70%{translate:-7px 3px}40%,60%{translate:7px -3px}}
 .wf-view.fx-lose .wf-stage{animation:wfSad 1.4s ease-out}
 @keyframes wfSad{0%{filter:drop-shadow(0 18px 40px rgba(0,0,0,.35))}25%{filter:drop-shadow(0 18px 40px rgba(0,0,0,.35)) grayscale(.75) brightness(.8)}100%{filter:drop-shadow(0 18px 40px rgba(0,0,0,.35))}}
+.wf-mega{animation:wfMegaG 1.1s ease-in-out infinite alternate}
+@keyframes wfMegaG{from{stroke-opacity:.35}to{stroke-opacity:1}}
 .wf-hl{pointer-events:none;stroke-linejoin:round}
 .wf-hl.win,.wf-hl.jack{fill:#fff;stroke:#fff;stroke-width:1.8;animation:wfHl .55s ease-in-out infinite alternate}
 .wf-hl.jack{stroke:#ffcf3a;stroke-width:2.4}
@@ -2579,7 +2581,7 @@ const CH_FAQ=[
   [['okey','okay','oki','tipp','tipps','strategie','trick','besser','schwer','gegner','bots'],()=>'**Okey-Tipps** 💡\n1. Tippe nach jedem Ziehen auf **„Reihen“**. So siehst du sofort, was dir noch fehlt.\n2. Wirf zuerst **einzelne Steine** ab, die zu nichts passen, z. B. eine 🟡 2, wenn du keine anderen gelben Steine hast.\n3. **Okey-Steine nie abwerfen.** Sie füllen jede Lücke.\n4. Achte darauf, was deine Nachbarn abwerfen. Braucht der rechte Nachbar Rot, gib ihm lieber keine roten Steine.\n5. Hast du schon viele doppelte Steine, versuch es mit **7 Paaren**, das zahlt sogar 8×.'],
   [['okey','okay','oki','einsatz','setzen','kosten','wieviel','geld'],()=>'**Einsatz bei Okey:** Vor dem Spiel wählst du 10 €, 50 €, 100 €, 500 € oder 1.000 €. Er wird vom Guthaben abgezogen. Gewinnst du, bekommst du 4× (mit Okey oder 7 Paaren 8×) zurück. Okey lässt sich in den Optionen unter „Casino“ auch ausblenden.'],
   [['code','einlös','einlos','gutschein','promo'],()=>'**Codes einlösen:** Geh zu **Optionen → Code einlösen**, tipp den Code ein und drück **Einlösen**. Das Geld landet sofort auf deinem Konto.\n• Jeder Code geht einmal pro Gerät.\n• Groß- und Kleinschreibung und Leerzeichen sind egal.\n• Codes gibt es von Larsen.'],
-  [['gluecksrad','glucksrad','rad','drehen','wheel','10k','10.000'],()=>'**Glücksrad:** Drehen ist **gratis**. Das Rad hat 50 Felder: 25 Gewinne und 25 Nieten.\n• Gewinne: 11.000 € bis 100.000 € (goldene Felder sind die großen) und **×2** (dein nächster Geldgewinn zählt doppelt).\n• Nieten: nichts oder 5.000 € bis 100.000 € Abzug.\n• Die Farben passen sich deinem App-Thema an.'],
+  [['gluecksrad','glucksrad','rad','drehen','wheel','10k','10.000'],()=>'**Glücksrad:** Ein Dreh kostet **5.000 €**. Das Rad hat 50 Felder: 25 Gewinne und 25 Nieten.\n• Gewinne: 11.000 € bis 100.000 € (goldene Felder sind die großen), der seltene **1-Million-Jackpot** (lila-rotes Feld) und **×2** (dein nächster Geldgewinn zählt doppelt).\n• Nieten: nichts oder 5.000 € bis 100.000 € Abzug.\n• Die Farben passen sich deinem App-Thema an.'],
   [['freispiel','free spin','freespin','free'],()=>'**Freispiele:** Landet das FREE-Symbol auf allen drei Walzen, bekommst du **10 Freispiele**. Sie kosten nichts und jeder Gewinn darin zählt **doppelt**. Sie laufen automatisch nacheinander ab.'],
   [['slot','automat','walze','spielautomat','symbol','gewinnlinie','linie','777','bar'],()=>'**Slots:** Wähle deinen Einsatz und tippe auf Drehen. Es gibt 5 Gewinnlinien (3 waagerecht, 2 schräg).\n• 7 7 7 zahlt am meisten, danach BAR, Ass und die Kartenfarben.\n• Drei gleiche Farben (z. B. ♥ ♥ ♥) zahlen ebenfalls.\n• 3× FREE startet 10 Freispiele mit doppeltem Gewinn.\nDie genauen Gewinne stehen neben den Walzen.'],
   [['highscore','rekord','bestwert','pokal'],()=>'Der **Highscore** ist dein höchster Kontostand aller Zeiten, gezählt wird nur Geld aus Blackjack, Roulette und Slots. Geld aus Flying Bird landet zwar im Guthaben, zählt aber nicht zum Casino-Highscore. Flying Bird hat einen eigenen Rekord nach Punkten. Du siehst ihn oben im Casino und in den '+'Optionen'+'. Er bleibt erhalten, auch wenn du dein Guthaben zurücksetzt.'],
@@ -2613,7 +2615,7 @@ function faqAnswer(q){
 }
 const CH_RULES=`Du bist "Larsens Assistent", der freundliche Hilfe-Chat in der privaten Web-App "Larsens World". Antworte auf Deutsch, kurz (höchstens 6 Sätze oder eine kurze Liste mit •), locker und hilfreich. Nutze **fett** sparsam, sonst kein Markdown.
 Die App: Notizen (anheften, suchen, Farben), To-dos (Priorität, Fälligkeit, Filter), Termine (Export als .ics in den iPhone-Kalender), Trading Journal (Gewinn, Trefferquote, Kurve), Angebote (jeden Montag werden Prospekte von Aldi, Lidl, Rewe, Edeka etc. für die Merkliste durchsucht; neue Produkte werden sofort gesucht; "Jetzt suchen" startet manuell), Casino, Bird (Flying Bird), Optionen (App-Themes wie Babyblau Gold, eigene Farben, Unschärfe, Animationen, App-Größe am PC, Tisch- und Kartendesigns, Casino-Sounds, Assistent-Farben). Daten liegen privat im Claude-Konto.
-Casino: Spielgeld, keine Echtgeld-Ein- oder Auszahlung. Start 1.000 €, alle Spiele teilen ein Guthaben, "1.000 € nachfüllen" wenn pleite, Highscore = höchster Kontostand aller Zeiten ohne Geld aus Flying Bird (Bird hat eigenen Punkte-Rekord). Blackjack: 6 Decks, Dealer steht auf Soft 17, Blackjack zahlt 3 zu 2, Ziehen/Halten/Doppeln/Teilen, Glühbirne zeigt Basic-Strategy-Tipps, keine Versicherung. Roulette: europäisch mit einer Null; Rot/Schwarz, Gerade/Ungerade, 1–18/19–36 zahlen 1:1, Dutzende 2:1, Einzelzahl 35:1. Slots: 3 Walzen, 5 Gewinnlinien, 7-7-7 zahlt am meisten, dann BAR, Ass, drei gleiche Kartenfarben; 3× FREE = 10 Freispiele mit doppeltem Gewinn; Glücksrad (eigener Tab): gratis drehen, 50 Felder, 25 Gewinne (11K bis 100K, ×2), 25 Nieten (nichts oder −5K bis −100K). Okey (im Casino, 4. Spiel): türkisches Steinspiel gegen 3 Computer (Mehmet, Ayşe, Can). Erkläre Okey immer einfach, Schritt für Schritt und mit kleinen Beispielen (Farbe + Zahl, z. B. rote 4-5-6), weil viele es nicht kennen. Regeln: 106 Steine (Zahlen 1–13 in Gelb, Blau, Schwarz, Rot, je doppelt, plus 2 ★-Steine). Jeder hat 14 Steine. Zug: Stein links unten nehmen (Abwurf des linken Nachbarn) oder verdeckt aus der Mitte ziehen, dann einen Stein abwerfen (antippen, dann „Abwerfen“ oder Feld rechts unten). Reihe = gleiche Farbe, mind. 3 fortlaufende Zahlen (12-13-1 erlaubt, 13-1-2 nicht). Gruppe = gleiche Zahl, 3–4 verschiedene Farben. Okey = Joker: gleiche Farbe wie der Anzeiger in der Mitte, Zahl +1 (nach 13 kommt 1), golden mit „OK“ markiert, ersetzt jeden Stein. ★ = falscher Okey, zählt als normaler Stein mit dem Okey-Wert. Gewinnen: 14 Steine komplett in Reihen/Gruppen oder 7 Paare, dann leuchtet „Fertig machen“. Gewinn 4× Einsatz, mit Okey abgeworfen oder 7 Paaren 8×. Knöpfe „Reihen“ und „Paare“ sortieren automatisch. Stein antippen und dann anderes Feld antippen verschiebt ihn. Einsatz 10 € bis 1.000 €. Okey in den Optionen unter Casino ausblendbar. Auszahlungsquote ca. 94 %. Flying Bird (eigener Tab "Bird"): tippen bzw. Leertaste zum Fliegen, Säulen ausweichen, Münzen 2 €, Geldbündel 10 €, Diamanten 50 € sammeln, das Geld geht direkt ins Casino-Guthaben; 9 Figuren (Blauer Spatz, Goldvogel, Nachteule, Mini-Drache, Rakete, Ufo, Geldsack, Pinguin, Wassermelone), für jede Figur eine eigene Farbe wählbar (Original oder 10 Farben); Vollbild-Knopf oben rechts, am PC Taste F; Rekord = meiste Punkte; Power-ups Magnet (7 s), Schild (rettet einmal), Doppelgeld (8 s); Combo ab 5 Teilen ×2, ab 10 ×3; Medaillen Bronze 10, Silber 25, Gold 50, Diamant 100; ab 12 Punkten bewegliche Säulen; Pause mit P oder Esc am PC; wird mit der Zeit schneller, Himmel wechselt von Tag zu Abend zu Nacht; Grafik im Blockwelt-3D-Look (Voxel); 5 Maps in den Einstellungen unter Flying Bird: Wiese, Wüste (Staub), Schnee (Schneefall), Vulkan (Glut), Weltraum (Sternschnuppen).
+Casino: Spielgeld, keine Echtgeld-Ein- oder Auszahlung. Start 1.000 €, alle Spiele teilen ein Guthaben, "1.000 € nachfüllen" wenn pleite, Highscore = höchster Kontostand aller Zeiten ohne Geld aus Flying Bird (Bird hat eigenen Punkte-Rekord). Blackjack: 6 Decks, Dealer steht auf Soft 17, Blackjack zahlt 3 zu 2, Ziehen/Halten/Doppeln/Teilen, Glühbirne zeigt Basic-Strategy-Tipps, keine Versicherung. Roulette: europäisch mit einer Null; Rot/Schwarz, Gerade/Ungerade, 1–18/19–36 zahlen 1:1, Dutzende 2:1, Einzelzahl 35:1. Slots: 3 Walzen, 5 Gewinnlinien, 7-7-7 zahlt am meisten, dann BAR, Ass, drei gleiche Kartenfarben; 3× FREE = 10 Freispiele mit doppeltem Gewinn; Glücksrad (eigener Tab): 5.000 € pro Dreh, 50 Felder, 25 Gewinne (11K bis 100K, seltener 1-Mio-Jackpot, ×2), 25 Nieten (nichts oder −5K bis −100K). Okey (im Casino, 4. Spiel): türkisches Steinspiel gegen 3 Computer (Mehmet, Ayşe, Can). Erkläre Okey immer einfach, Schritt für Schritt und mit kleinen Beispielen (Farbe + Zahl, z. B. rote 4-5-6), weil viele es nicht kennen. Regeln: 106 Steine (Zahlen 1–13 in Gelb, Blau, Schwarz, Rot, je doppelt, plus 2 ★-Steine). Jeder hat 14 Steine. Zug: Stein links unten nehmen (Abwurf des linken Nachbarn) oder verdeckt aus der Mitte ziehen, dann einen Stein abwerfen (antippen, dann „Abwerfen“ oder Feld rechts unten). Reihe = gleiche Farbe, mind. 3 fortlaufende Zahlen (12-13-1 erlaubt, 13-1-2 nicht). Gruppe = gleiche Zahl, 3–4 verschiedene Farben. Okey = Joker: gleiche Farbe wie der Anzeiger in der Mitte, Zahl +1 (nach 13 kommt 1), golden mit „OK“ markiert, ersetzt jeden Stein. ★ = falscher Okey, zählt als normaler Stein mit dem Okey-Wert. Gewinnen: 14 Steine komplett in Reihen/Gruppen oder 7 Paare, dann leuchtet „Fertig machen“. Gewinn 4× Einsatz, mit Okey abgeworfen oder 7 Paaren 8×. Knöpfe „Reihen“ und „Paare“ sortieren automatisch. Stein antippen und dann anderes Feld antippen verschiebt ihn. Einsatz 10 € bis 1.000 €. Okey in den Optionen unter Casino ausblendbar. Auszahlungsquote ca. 94 %. Flying Bird (eigener Tab "Bird"): tippen bzw. Leertaste zum Fliegen, Säulen ausweichen, Münzen 2 €, Geldbündel 10 €, Diamanten 50 € sammeln, das Geld geht direkt ins Casino-Guthaben; 9 Figuren (Blauer Spatz, Goldvogel, Nachteule, Mini-Drache, Rakete, Ufo, Geldsack, Pinguin, Wassermelone), für jede Figur eine eigene Farbe wählbar (Original oder 10 Farben); Vollbild-Knopf oben rechts, am PC Taste F; Rekord = meiste Punkte; Power-ups Magnet (7 s), Schild (rettet einmal), Doppelgeld (8 s); Combo ab 5 Teilen ×2, ab 10 ×3; Medaillen Bronze 10, Silber 25, Gold 50, Diamant 100; ab 12 Punkten bewegliche Säulen; Pause mit P oder Esc am PC; wird mit der Zeit schneller, Himmel wechselt von Tag zu Abend zu Nacht; Grafik im Blockwelt-3D-Look (Voxel); 5 Maps in den Einstellungen unter Flying Bird: Wiese, Wüste (Staub), Schnee (Schneefall), Vulkan (Glut), Weltraum (Sternschnuppen).
 Kontakt zum Entwickler Larsen: ${CHAT_MAIL}. Verweise auf diese E-Mail bei Fehlern, Update-Vorschlägen, Wünschen oder wenn du etwas nicht sicher weißt. Erfinde keine Funktionen. Bei Fragen ohne Bezug zur App darfst du kurz und freundlich antworten.`;
 let chSample;
 async function chAsk(q){
@@ -2654,8 +2656,9 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'3.1',d:'10.11.2026',t:'1-Million-Jackpot',items:[['n','Neues Feld am Glücksrad: der 1-Million-Jackpot. Sehr selten, aber wer ihn trifft, bekommt 1.000.000 €.']]},
   {v:'3.0',d:'10.11.2026',t:'Glücksrad: höhere Verluste',items:[['n','Nieten kosten jetzt deutlich mehr: zwischen 5.000 € und 100.000 €. Trostpreise gibt es nicht mehr.']]},
-  {v:'2.9',d:'10.11.2026',t:'Glücksrad gratis',items:[['n','Das Glücksrad kostet nichts mehr, du kannst so oft drehen, wie du willst.'],['n','Statt Gratis-Feldern gibt es jetzt zwei neue Geldfelder.']]},
+  {v:'2.9',d:'10.11.2026',t:'Glücksrad günstiger',items:[['n','Ein Dreh kostet nur noch 5.000 € statt 10.000 €.'],['n','Statt Gratis-Feldern gibt es jetzt zwei neue Geldfelder.']]},
   {v:'2.8',d:'10.11.2026',t:'Blackjack: Dealer-Punkte',items:[['f','Hat der Dealer ein Ass, siehst du jetzt beide möglichen Werte (z. B. 3 / 13), genau wie bei deinen Karten. Vorher sah die Zahl manchmal falsch aus, weil das Ass von 11 auf 1 wechselt.']]},
   {v:'2.7',d:'08.11.2026',t:'Codes einlösen',items:[['n','In den Optionen kannst du jetzt Codes einlösen und bekommst sofort Geld aufs Konto. Jeder Code geht einmal pro Gerät.']]},
   {v:'2.6',d:'08.11.2026',t:'Updates sofort',items:[['n','Neue Versionen werden jetzt sofort geladen, auch mitten in einer Runde.'],['n','Die Runde wird dann abgebrochen und alles auf den Stand davor zurückgesetzt: Du verlierst nichts und gewinnst nichts.']]},
@@ -2766,13 +2769,13 @@ function gateLoad(raw){const data=bkParse(raw);if(!data){toast('Kein gültiger S
   bkApply(data);S.settings.welcomed=true;saveLocal();gateClose();toast('Spielstand geladen: '+fmtC(bjS().bal));return true}
 if('serviceWorker' in navigator&&!ON_OLD_HOST&&location.protocol==='https:'){try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}}
 
-/* ---------- Glücksrad: 50 Felder (25 Gewinne, 25 Nieten), Drehen ist gratis ---------- */
-const WF_COST=0,WF_P=.15,WF_N=50,WF_STEP=360/WF_N;
+/* ---------- Glücksrad: 50 Felder (25 Gewinne inkl. 1-Mio-Jackpot, 25 Nieten), 5.000 € pro Dreh ---------- */
+const WF_COST=5000,WF_P=.15,WF_N=50,WF_STEP=360/WF_N;
 /* good: [label, kind, value, weight]  kind: money | free | dbl */
 const WF_GOOD=[['+15K','money',15000,6],['+50K','money',50000,2],['+20K','money',20000,6],['+14K','money',14000,4],['+12K','money',12000,7],['+30K','money',30000,4],
   ['+100K','money',100000,.6],['+18K','money',18000,6],['×2','dbl',1,4],['+25K','money',25000,5],['+13K','money',13000,7],['+40K','money',40000,3],
   ['+16K','money',16000,6],['+75K','money',75000,1],['+22K','money',22000,5],['+17K','money',17000,4],['+11K','money',11000,7],['+35K','money',35000,3],
-  ['+20K','money',20000,6],['×2','dbl',1,4],['+60K','money',60000,1.4],['+15K','money',15000,6],['+45K','money',45000,2.4],['+25K','money',25000,5],['+30K','money',30000,4]];
+  ['+20K','money',20000,6],['×2','dbl',1,4],['+60K','money',60000,1.4],['1 MIO','money',1000000,.1],['+45K','money',45000,2.4],['+25K','money',25000,5],['+30K','money',30000,4]];
 /* bad: [label, kind, value]  kind: none | plus (small refund, still a loss) | minus */
 const WF_BAD=[['−10K','minus',10000],['Niete','none',0],['−25K','minus',25000],['−5K','minus',5000],['Fast!','none',0],['−50K','minus',50000],['−15K','minus',15000],['−8K','minus',8000],['Pech','none',0],
   ['−20K','minus',20000],['−12K','minus',12000],['−30K','minus',30000],['Fast!','none',0],['−10K','minus',10000],['−40K','minus',40000],['−6K','minus',6000],['Niete','none',0],
@@ -2786,14 +2789,15 @@ function wfSVG(){
   const c=wfCols(),R=100,p=(deg,r)=>{const t=(deg-90)*Math.PI/180;return[(Math.cos(t)*r).toFixed(2),(Math.sin(t)*r).toFixed(2)]};
   let sl='';
   WF_SLICES.forEach((s,i)=>{const a0=i*WF_STEP-WF_STEP/2,a1=a0+WF_STEP,[x0,y0]=p(a0,R),[x1,y1]=p(a1,R);
-    const jack=s.good&&s.d[2]>=60000&&s.d[1]==='money',fill=jack?'#ffcf3a':s.good?(i%4===0?c.a:c.a2):(i%4===1?c.b1:c.b2),tc=jack?'#3a2600':s.good?c.on:'rgba(255,255,255,.72)';
-    sl+=`<path d="M0 0L${x0} ${y0}A${R} ${R} 0 0 1 ${x1} ${y1}Z" fill="${fill}" stroke="rgba(0,0,0,.35)" stroke-width=".4"/>`;
+    const mega=s.good&&s.d[2]>=1e6,jack=s.good&&s.d[2]>=60000&&s.d[1]==='money',fill=mega?'url(#wfMega)':jack?'#ffcf3a':s.good?(i%4===0?c.a:c.a2):(i%4===1?c.b1:c.b2),tc=mega?'#fff':jack?'#3a2600':s.good?c.on:'rgba(255,255,255,.72)';
+    sl+=`<path d="M0 0L${x0} ${y0}A${R} ${R} 0 0 1 ${x1} ${y1}Z" fill="${fill}" stroke="${mega?'#ffe27a':'rgba(0,0,0,.35)'}" stroke-width="${mega?1.2:.4}"${mega?' class="wf-mega"':''}/>`;
     const flip=i*WF_STEP>180;sl+=`<g transform="rotate(${i*WF_STEP})"><text x="0" y="-60" transform="rotate(${flip?90:-90} 0 -60)" fill="${tc}" font-size="${s.d[0].length>5?5.2:6.2}" font-weight="800" text-anchor="middle" dominant-baseline="central">${s.d[0]}</text></g>`});
   let bulbs='';for(let i=0;i<30;i++){const [x,y]=p(i*12,106.5);bulbs+=`<circle class="wf-bulb ${i%2?'o':'e'}" style="--i:${i}" cx="${x}" cy="${y}" r="2.4"/>`}
   const [h0x,h0y]=p(-WF_STEP/2,R),[h1x,h1y]=p(WF_STEP/2,R);
   if(WF.res&&!WF.spinning&&WF.pick!=null)sl+=`<path class="wf-hl ${WF.res.cls}" d="M0 0L${h0x} ${h0y}A${R} ${R} 0 0 1 ${h1x} ${h1y}Z" transform="rotate(${WF.pick*WF_STEP})"/>`;
   return `<svg class="wf-svg" viewBox="-114 -118 228 232" aria-hidden="true">
     <defs><radialGradient id="wfHub" cx="40%" cy="35%"><stop offset="0" stop-color="#fff7d6"/><stop offset=".55" stop-color="#ffcf3a"/><stop offset="1" stop-color="#a87412"/></radialGradient>
+      <linearGradient id="wfMega" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#7a00ff"/><stop offset=".5" stop-color="#ff2d75"/><stop offset="1" stop-color="#ffb000"/></linearGradient>
       <radialGradient id="wfBlurG"><stop offset=".14" stop-color="${c.b2}" stop-opacity="0"/><stop offset=".5" stop-color="${c.a}" stop-opacity=".85"/><stop offset=".97" stop-color="${c.b1}" stop-opacity=".95"/></radialGradient>
       <radialGradient id="wfShine" cx="50%" cy="20%" r="80%"><stop offset="0" stop-color="rgba(255,255,255,.28)"/><stop offset=".6" stop-color="rgba(255,255,255,0)"/></radialGradient></defs>
     <circle r="111" fill="${c.rim}" stroke="${c.a}" stroke-width="2.5"/>${bulbs}
@@ -2886,7 +2890,7 @@ function wfPick(){
 const wfEIO=k=>-(Math.cos(Math.PI*k)-1)/2;
 function wfSpin(){
   if(WF.spinning)return;const st=bjS(),w=wfS(),free=w.free>0;
-  if(!free&&st.bal<WF_COST){toast('Für einen Dreh brauchst du 10.000 €.');return}
+  if(!free&&st.bal<WF_COST){toast('Für einen Dreh brauchst du '+fmtC(WF_COST)+'.');return}
   if(bjS().sound)unlockAudio();
   if(free)w.free--;else st.bal=Math.round((st.bal-WF_COST)*100)/100;
   saveSettings();WF.res=null;WF.fx=null;WF.paid=!free;
@@ -2917,7 +2921,7 @@ function wfDone(){
   WF.spinning=false;document.body.classList.remove('wf-spin');WF.angle=WF.angle%360;wfWindStop();
   const s=WF_SLICES[WF.pick],w=wfS(),st=bjS(),before=st.bal;let msg='',amt=0,cls='lose',fx='lose';
   if(s.good){cls='win';fx='win';
-    if(s.d[1]==='money'){amt=s.d[2]*(w.dbl?2:1);msg=(w.dbl?'Doppelt! ':'')+'+'+fmtC(amt);w.dbl=false;czCredit(st,amt);w.won+=amt;if(amt>w.best)w.best=amt;
+    if(s.d[1]==='money'){amt=s.d[2]*(w.dbl?2:1);msg=(s.d[2]>=1e6?'MEGA-JACKPOT! ':'')+(w.dbl?'Doppelt! ':'')+'+'+fmtC(amt);w.dbl=false;czCredit(st,amt);w.won+=amt;if(amt>w.best)w.best=amt;
       if(amt>=60000){cls='jack';fx='jack';wfSndWin(true);bell(.5,.5);bell(.65,.45);bell(.8,.4);setTimeout(()=>play('register1',.8,0,1),500)}else{wfSndWin(false);setTimeout(()=>play('register1',.6,0,1.05),380)}}
     else if(s.d[1]==='free'){w.free++;msg='Gratis-Dreh! Der nächste Dreh kostet nichts.';fx='free';wfSndMagic()}
     else{w.dbl=true;msg='×2! Dein nächster Geldgewinn zählt doppelt.';fx='dbl';wfSndMagic()}}
@@ -2926,7 +2930,7 @@ function wfDone(){
     else if(s.d[1]==='minus'){amt=Math.min(s.d[2],st.bal);st.bal=Math.round((st.bal-amt)*100)/100;w.lost+=amt;msg='Autsch: −'+fmtC(amt);fx='minus';wfSndLose('minus')}
     else{msg=s.d[0]==='Fast!'?'Fast! Knapp daneben.':s.d[0]+'. Diesmal leider nichts.';wfSndLose('none')}}
   w.spins++;w.hist=[{l:s.d[0],g:s.good}].concat(w.hist||[]).slice(0,10);
-  WF.res={msg,cls,label:s.d[0]};WF.fx=cls==='jack'?'jack':cls;czRecord(st);saveSettings();bjRender();
+  WF.res={msg,cls,label:s.d[0],mega:s.good&&s.d[2]>=1e6};WF.fx=cls==='jack'?'jack':cls;czRecord(st);saveSettings();bjRender();
   wfBurst(fx);wfCount(before,st.bal);
   clearTimeout(WF.fxT);WF.fxT=setTimeout(()=>{WF.fx=null;const v=document.querySelector('.wf-view');if(v)v.classList.remove('fx-win','fx-jack','fx-lose')},cls==='jack'?3200:2200);
   /* Zeiger schwingt nach dem Stopp noch kurz aus */
@@ -2946,7 +2950,7 @@ function vWheel(){
       <div class="wf-tags">${free?`<span class="wf-tag">🎟️ ${w.free}× gratis</span>`:''}${w.dbl?'<span class="wf-tag gold">×2 aktiv</span>':''}
       <button class="fb-ico glass" data-act="bj-sound" aria-pressed="${!!st.sound}" aria-label="Ton"><svg viewBox="0 0 24 24" aria-hidden="true">${st.sound?BJI.on:BJI.off}</svg></button></div></div>
     <div class="wf-main"><div class="wf-stage" id="wf-stage"><div class="wf-rays"></div>${wfSVG()}</div><div class="wf-side">
-    <div class="wf-res ${WF.res?WF.res.cls:''}" aria-live="polite">${WF.res?`${WF.res.cls==='jack'?'<span class="wf-jk">JACKPOT</span>':''}<b>${esc(WF.res.label)}</b><span>${esc(WF.res.msg)}</span>`:WF.spinning?'<span>Das Rad dreht sich…</span>':'<span>25 Gewinne, 25 Nieten. Viel Glück!</span>'}</div>
+    <div class="wf-res ${WF.res?WF.res.cls:''}" aria-live="polite">${WF.res?`${WF.res.cls==='jack'?`<span class="wf-jk">${WF.res.mega?'MEGA-JACKPOT':'JACKPOT'}</span>`:''}<b>${esc(WF.res.label)}</b><span>${esc(WF.res.msg)}</span>`:WF.spinning?'<span>Das Rad dreht sich…</span>':'<span>25 Gewinne, 25 Nieten. Viel Glück!</span>'}</div>
     <button class="wf-spinbtn" data-act="wf-spin" ${can?'':'disabled'}>${WF.spinning?'Dreht…':free||!WF_COST?'Gratis drehen':'Drehen · '+fmtC(WF_COST)}</button>
     ${!WF.spinning&&!free&&st.bal<WF_COST?`<p class="wf-note">Zu wenig Guthaben für einen Dreh.${st.bal<5?' <button class="btn sm" data-act="bj-refill">1.000 € nachfüllen</button>':''}</p>`:''}
     <div class="wf-hist">${(w.hist||[]).map(h=>`<span class="${h.g?'g':'b'}">${esc(h.l)}</span>`).join('')}</div>
