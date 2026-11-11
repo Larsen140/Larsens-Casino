@@ -691,6 +691,7 @@ nav.tabs{width:min(620px,calc(100% - 24px - env(safe-area-inset-left,0px) - env(
 .fb-exit svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .fb-wrap.full .fb-exit{display:grid}
 body.fb-full{overflow:hidden}
+.fb-fsnote{margin-top:6px;font-size:11.5px;opacity:.7;text-align:center}
 .fb-maps{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
 .fb-map{border:2px solid transparent;border-radius:14px;padding:0;overflow:hidden;background:var(--glass-strong);cursor:pointer;display:flex;flex-direction:column;color:var(--text);font:inherit;font-weight:700;font-size:13px;transition:transform .15s}
 .fb-map i{display:block;height:54px;background:linear-gradient(var(--s1),var(--s2) 68%,var(--g) 68%);image-rendering:pixelated}
@@ -2161,12 +2162,12 @@ const FB_PW={magnet:['Magnet',7,'#ff5a5f'],shield:['Schild',0,'#4da3ff'],x2:['Do
 const FB_MEDALS=[[100,'Diamant','#7fe9ff'],[50,'Gold','#ffd23f'],[25,'Silber','#d7dde8'],[10,'Bronze','#d08a4a']];
 const FB_LEVELS=['Tag','Sonnenuntergang','Nacht'];
 function fbReset(){Object.assign(FB,{landed:false,landT:0,blinkOn:false,blinkN:2,y:FB_H*.42,ry:FB_H*.42,vy:0,ang:0,flapT:1,pipes:[],items:[],fx:[],trailT:0,score:0,scorePop:0,money:0,coins:0,speed:210,shake:0,flash:0,slow:0,newBest:false,combo:0,comboT:9,pw:{magnet:0,shield:0,x2:0},inv:0,banner:null,nSp:0,lastPw:-4})}
-function fbStart(){fbReset();FB.state='ready';if(bjS().sound)unlockAudio();fbOverlay()}
+function fbStart(){if(!FB.full)fbFull(true);fbReset();FB.state='ready';if(bjS().sound)unlockAudio();fbOverlay()}
 function fbGo(){FB.state='play';fbFlap()}
-function fbTap(){if(FB.state==='play')fbFlap();else if(FB.state==='ready')fbGo()}
+function fbTap(){if(!FB.full&&(FB.state==='play'||FB.state==='ready')){fbFull(true);return}if(FB.state==='play')fbFlap();else if(FB.state==='ready')fbGo()}
 function fbFlap(){FB.vy=FB_FLAP;FB.flapT=0;fbWhoosh();
   if(!calm()&&fbS().char!=='rakete'&&fbS().char!=='ufo')for(let i=0;i<4;i++)fbPart(FB.bx-14,FB.y+6,fbRnd(-160,-40),fbRnd(20,120),fbRnd(.25,.45),fbRnd(2,3.5),'rgba(255,255,255,.85)',0)}
-function fbResume(){FB.ry=FB.y;FB.vy=0;FB.state='ready';fbOverlay()}
+function fbResume(){if(!FB.full)fbFull(true);FB.ry=FB.y;FB.vy=0;FB.state='ready';fbOverlay()}
 function fbGap(){return Math.max(148,205-FB.score*2)}
 function fbPart(x,y,vx,vy,life,r,c,g){if(FB.fx.length>240)FB.fx.splice(0,20);FB.fx.push({x,y,vx,vy,life,max:life,r,c,g:g==null?500:g})}
 function fbSpawn(){
@@ -2558,7 +2559,7 @@ function fbOverlay(){
   o.hidden=false;o.classList.toggle('blocky',b.style!=='classic');
   const chars=`<div class="fb-chars">${Object.entries(FB_CHARS).map(([k,n])=>`<button class="fb-ch" data-act="fb-char" data-k="${k}" aria-pressed="${b.char===k}"><img src="${fbPreview(k)}" alt=""><span>${n}</span></button>`).join('')}</div>`+(()=>{const cur=(b.colors||{})[b.char]||'';return `<div class="fb-cols" aria-label="Farbe für ${FB_CHARS[b.char]}"><span>Farbe</span><button class="orig" data-act="fb-col" data-c="" style="--c:${FB_BASE[b.char]}" aria-pressed="${!cur}">Original</button>${FB_COLS.map(([h,n])=>`<button data-act="fb-col" data-c="${h}" style="--c:${h}" aria-pressed="${cur===h}" aria-label="${n}" title="${n}"></button>`).join('')}</div>`})();
   if(st==='menu')o.innerHTML=`<div class="fb-card"><h3>Flying Bird</h3><p>Tippe, um zu fliegen, und weiche den Säulen aus. Sammle Geld fürs Casino und schnapp dir Power-ups: Magnet, Schild und Doppelgeld.</p>${chars}
-    <button class="fb-go" data-act="fb-start">Los geht's</button><div class="fb-mapline">Map: <b>${fbMap().n}</b><button data-act="fb-mapgo">ändern</button></div>${b.runs?`<div class="fb-stat">Rekord <b>${b.best}</b> · ${b.runs} Flüge · ${fmtC(b.earned||0)} verdient</div>`:''}</div>`;
+    <button class="fb-go" data-act="fb-start">Los geht's</button><div class="fb-fsnote">Gespielt wird im Vollbild</div><div class="fb-mapline">Map: <b>${fbMap().n}</b><button data-act="fb-mapgo">ändern</button></div>${b.runs?`<div class="fb-stat">Rekord <b>${b.best}</b> · ${b.runs} Flüge · ${fmtC(b.earned||0)} verdient</div>`:''}</div>`;
   else if(st==='pause')o.innerHTML=`<div class="fb-card"><h3>Pause</h3><p>Punkte: <b>${FB.score}</b> · gesammelt: <b>${fmtC(FB.money)}</b></p><button class="fb-go" data-act="fb-resume">Weiter</button><button class="fb-sec" data-act="fb-menu">Beenden</button></div>`;
   else{const m=fbMedal(FB.score);o.innerHTML=`<div class="fb-card"><h3>${FB.newBest?'Neuer Rekord!':'Abgestürzt!'}</h3>
     ${m?`<div class="fb-medal" style="--m:${m[2]}"><i>${m[0]}+</i><span>${m[1]}-Medaille</span></div>`:''}
@@ -2567,7 +2568,7 @@ function fbOverlay(){
     <button class="fb-go" data-act="fb-start">Nochmal</button><button class="fb-sec" data-act="fb-menu">Figur wechseln</button></div>`}
 }
 function fbFull(on){
-  if(on==null)on=!FB.full;FB.full=on;document.body.classList.toggle('fb-full',on);
+  if(on==null)on=!FB.full;FB.full=on;if(!on&&FB.state==='play'){FB.state='pause';setTimeout(fbOverlay,0)}document.body.classList.toggle('fb-full',on);
   if(!FB.wrap)return;FB.wrap.classList.toggle('full',on);
   if(on){document.body.appendChild(FB.wrap);const de=document.documentElement;
     if(de.requestFullscreen&&!document.fullscreenElement)try{de.requestFullscreen({navigationUI:'hide'}).then(()=>{FB.realFs=true;fbFit()},()=>{})}catch(e){}}
@@ -2762,6 +2763,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'3.4',d:'11.11.2026',t:'Flying Bird nur im Vollbild',items:[['n','Flying Bird startet jetzt immer im Vollbild. Verlässt du das Vollbild, pausiert das Spiel und geht beim Weiterspielen wieder ins Vollbild.']]},
   {v:'3.3',d:'11.11.2026',t:'Max-Knopf',items:[['n','Neuer Max-Knopf bei Blackjack, Roulette, Slots und Okey: setzt dein ganzes Guthaben auf einmal.'],['n','Roulette: Tippe zuerst ein Feld an, dann auf Max, dann landet alles auf diesem Feld.']]},
   {v:'3.2',d:'11.11.2026',t:'Flying Bird: Stadt & neue Figuren',items:[['n','Neue Map Stadt: Hochhäuser aus Glas, Beton und Ziegeln, Straße mit Mittelstreifen und eine Skyline, deren Fenster nachts leuchten.'],['n','5 neue Figuren: Propeller-Frosch, Biene, Roboter, fliegende Pizza und Super-Katze mit Umhang. Alle mit Farbauswahl.'],['f','Flüssiger: Kein kurzes Ruckeln mehr, wenn neue Säulen erscheinen.'],['f','Kommt dein Handy nicht hinterher, passt das Spiel die Auflösung automatisch an, damit es weiter flüssig läuft.']]},
   {v:'3.1',d:'10.11.2026',t:'1-Million-Jackpot',items:[['n','Neues Feld am Glücksrad: der 1-Million-Jackpot. Sehr selten, aber wer ihn trifft, bekommt 1.000.000 €.']]},
