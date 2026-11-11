@@ -1992,7 +1992,7 @@ function vSlots(){
 }
 
 /* ---------- Flying Bird ---------- */
-const FB_CHARS={spatz:'Spatz',goldi:'Goldi',eule:'Eule',drache:'Drache',rakete:'Rakete',ufo:'Ufo',geldsack:'Geldsack',pinguin:'Pinguin',melone:'Melone'};
+const FB_CHARS={spatz:'Spatz',goldi:'Goldi',eule:'Eule',drache:'Drache',rakete:'Rakete',ufo:'Ufo',geldsack:'Geldsack',pinguin:'Pinguin',melone:'Melone',frosch:'Frosch',biene:'Biene',roboter:'Roboter',pizza:'Pizza',katze:'Katze'};
 const FB_H=640,FB_GR=64,FB_GY=FB_H-FB_GR,FB_G=1800,FB_FLAP=-520,FB_SP=270;
 const FB_ITEMS={coin:['Münze',2],bills:['Geldbündel',10],gem:['Diamant',50]};
 function fbS(){const s=S.settings;if(!s.bird||Object.isFrozen(s.bird))s.bird=Object.assign({char:'spatz',best:0,earned:0,runs:0,style:'block'},JSON.parse(JSON.stringify(s.bird||{})));if(!FB_CHARS[s.bird.char])s.bird.char='spatz';if(typeof FB_MAPS!=='undefined'&&!FB_MAPS[s.bird.map])s.bird.map='wiese';s.bird.style='block';return s.bird}
@@ -2010,7 +2010,7 @@ function fbE(c,x,y,rx,ry,rot,f){c.beginPath();c.ellipse(x,y,rx,ry,rot||0,0,Math.
 function fbP(c,pts,f){c.beginPath();c.moveTo(pts[0],pts[1]);for(let i=2;i<pts.length;i+=2)c.lineTo(pts[i],pts[i+1]);c.closePath();c.fillStyle=f;c.fill()}
 function fbRR(c,x,y,w,h,r,f){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();c.fillStyle=f;c.fill()}
 /* main colour of every character; the colour picker replaces it, darker and lighter tones are derived from it */
-const FB_BASE={spatz:'#3b9bff',goldi:'#f6c533',eule:'#7b5cf0',drache:'#3fc46b',rakete:'#e3263b',ufo:'#b8c4d6',geldsack:'#c79a5b',pinguin:'#1b2230',melone:'#2f9e44'};
+const FB_BASE={spatz:'#3b9bff',goldi:'#f6c533',eule:'#7b5cf0',drache:'#3fc46b',rakete:'#e3263b',ufo:'#b8c4d6',geldsack:'#c79a5b',pinguin:'#1b2230',melone:'#2f9e44',frosch:'#4cbb47',biene:'#ffc928',roboter:'#9aa7b8',pizza:'#f6c548',katze:'#ff9a3c'};
 const FB_COLS=[['#ff4d5e','Rot'],['#ff9f1c','Orange'],['#ffd23f','Gelb'],['#3fc46b','Grün'],['#22c3e6','Türkis'],['#3b6bff','Blau'],['#9b5cf6','Lila'],['#ff6fb5','Pink'],['#2b2f3a','Schwarz'],['#eef1f6','Weiß']];
 function fbShade(hex,a){const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255,t=a<0?0:255,f=Math.abs(a);return '#'+[r,g,b].map(v=>Math.round(v+(t-v)*f).toString(16).padStart(2,'0')).join('')}
 function fbCol(k){const v=(fbS().colors||{})[k];return /^#[0-9a-f]{6}$/i.test(v||'')?v:FB_BASE[k]}
@@ -2085,6 +2085,61 @@ function fbChar(c,k,t,w,col){
       c.strokeStyle='#7a1020';c.lineWidth=1.4;c.beginPath();c.arc(8.5,3,3,.25,Math.PI-.25);c.stroke();
       c.save();c.translate(-6,3);c.rotate(-w*.9-.15);c.beginPath();c.moveTo(0,0);c.quadraticCurveTo(-10,-10,-21,-2);c.quadraticCurveTo(-10,7,0,0);c.fillStyle='#7bd651';c.fill();
       c.strokeStyle='#3d8a26';c.lineWidth=1.2;c.beginPath();c.moveTo(0,0);c.lineTo(-17,-2);c.stroke();c.restore();break}
+
+    case'frosch':{
+      c.save();c.translate(-12,11);c.rotate(.5+w*.6);fbE(c,-6,0,8,3.4,0,d);c.restore();
+      fbE(c,0,3,18,14,0,m);fbE(c,2,9,12,6,0,l);
+      fbC(c,-7,-8,6.5,m);fbC(c,8,-8,6.5,m);
+      [[-7,-9],[8,-9]].forEach(([x,y])=>{if(FB_BLINK){c.fillStyle=d;c.fillRect(x-4,y-1,8,3)}else{fbC(c,x,y,4.6,'#fff');fbC(c,x+1.4,y,2.4,'#14161c')}});
+      c.strokeStyle=d;c.lineWidth=2;c.lineCap='round';c.beginPath();c.arc(2,2,9,.35,Math.PI-.35);c.stroke();
+      fbC(c,-11,5,2.6,'rgba(255,120,140,.7)');fbC(c,14,5,2.6,'rgba(255,120,140,.7)');
+      c.fillStyle='#e3263b';c.beginPath();c.arc(0,-14,6,Math.PI,0);c.fill();c.fillStyle='#ffd84a';c.fillRect(-7,-14.5,14,2.5);
+      c.fillStyle='#444';c.fillRect(-1,-26,2,8);
+      {const s=Math.abs(Math.cos(t*9+w*2.2));fbE(c,0,-26,3+13*s,2.4,0,'#3b9bff');fbC(c,0,-26,2,'#ffd84a')}
+      break}
+    case'biene':{
+      fbP(c,[-17,-1,-26,1,-17,5],'#22201c');
+      c.save();c.translate(-1,-11);c.rotate(-.4-w*.9);fbE(c,-6,-6,11,6,-.3,'rgba(225,245,255,.95)');c.restore();
+      fbE(c,0,2,19,14,0,m);
+      c.save();c.beginPath();c.ellipse(0,2,19,14,0,0,Math.PI*2);c.clip();c.fillStyle='#22201c';[-13,-5,3].forEach(x=>c.fillRect(x,-14,4.5,32));c.restore();
+      if(FB_BLINK){c.fillStyle='#22201c';c.fillRect(8,-4,8,3)}else{fbC(c,12,-3,5,'#fff');fbC(c,13.4,-3,2.6,'#14161c')}
+      c.strokeStyle='#22201c';c.lineWidth=1.6;c.lineCap='round';c.beginPath();c.arc(12,4,4,.3,Math.PI-.3);c.stroke();
+      c.lineWidth=1.8;c.beginPath();c.moveTo(8,-11);c.quadraticCurveTo(9,-20,15,-22);c.moveTo(13,-10);c.quadraticCurveTo(17,-17,22,-17);c.stroke();
+      fbC(c,15,-22,2.4,'#22201c');fbC(c,22,-17,2.4,'#22201c');
+      c.save();c.translate(-6,-11);c.rotate(-.2-w*.9);fbE(c,-4,-7,12,7,-.2,'rgba(240,250,255,.98)');c.restore();
+      break}
+    case'roboter':{
+      const len=8+Math.random()*8;fbP(c,[-17,-4,-17-len,2,-17,8],'#ff8a1f');fbP(c,[-17,-1,-17-len*.6,2,-17,5],'#fff1a8');
+      c.save();c.translate(-6,6);c.rotate(-w*.8);fbRR(c,-16,-3,16,6,3,d);fbC(c,-16,0,3.5,fbShade(m,.2));c.restore();
+      fbRR(c,-17,-15,32,30,7,m);fbRR(c,-17,-15,32,7,5,fbShade(m,.35));
+      fbRR(c,-3,-8,16,10,3,'#14161c');
+      if(FB_BLINK){c.fillStyle='#3fe0ff';c.fillRect(0,-4,10,2)}else{fbRR(c,0,-6,4.5,5,1.5,'#3fe0ff');fbRR(c,7,-6,4.5,5,1.5,'#3fe0ff')}
+      c.fillStyle=d;for(let i=0;i<4;i++)c.fillRect(-1+i*3.6,6,2,5);
+      fbC(c,-12,-10,1.5,d);fbC(c,10,-10,1.5,d);
+      c.fillStyle=d;c.fillRect(-2,-24,3,9);fbC(c,-.5,-25,3.4,'#e3263b');fbC(c,-1.5,-26,1,'#fff');
+      break}
+    case'pizza':{
+      c.save();c.translate(-12,-8);c.rotate(-.3-w*.9);fbE(c,-6,-4,11,5.5,-.4,'#fff');fbE(c,-4,-2,8,4,-.4,'#e9eef7');c.restore();
+      c.beginPath();c.moveTo(-14,-17);c.lineTo(22,2);c.lineTo(-14,19);c.closePath();c.fillStyle=m;c.fill();
+      fbE(c,4,10,2.2,4.5,0,m);fbE(c,-4,14,2,4,0,m);
+      fbRR(c,-21,-19,9,40,4.5,'#c8843a');c.fillStyle='rgba(255,255,255,.25)';c.fillRect(-19,-16,2,32);
+      [[-7,-8],[-1,8],[-8,9]].forEach(([x,y])=>{fbC(c,x,y,3.6,'#d6402f');fbC(c,x-1,y-1,1.1,'rgba(255,255,255,.45)')});
+      if(FB_BLINK){c.fillStyle='#7a4a10';c.fillRect(1,-3,5,1.6);c.fillRect(8,0,5,1.6)}else{fbC(c,3,-2,2.8,'#fff');fbC(c,3.8,-2,1.5,'#14161c');fbC(c,10,1,2.6,'#fff');fbC(c,10.7,1,1.4,'#14161c')}
+      c.strokeStyle='#7a4a10';c.lineWidth=1.3;c.beginPath();c.arc(6,5,2.6,.2,Math.PI-.2);c.stroke();
+      c.save();c.translate(-10,6);c.rotate(w*.6);fbE(c,-6,4,9,4.5,.4,'#e9eef7');c.restore();
+      break}
+    case'katze':{
+      c.save();c.translate(-4,-7);c.rotate(-w*.35);fbP(c,[0,0,-26,-5,-31,7,-25,14,-2,9],'#e3263b');fbP(c,[-26,-5,-31,7,-28,6],'#b01a2c');c.restore();
+      c.strokeStyle=d;c.lineWidth=4.5;c.lineCap='round';c.beginPath();c.moveTo(-13,8);c.quadraticCurveTo(-25,15,-21,-3);c.stroke();
+      fbC(c,0,2,16,m);
+      fbP(c,[-11,-8,-12,-21,-2,-14],m);fbP(c,[5,-14,13,-21,13,-7],m);fbP(c,[-9,-10,-10,-17,-5,-13],'#ffb3c1');fbP(c,[7,-13,11,-17,11,-10],'#ffb3c1');
+      c.fillStyle=d;c.fillRect(-4,-14,2.5,6);c.fillRect(1,-14,2.5,5);
+      fbE(c,7,6,7,5,0,l);
+      [[1,-2],[10,-2]].forEach(([x,y])=>{if(FB_BLINK){c.fillStyle='#14161c';c.fillRect(x-3,y,6,1.8)}else{fbE(c,x,y,3.4,3.8,0,'#9be15d');fbE(c,x+.6,y,1.2,3,0,'#14161c')}});
+      fbP(c,[5,3,9,3,7,5.5],'#ff7d95');
+      c.strokeStyle='rgba(255,255,255,.8)';c.lineWidth=1;c.beginPath();c.moveTo(12,6);c.lineTo(21,4);c.moveTo(12,8);c.lineTo(21,9);c.stroke();
+      c.save();c.translate(8,13);c.rotate(-.3+w*.3);fbE(c,4,0,6,3.5,0,l);c.restore();
+      break}
   }
 }
 function fbPreview(k){
@@ -2245,6 +2300,7 @@ const FB_MAPS={
   wueste:{n:'Wüste',sky:[['#f9c784','#fde8c4',[232,186,128],[214,160,98]],['#f08a5d','#f9c59b',[205,128,92],[184,112,78]],['#1d1838','#5a3f66',[66,48,82],[54,38,58]]],ground:['sand_top','sand_side','sand'],mats:['sandstone','terracotta'],cap:'gold',fx:'dust',sun:'sun',hi:'rgba(255,240,200,.35)',chip:'#e3c98a'},
   schnee:{n:'Schnee',sky:[['#9fd0f5','#eaf6ff',[196,218,240],[236,243,250]],['#c7a6d9','#f3d9e6',[200,180,215],[232,222,236]],['#0d1631','#2c3d6b',[52,68,110],[150,165,195]]],ground:['snow_top','snow_side','dirt'],mats:['ice','stone','planks'],cap:'gold',fx:'snow',sun:'sun',hi:'rgba(255,255,255,.9)',chip:'#f4f8fc'},
   vulkan:{n:'Vulkan',sky:[['#1a0606','#7a1d0e',[78,22,18],[42,12,12]],['#240707','#8f2a0c',[92,28,20],[48,14,12]],['#120405','#5e160c',[60,18,16],[34,10,10]]],ground:['magma','magma','basalt'],mats:['basalt','darkbrick'],cap:'magma',fx:'embers',sun:'none',hi:'rgba(255,90,30,.55)',chip:'#e2541b'},
+  stadt:{n:'Stadt',sky:[['#8db6dc','#dde9f2',[150,166,188],[96,108,130]],['#ff8a5c','#ffc999',[150,96,112],[96,66,88]],['#060a1d','#1b2450',[30,36,70],[18,22,44]]],ground:['asphalt_top','curb_side','concrete'],mats:['glass','office','brick'],cap:'rooftop',fx:null,sun:'sun',city:1,hi:'rgba(255,255,255,.12)',chip:'#7d8796'},
   weltraum:{n:'Weltraum',sky:[['#03041a','#1b1442',[44,36,96],[96,98,112]],['#070320','#2a1150',[60,34,110],[100,96,118]],['#02030f','#0e1a3a',[30,44,90],[88,96,112]]],ground:['moon','moon','moon'],mats:['metal'],cap:'lamp',fx:'comet',sun:'planet',space:1,hi:'rgba(255,255,255,.15)',chip:'#a9abb3'}
 };
 Object.keys(FB_MAPS).forEach(k=>FB_MAPS[k].key=k);
@@ -2303,6 +2359,12 @@ function fbTex(k){
     case'moon':noise([168,170,178],.14);c.fillStyle='rgba(60,62,72,.45)';[[3,4,3],[10,9,4],[5,12,2]].forEach(([x,y,s])=>c.fillRect(x,y,s,s));c.fillStyle='rgba(255,255,255,.25)';[[3,4,3],[10,9,4]].forEach(([x,y,s])=>c.fillRect(x,y-1,s,1));break;
     case'metal':noise([140,150,166],.07);c.fillStyle='#59606e';c.fillRect(0,0,16,1);c.fillRect(0,15,16,1);c.fillRect(0,0,1,16);c.fillRect(15,0,1,16);c.fillStyle='#dfe5ee';[[2,2],[13,2],[2,13],[13,13]].forEach(([x,y])=>c.fillRect(x,y,1,1));c.fillStyle='rgba(0,0,0,.18)';c.fillRect(0,7,16,1);break;
     case'lamp':noise([110,235,255],.1);c.fillStyle='#1b3a4a';c.fillRect(0,0,16,1);c.fillRect(0,15,16,1);c.fillRect(0,0,1,16);c.fillRect(15,0,1,16);c.fillStyle='rgba(255,255,255,.65)';c.fillRect(5,5,6,6);break;
+    case'asphalt_top':noise([74,76,82],.14);c.fillStyle='#e8d36a';c.fillRect(1,7,7,2);c.fillStyle='rgba(255,255,255,.08)';for(let i=0;i<6;i++)c.fillRect(Math.floor(rnd()*16),Math.floor(rnd()*16),1,1);break;
+    case'curb_side':noise([86,88,94],.12);noise([196,196,190],.06,0,4);c.fillStyle='rgba(0,0,0,.25)';c.fillRect(0,4,16,1);c.fillStyle='rgba(255,255,255,.35)';c.fillRect(0,0,16,1);break;
+    case'concrete':noise([150,150,146],.08);c.fillStyle='rgba(0,0,0,.18)';[[3,4,5],[9,11,4],[2,13,3]].forEach(([x,y,w])=>c.fillRect(x,y,w,1));break;
+    case'glass':noise([70,128,186],.07);c.fillStyle='rgba(255,255,255,.28)';for(let i=0;i<5;i++)c.fillRect(2+i,7-i,1,1);for(let i=0;i<5;i++)c.fillRect(10+i,15-i,1,1);c.fillStyle='#2b3442';c.fillRect(0,0,16,1);c.fillRect(0,8,16,1);c.fillRect(0,0,1,16);c.fillRect(8,0,1,16);break;
+    case'office':noise([182,178,170],.06);c.fillStyle='#33475e';c.fillRect(2,3,5,5);c.fillRect(9,3,5,5);c.fillRect(2,10,5,4);c.fillRect(9,10,5,4);c.fillStyle='rgba(160,210,255,.45)';c.fillRect(2,3,2,2);c.fillRect(9,3,2,2);c.fillRect(2,10,2,2);c.fillRect(9,10,2,2);c.fillStyle='rgba(0,0,0,.15)';c.fillRect(0,15,16,1);break;
+    case'rooftop':noise([62,64,70],.12);c.fillStyle='#a6abb5';c.fillRect(0,0,16,1);c.fillRect(0,15,16,1);c.fillRect(0,0,1,16);c.fillRect(15,0,1,16);c.fillStyle='#ffd84a';c.fillRect(6,6,4,4);c.fillStyle='#e3263b';c.fillRect(7,7,2,2);break;
     case'gold':noise([244,196,62],.14);c.fillStyle='#a8740f';c.fillRect(0,0,16,1);c.fillRect(0,15,16,1);c.fillRect(0,0,1,16);c.fillRect(15,0,1,16);for(let i=0;i<7;i++)px(1+Math.floor(rnd()*14),1+Math.floor(rnd()*14),'#fff6c8');break;
   }
   return FB_TEX[k]=cv;
@@ -2344,6 +2406,18 @@ function fbPillarCache(p){
     if(y===bt)for(let i=0;i<2;i++)fbFace(bot.c,tx,i*B,y,B+.6,0,D,-D,'rgba(255,255,255,.16)')});
   p.lt={cv:top.cv,y:y0};p.lb={cv:bot.cv,y:y1};
 }
+/* Säulen: pro Material einmal einen hohen Streifen und den Deckel vorzeichnen, dann nur noch verschieben (keine neuen Bilder pro Hindernis = kein Ruckeln) */
+const FB_NROW=Math.ceil((FB_H+180)/FB_B);
+function fbRowDraw(c,tx,y,top){const B=FB_B,D=FB_D;for(let i=0;i<2;i++)fbFace(c,tx,i*B,y,B+.6,0,0,B+.6);fbFace(c,tx,2*B,y,D,-D,0,B+.6,'rgba(0,0,0,.38)');if(top)for(let i=0;i<2;i++)fbFace(c,tx,i*B,y,B+.6,0,D,-D,'rgba(255,255,255,.16)')}
+function fbCols(){const M=fbMap(),key=FB.k+'|'+M.key;if(FB.cols&&FB.cols.key===key)return FB.cols;
+  const B=FB_B,D=FB_D,W=2*B+D+2,o={key,strip:{}},capT=fbTex(M.cap);
+  let L=fbLayer(W,B+D+3);L.c.translate(0,D+1);fbRowDraw(L.c,capT,0,false);o.cap=L.cv;
+  L=fbLayer(W,B+D+3);L.c.translate(0,D+1);fbRowDraw(L.c,capT,0,true);o.capTop=L.cv;
+  M.mats.forEach(m=>{const tx=fbTex(m),S=fbLayer(W,FB_NROW*B+D+3);S.c.translate(0,D+1);for(let r=FB_NROW-1;r>=0;r--)fbRowDraw(S.c,tx,r*B,false);o.strip[m]=S.cv});
+  return FB.cols=o}
+function fbPillarDraw(c,p){const C=fbCols(),B=FB_B,D=FB_D,dy=p.gy-p.base,tp=p.base-p.gap/2+dy,bt=p.base+p.gap/2+dy,st=C.strip[p.mat]||C.strip[fbMap().mats[0]];
+  fbBlit(c,C.cap,p.x,tp-B-D-1);fbBlit(c,st,p.x,tp-B-FB_NROW*B-D-1);
+  fbBlit(c,st,p.x,bt+B-D-1);fbBlit(c,C.capTop,p.x,bt-D-1)}
 function fbGroundCache(){
   const M=fbMap(),B=FB_B,D=FB_D,n=Math.ceil(FB.W/B)+3,key=FB.k+'|'+n+'|'+M.key;if(FB.gc&&FB.gc.key===key)return FB.gc;
   const y0=FB_GY-D-1,L=fbLayer(n*B+D+2,FB_H+12-y0);L.c.translate(0,-y0);
@@ -2353,6 +2427,31 @@ function fbGroundCache(){
   return FB.gc={key,cv:L.cv,y:y0};
 }
 function fbBlit(c,cv,x,y){c.drawImage(cv,fbSnap(x),fbSnap(y),cv.width/FB.k,cv.height/FB.k)}
+/* City-Skyline: zwei Häuserreihen, je Tageszeit einmal vorgezeichnet (halbe Auflösung, Block-Look), danach nur verschoben */
+function fbSkyline(li,pi){
+  const q=Math.max(.75,FB.k*.5),key=q+'|'+li+'|'+pi;FB.sky=FB.sky||{};if(FB.sky[key])return FB.sky[key];
+  const L=FB.city[li],tot=Math.ceil(L.total),H=260,cv=document.createElement('canvas');cv.width=Math.ceil(tot*q);cv.height=Math.ceil(H*q);
+  const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.scale(q,q);
+  const SK=FB_MAPS.stadt.sky[pi],base=li?SK[3]:SK[2],night=pi===2;let seed=li*97+11;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+  const H0=li?150:230;
+  L.forEach((b,i)=>{const h=Math.round(Math.min(H0-30,b.h*(li?1:1.15))/6)*6,x=Math.round(b.x/2)*2,w=Math.round(b.w/2)*2,y=H-h,v=.9+rnd()*.2,col=base.map(n=>Math.round(Math.min(255,n*v)));
+    c.fillStyle=`rgb(${col})`;c.fillRect(x,y,w,h);
+    if(rnd()<.35){const sw=Math.round(w*.55/2)*2,sh=12+Math.round(rnd()*3)*6;c.fillRect(x+Math.round((w-sw)/4)*2,y-sh,sw,sh)}
+    if(rnd()<.3){c.fillRect(x+Math.round(w/2),y-26,2,26);if(night){c.fillStyle='#ff3b3b';c.fillRect(x+Math.round(w/2)-1,y-28,4,4)}}
+    else if(rnd()<.3){c.fillStyle=`rgb(${col.map(n=>n*.8|0)})`;c.fillRect(x+4,y-10,10,10)}
+    c.fillStyle=`rgba(255,255,255,${night?0:.08})`;c.fillRect(x,y,3,h);
+    const cw=li?6:8,ch=li?8:10;
+    for(let wy=y+8;wy<H-10;wy+=ch+4)for(let wx=x+5;wx<x+w-cw-2;wx+=cw+4){
+      if(night){if(rnd()<.42){c.fillStyle=rnd()<.15?'#9fd8ff':'#ffd56b';c.fillRect(wx,wy,cw,ch)}else{c.fillStyle='rgba(0,0,0,.22)';c.fillRect(wx,wy,cw,ch)}}
+      else{c.fillStyle=pi===1?'rgba(255,190,120,.28)':'rgba(255,255,255,.2)';c.fillRect(wx,wy,cw,ch);c.fillStyle='rgba(0,0,0,.1)';c.fillRect(wx,wy+ch-2,cw,2)}}});
+  return FB.sky[key]={cv,tot,H};
+}
+function fbCityDraw(c,ph){
+  [[0,.12],[1,.3]].forEach(([li,sp])=>{
+    const draw=(pi,a)=>{if(a<=0)return;const S=fbSkyline(li,pi),off=(FB.dist*sp)%S.tot,y=FB_GY-S.H;c.globalAlpha=a;
+      for(let x=-off;x<FB.W;x+=S.tot)c.drawImage(S.cv,fbSnap(x),y,S.tot,S.H)};
+    draw(ph.i0,1);if(ph.f>0)draw(ph.i1,ph.f);c.globalAlpha=1});
+}
 function fbBgBlock(c,ph){
   const M=fbMap(),SK=M.sky,W=FB.W,t=FB.t,A=SK[ph.i0%SK.length],Bq=SK[ph.i1%SK.length],f=ph.f,night=M.space?1:ph.night;
   const top=fbMix(fbHex(A[0]),fbHex(Bq[0]),f),bot=fbMix(fbHex(A[1]),fbHex(Bq[1]),f),far=fbMix(A[2],Bq[2],f),near=fbMix(A[3],Bq[3],f);
@@ -2369,6 +2468,7 @@ function fbBgBlock(c,ph){
     c.fillStyle=`rgba(${tint},${a*.75})`;c.beginPath();c.moveTo(x,y);c.lineTo(x+w,y);c.lineTo(x+w+10,y-10);c.lineTo(x+10,y-10);c.fill();
     c.fillStyle=`rgba(${tint},${a*.9})`;c.beginPath();c.moveTo(x+w,y);c.lineTo(x+w+10,y-10);c.lineTo(x+w+10,y+h-10);c.lineTo(x+w,y+h);c.fill();
     c.fillStyle=`rgba(${tint},${a})`;c.fillRect(x,y,w,h);c.fillStyle=`rgba(0,0,0,${a*.12})`;c.fillRect(x,y+h-6,w,6)});
+  if(M.city){fbCityDraw(c,ph);return}
   const HL=fbHills();[[HL[0],.12,far,'rgba(255,255,255,.12)',5],[HL[1],.3,near,M.hi,M.key==='schnee'?9:5]].forEach(([hs,sp,col,hi,hh])=>{const cw=20,n=hs.length,tot=n*cw,off=(FB.dist*sp)%tot,i0b=Math.floor(off/cw),sub=off%cw;
     c.fillStyle=`rgb(${col})`;c.beginPath();c.moveTo(-40,FB_GY);for(let j=-1;j*cw-sub<W+cw;j++){const h=hs[((i0b+j)%n+n)%n],x=fbSnap(j*cw-sub);c.lineTo(x,FB_GY-h);c.lineTo(x+cw,FB_GY-h)}c.lineTo(W+40,FB_GY);c.closePath();c.fill();
     c.fillStyle=hi;c.beginPath();for(let j=-1;j*cw-sub<W+cw;j++){const h=hs[((i0b+j)%n+n)%n];c.rect(fbSnap(j*cw-sub),FB_GY-h,cw+.5,hh)}c.fill()});
@@ -2382,7 +2482,7 @@ function fbDraw(){
     fbBgBlock(c,ph);
     const gc=fbGroundCache(),gx=-(FB.dist%FB_B)-FB_B;
     c.save();c.beginPath();c.rect(-40,gc.y,W+80,FB_D+2);c.clip();fbBlit(c,gc.cv,gx,gc.y);c.restore();
-    for(const p of FB.pipes){fbPillarCache(p);const dy=p.gy-p.base;fbBlit(c,p.lt.cv,p.x,p.lt.y+dy);fbBlit(c,p.lb.cv,p.x,p.lb.y+dy)}
+    for(const p of FB.pipes)fbPillarDraw(c,p);
     c.save();c.beginPath();c.rect(-40,FB_GY,W+80,FB_H);c.clip();fbBlit(c,gc.cv,gx,gc.y);c.restore();
     fbWxDraw(c);
   }else{fbBgClassic(c,ph);fbPipesClassic(c);fbGroundClassic(c)}
@@ -2437,9 +2537,13 @@ function fbDraw(){
     c.font=`900 44px ${font}`;c.fillStyle='rgba(0,0,0,.5)';c.fillText(b.txt,3,3);c.fillStyle='#ffd84a';c.fillText(b.txt,0,0);c.font=`800 18px ${font}`;c.fillStyle='#fff';c.fillText(b.sub,0,34);c.restore()}
   if(FB.flash>0){c.fillStyle=`rgba(255,255,255,${Math.min(.8,FB.flash*1.6)})`;c.fillRect(-30,-30,W+60,FB_H+60)}
 }
+/* passt die Auflösung an, wenn das Gerät nicht hinterherkommt (nur nach unten, einmal pro Stufe) */
+function fbPerf(raw){if(FB.state!=='play'||document.hidden)return;if(raw>.004&&raw<(FB.minDt||1))FB.minDt=raw;
+  FB.ema=FB.ema?FB.ema*.96+raw*.04:raw;FB.perfT=(FB.perfT||0)+raw;
+  if(FB.perfT>2.5){FB.perfT=0;const tgt=Math.max(1/60,FB.minDt||1/60);if(FB.ema>tgt*1.35&&(FB.q||1)>.6){FB.q=Math.round(((FB.q||1)-.2)*10)/10;FB.ema=0;fbFit()}}}
 function fbLoop(ts){
   FB.raf=requestAnimationFrame(fbLoop);
-  let dt=(ts-FB.last)/1000;FB.last=ts;if(!(dt>0))dt=0;dt=Math.min(dt,.05);
+  let dt=(ts-FB.last)/1000;FB.last=ts;if(!(dt>0))dt=0;if(dt<.2)fbPerf(dt);dt=Math.min(dt,.05);
   if(FB.slow>0){FB.slow-=dt;dt*=.3}
   if(FB.state!=='pause'){const n=Math.max(1,Math.ceil(dt/(1/120)));for(let i=0;i<n;i++)fbUpdate(dt/n)}
   fbDraw();
@@ -2475,7 +2579,7 @@ function fbFit(){
   if(!FB.full){const h=$('#fb-host'),nav=$('#tabs');if(!h||!nav)return;h.style.height='';
     const r=h.getBoundingClientRect(),z=(r.height/h.offsetHeight)||1,avail=nav.getBoundingClientRect().top-14*z-r.top;
     h.style.height=Math.max(320,Math.min(900,avail/z))+'px'}
-  const rr=FB.cv.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);if(!rr.height)return;
+  const rr=FB.cv.getBoundingClientRect(),dpr=Math.max(1,Math.min(window.devicePixelRatio||1,2)*(FB.q||1));if(!rr.height)return;
   const cw=Math.round(rr.width*dpr),chh=Math.round(rr.height*dpr);
   /* only touch the canvas when its size really changed: resizing clears it and caused a blank frame on every tap */
   if(FB.cv.width!==cw||FB.cv.height!==chh){FB.cv.width=cw;FB.cv.height=chh}
@@ -2487,7 +2591,7 @@ function fbMount(){
   if(!FB.wrap){
     fbInitScene();fbReset();
     FB.wrap=document.createElement('div');FB.wrap.className='fb-wrap';
-    FB.cv=document.createElement('canvas');FB.ctx=FB.cv.getContext('2d',{alpha:false});
+    FB.cv=document.createElement('canvas');FB.ctx=FB.cv.getContext('2d',{alpha:false,desynchronized:true});
     FB.ov=document.createElement('div');FB.ov.className='fb-ov';
     FB.ex=document.createElement('button');FB.ex.className='fb-exit';FB.ex.dataset.act='fb-full';FB.ex.setAttribute('aria-label','Vollbild beenden');FB.ex.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8h5V3M21 8h-5V3M3 16h5v5M21 16h-5v5"/></svg>';
     FB.pb=document.createElement('button');FB.pb.className='fb-pause';FB.pb.dataset.act='fb-pause';FB.pb.setAttribute('aria-label','Pause');FB.pb.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>';
@@ -2570,7 +2674,7 @@ const CH_FAQ=[
   [['versicherung','insurance'],()=>'Eine Versicherung gibt es hier nicht. Du spielst einfach normal weiter.'],
   [['blackjack','17 und 4','siebzehn','dealer','karten','ziehen','halten','hit','stand'],()=>'**Blackjack:** Komm näher an 21 als der Dealer, ohne drüber zu gehen.\n• Bildkarten zählen 10, Asse 1 oder 11.\n• Setz Chips und tippe auf Geben.\n• **Ziehen** = noch eine Karte, **Halten** = stehen bleiben.\n• Der Dealer zieht bis 17 und bleibt bei Soft 17 stehen.\n• Ein Blackjack (Ass + 10) zahlt 3 zu 2, ein normaler Sieg 1 zu 1.\nMit der Glühbirne oben bekommst du Strategie-Tipps.'],
   [['roulette','kessel','rot','schwarz','zahl','null','dutzend','gerade','ungerade'],()=>'**Roulette** (europäisch, eine Null):\n• Wähle einen Chip und tippe auf Felder, um zu setzen.\n• Rot/Schwarz, Gerade/Ungerade, 1–18/19–36 zahlen 1 zu 1.\n• Dutzende (1–12, 13–24, 25–36) zahlen 2 zu 1.\n• Eine einzelne Zahl zahlt 35 zu 1.\n• Bei 0 verlieren alle Außenwetten.\nMit Wiederholen setzt du die letzte Runde nochmal.'],
-  [['flying','bird','vogel','flug','fliegen','figur','charakter','character','saeule','pinguin','drache','rakete','ufo','melone','skin','vollbild'],()=>'**Flying Bird:** Tippe (am PC Leertaste), um zu fliegen, und weiche den Säulen aus. Unterwegs sammelst du Geld: Münze 2 €, Geldbündel 10 €, Diamant 50 €. Alles landet direkt in deinem Casino-Guthaben. Vor dem Start wählst du eine von 9 Figuren, z. B. Spatz, Drache, Rakete, Ufo, Geldsack oder Wassermelone, und für jede Figur eine eigene Farbe. Mit dem Vollbild-Knopf (am PC Taste F) spielst du im Vollbild. Power-ups: Magnet zieht Geld an, Schild rettet dich einmal, Doppelgeld verdoppelt 8 Sekunden lang. Combos ab 5 Teilen hintereinander zahlen ×2, ab 10 ×3. Ab 10 Punkten gibt es Medaillen. Je weiter du kommst, desto schneller wird es, später bewegen sich Säulen. Das Spiel läuft im Blockwelt-3D-Look. In den Einstellungen wählst du die Map: Wiese, Wüste, Schnee, Vulkan oder Weltraum.'],
+  [['flying','bird','vogel','flug','fliegen','figur','charakter','character','saeule','pinguin','drache','rakete','ufo','melone','skin','vollbild'],()=>'**Flying Bird:** Tippe (am PC Leertaste), um zu fliegen, und weiche den Säulen aus. Unterwegs sammelst du Geld: Münze 2 €, Geldbündel 10 €, Diamant 50 €. Alles landet direkt in deinem Casino-Guthaben. Vor dem Start wählst du eine von 9 Figuren, z. B. Spatz, Drache, Rakete, Ufo, Geldsack, Wassermelone, Frosch, Biene, Roboter, Pizza oder Katze, und für jede Figur eine eigene Farbe. Mit dem Vollbild-Knopf (am PC Taste F) spielst du im Vollbild. Power-ups: Magnet zieht Geld an, Schild rettet dich einmal, Doppelgeld verdoppelt 8 Sekunden lang. Combos ab 5 Teilen hintereinander zahlen ×2, ab 10 ×3. Ab 10 Punkten gibt es Medaillen. Je weiter du kommst, desto schneller wird es, später bewegen sich Säulen. Das Spiel läuft im Blockwelt-3D-Look. In den Einstellungen wählst du die Map: Wiese, Wüste, Schnee, Vulkan, Stadt oder Weltraum.'],
   [['was ist neu','neuigkeit','changelog','patch','neue version','updates'],()=>'Alle Neuerungen stehen im Tab **Updates** unten in der Leiste, mit Datum und Version. Aktuell: v'+UPDATES[0].v+' – '+UPDATES[0].t+'.'],
   [['okey','okay','oki','erklaer','wie geht','wie spielt','regeln','anleitung','verstehe','versteh','kapier'],()=>'**Okey in 30 Sekunden** 🀄\n• Du spielst gegen 3 Computer (Mehmet, Ayşe, Can). Jeder hat 14 Steine, die Zahlen 1 bis 13 in 4 Farben.\n• Ziel: Alle deine Steine zu **Reihen** und **Gruppen** ordnen, dann gewinnst du.\n• Reihe = gleiche Farbe, Zahlen hintereinander, z. B. 🔴 4-5-6.\n• Gruppe = gleiche Zahl, verschiedene Farben, z. B. 7 🔴 7 🔵 7 ⚫.\n• Jeder Zug: **1 Stein nehmen, 1 Stein abwerfen.**\n• Kannst du gewinnen, leuchtet der goldene Knopf **„Fertig machen“**.\nFrag mich auch: „Wie geht ein Zug?“, „Was ist der Okey?“ oder „Gib mir Okey-Tipps“.'],
   [['okey','okay','oki','ein zug','mein zug','zug','ziehen','nehmen','abwerfen','ablegen','dran','reihenfolge','links','rechts','mitte','stapel'],()=>'**So geht ein Zug bei Okey:**\n1. Wenn du dran bist, leuchtet etwas auf. Nimm entweder den Stein **links unten**, den hat dein linker Nachbar weggeworfen, oder tippe auf den **Stapel in der Mitte** für einen verdeckten Stein.\n2. Jetzt hast du 15 Steine. Tippe einen Stein an, den du **nicht brauchst**. Er hebt sich an.\n3. Tippe auf **„Abwerfen“** oder auf dein Feld **rechts unten**.\nDann sind Mehmet, Ayşe und Can dran, danach wieder du. 💡 Den Stein links unten lohnt es sich zu nehmen, wenn er direkt in eine deiner Reihen oder Gruppen passt.'],
@@ -2615,7 +2719,7 @@ function faqAnswer(q){
 }
 const CH_RULES=`Du bist "Larsens Assistent", der freundliche Hilfe-Chat in der privaten Web-App "Larsens World". Antworte auf Deutsch, kurz (höchstens 6 Sätze oder eine kurze Liste mit •), locker und hilfreich. Nutze **fett** sparsam, sonst kein Markdown.
 Die App: Notizen (anheften, suchen, Farben), To-dos (Priorität, Fälligkeit, Filter), Termine (Export als .ics in den iPhone-Kalender), Trading Journal (Gewinn, Trefferquote, Kurve), Angebote (jeden Montag werden Prospekte von Aldi, Lidl, Rewe, Edeka etc. für die Merkliste durchsucht; neue Produkte werden sofort gesucht; "Jetzt suchen" startet manuell), Casino, Bird (Flying Bird), Optionen (App-Themes wie Babyblau Gold, eigene Farben, Unschärfe, Animationen, App-Größe am PC, Tisch- und Kartendesigns, Casino-Sounds, Assistent-Farben). Daten liegen privat im Claude-Konto.
-Casino: Spielgeld, keine Echtgeld-Ein- oder Auszahlung. Start 1.000 €, alle Spiele teilen ein Guthaben, "1.000 € nachfüllen" wenn pleite, Highscore = höchster Kontostand aller Zeiten ohne Geld aus Flying Bird (Bird hat eigenen Punkte-Rekord). Blackjack: 6 Decks, Dealer steht auf Soft 17, Blackjack zahlt 3 zu 2, Ziehen/Halten/Doppeln/Teilen, Glühbirne zeigt Basic-Strategy-Tipps, keine Versicherung. Roulette: europäisch mit einer Null; Rot/Schwarz, Gerade/Ungerade, 1–18/19–36 zahlen 1:1, Dutzende 2:1, Einzelzahl 35:1. Slots: 3 Walzen, 5 Gewinnlinien, 7-7-7 zahlt am meisten, dann BAR, Ass, drei gleiche Kartenfarben; 3× FREE = 10 Freispiele mit doppeltem Gewinn; Glücksrad (eigener Tab): 5.000 € pro Dreh, 50 Felder, 25 Gewinne (11K bis 100K, seltener 1-Mio-Jackpot, ×2), 25 Nieten (nichts oder −5K bis −100K). Okey (im Casino, 4. Spiel): türkisches Steinspiel gegen 3 Computer (Mehmet, Ayşe, Can). Erkläre Okey immer einfach, Schritt für Schritt und mit kleinen Beispielen (Farbe + Zahl, z. B. rote 4-5-6), weil viele es nicht kennen. Regeln: 106 Steine (Zahlen 1–13 in Gelb, Blau, Schwarz, Rot, je doppelt, plus 2 ★-Steine). Jeder hat 14 Steine. Zug: Stein links unten nehmen (Abwurf des linken Nachbarn) oder verdeckt aus der Mitte ziehen, dann einen Stein abwerfen (antippen, dann „Abwerfen“ oder Feld rechts unten). Reihe = gleiche Farbe, mind. 3 fortlaufende Zahlen (12-13-1 erlaubt, 13-1-2 nicht). Gruppe = gleiche Zahl, 3–4 verschiedene Farben. Okey = Joker: gleiche Farbe wie der Anzeiger in der Mitte, Zahl +1 (nach 13 kommt 1), golden mit „OK“ markiert, ersetzt jeden Stein. ★ = falscher Okey, zählt als normaler Stein mit dem Okey-Wert. Gewinnen: 14 Steine komplett in Reihen/Gruppen oder 7 Paare, dann leuchtet „Fertig machen“. Gewinn 4× Einsatz, mit Okey abgeworfen oder 7 Paaren 8×. Knöpfe „Reihen“ und „Paare“ sortieren automatisch. Stein antippen und dann anderes Feld antippen verschiebt ihn. Einsatz 10 € bis 1.000 €. Okey in den Optionen unter Casino ausblendbar. Auszahlungsquote ca. 94 %. Flying Bird (eigener Tab "Bird"): tippen bzw. Leertaste zum Fliegen, Säulen ausweichen, Münzen 2 €, Geldbündel 10 €, Diamanten 50 € sammeln, das Geld geht direkt ins Casino-Guthaben; 9 Figuren (Blauer Spatz, Goldvogel, Nachteule, Mini-Drache, Rakete, Ufo, Geldsack, Pinguin, Wassermelone), für jede Figur eine eigene Farbe wählbar (Original oder 10 Farben); Vollbild-Knopf oben rechts, am PC Taste F; Rekord = meiste Punkte; Power-ups Magnet (7 s), Schild (rettet einmal), Doppelgeld (8 s); Combo ab 5 Teilen ×2, ab 10 ×3; Medaillen Bronze 10, Silber 25, Gold 50, Diamant 100; ab 12 Punkten bewegliche Säulen; Pause mit P oder Esc am PC; wird mit der Zeit schneller, Himmel wechselt von Tag zu Abend zu Nacht; Grafik im Blockwelt-3D-Look (Voxel); 5 Maps in den Einstellungen unter Flying Bird: Wiese, Wüste (Staub), Schnee (Schneefall), Vulkan (Glut), Weltraum (Sternschnuppen).
+Casino: Spielgeld, keine Echtgeld-Ein- oder Auszahlung. Start 1.000 €, alle Spiele teilen ein Guthaben, "1.000 € nachfüllen" wenn pleite, Highscore = höchster Kontostand aller Zeiten ohne Geld aus Flying Bird (Bird hat eigenen Punkte-Rekord). Blackjack: 6 Decks, Dealer steht auf Soft 17, Blackjack zahlt 3 zu 2, Ziehen/Halten/Doppeln/Teilen, Glühbirne zeigt Basic-Strategy-Tipps, keine Versicherung. Roulette: europäisch mit einer Null; Rot/Schwarz, Gerade/Ungerade, 1–18/19–36 zahlen 1:1, Dutzende 2:1, Einzelzahl 35:1. Slots: 3 Walzen, 5 Gewinnlinien, 7-7-7 zahlt am meisten, dann BAR, Ass, drei gleiche Kartenfarben; 3× FREE = 10 Freispiele mit doppeltem Gewinn; Glücksrad (eigener Tab): 5.000 € pro Dreh, 50 Felder, 25 Gewinne (11K bis 100K, seltener 1-Mio-Jackpot, ×2), 25 Nieten (nichts oder −5K bis −100K). Okey (im Casino, 4. Spiel): türkisches Steinspiel gegen 3 Computer (Mehmet, Ayşe, Can). Erkläre Okey immer einfach, Schritt für Schritt und mit kleinen Beispielen (Farbe + Zahl, z. B. rote 4-5-6), weil viele es nicht kennen. Regeln: 106 Steine (Zahlen 1–13 in Gelb, Blau, Schwarz, Rot, je doppelt, plus 2 ★-Steine). Jeder hat 14 Steine. Zug: Stein links unten nehmen (Abwurf des linken Nachbarn) oder verdeckt aus der Mitte ziehen, dann einen Stein abwerfen (antippen, dann „Abwerfen“ oder Feld rechts unten). Reihe = gleiche Farbe, mind. 3 fortlaufende Zahlen (12-13-1 erlaubt, 13-1-2 nicht). Gruppe = gleiche Zahl, 3–4 verschiedene Farben. Okey = Joker: gleiche Farbe wie der Anzeiger in der Mitte, Zahl +1 (nach 13 kommt 1), golden mit „OK“ markiert, ersetzt jeden Stein. ★ = falscher Okey, zählt als normaler Stein mit dem Okey-Wert. Gewinnen: 14 Steine komplett in Reihen/Gruppen oder 7 Paare, dann leuchtet „Fertig machen“. Gewinn 4× Einsatz, mit Okey abgeworfen oder 7 Paaren 8×. Knöpfe „Reihen“ und „Paare“ sortieren automatisch. Stein antippen und dann anderes Feld antippen verschiebt ihn. Einsatz 10 € bis 1.000 €. Okey in den Optionen unter Casino ausblendbar. Auszahlungsquote ca. 94 %. Flying Bird (eigener Tab "Bird"): tippen bzw. Leertaste zum Fliegen, Säulen ausweichen, Münzen 2 €, Geldbündel 10 €, Diamanten 50 € sammeln, das Geld geht direkt ins Casino-Guthaben; 14 Figuren (Blauer Spatz, Goldvogel, Nachteule, Mini-Drache, Rakete, Ufo, Geldsack, Pinguin, Wassermelone, Propeller-Frosch, Biene, Roboter, fliegende Pizza, Super-Katze mit Umhang), für jede Figur eine eigene Farbe wählbar (Original oder 10 Farben); Vollbild-Knopf oben rechts, am PC Taste F; Rekord = meiste Punkte; Power-ups Magnet (7 s), Schild (rettet einmal), Doppelgeld (8 s); Combo ab 5 Teilen ×2, ab 10 ×3; Medaillen Bronze 10, Silber 25, Gold 50, Diamant 100; ab 12 Punkten bewegliche Säulen; Pause mit P oder Esc am PC; wird mit der Zeit schneller, Himmel wechselt von Tag zu Abend zu Nacht; Grafik im Blockwelt-3D-Look (Voxel); 6 Maps in den Einstellungen unter Flying Bird: Wiese, Wüste (Staub), Schnee (Schneefall), Vulkan (Glut), Stadt (Hochhäuser, nachts leuchtende Fenster), Weltraum (Sternschnuppen).
 Kontakt zum Entwickler Larsen: ${CHAT_MAIL}. Verweise auf diese E-Mail bei Fehlern, Update-Vorschlägen, Wünschen oder wenn du etwas nicht sicher weißt. Erfinde keine Funktionen. Bei Fragen ohne Bezug zur App darfst du kurz und freundlich antworten.`;
 let chSample;
 async function chAsk(q){
@@ -2656,6 +2760,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'3.2',d:'11.11.2026',t:'Flying Bird: Stadt & neue Figuren',items:[['n','Neue Map Stadt: Hochhäuser aus Glas, Beton und Ziegeln, Straße mit Mittelstreifen und eine Skyline, deren Fenster nachts leuchten.'],['n','5 neue Figuren: Propeller-Frosch, Biene, Roboter, fliegende Pizza und Super-Katze mit Umhang. Alle mit Farbauswahl.'],['f','Flüssiger: Kein kurzes Ruckeln mehr, wenn neue Säulen erscheinen.'],['f','Kommt dein Handy nicht hinterher, passt das Spiel die Auflösung automatisch an, damit es weiter flüssig läuft.']]},
   {v:'3.1',d:'10.11.2026',t:'1-Million-Jackpot',items:[['n','Neues Feld am Glücksrad: der 1-Million-Jackpot. Sehr selten, aber wer ihn trifft, bekommt 1.000.000 €.']]},
   {v:'3.0',d:'10.11.2026',t:'Glücksrad: höhere Verluste',items:[['n','Nieten kosten jetzt deutlich mehr: zwischen 5.000 € und 100.000 €. Trostpreise gibt es nicht mehr.']]},
   {v:'2.9',d:'10.11.2026',t:'Glücksrad günstiger',items:[['n','Ein Dreh kostet nur noch 5.000 € statt 10.000 €.'],['n','Statt Gratis-Feldern gibt es jetzt zwei neue Geldfelder.']]},
