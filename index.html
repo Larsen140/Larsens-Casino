@@ -347,11 +347,12 @@ body.bj-mode .wrap{min-height:100%}
 .bj-chip{width:50px;height:50px;border-radius:50%;border:0;cursor:pointer;font-family:var(--f-mono);font-weight:700;font-size:11.5px;letter-spacing:-.03em;color:#fff;position:relative;background:var(--cc);box-shadow:0 6px 14px rgba(0,0,0,.5),inset 0 0 0 4px rgba(0,0,0,.18);transition:transform .15s cubic-bezier(.3,1.4,.5,1),opacity .2s}
 .bj-chip::before{content:"";position:absolute;inset:5px;border-radius:50%;border:3px dashed rgba(255,255,255,.55)}
 .c5{--cc:#ece6e3}.bj-chip.c5{color:var(--acc-d)}.c5::before{border-color:rgba(163,16,31,.55)!important}
-.c10{--cc:#3a3a42}.c25{--cc:#d81f35}.c100{--cc:#111}.c100::before{border-color:color-mix(in srgb,var(--acc) 85%,transparent)!important}.c500{--cc:#6b0d1a}.c1000{--cc:#12a150}.c1000::before{border-color:rgba(255,255,255,.7)!important}.bj-chip.c1000{font-size:10px;letter-spacing:-.06em}.c10000{--cc:#1aa7ec;background:radial-gradient(circle at 35% 30%,#bff0ff 0,#4fd0ff 30%,#1688d6 70%,#0b5fa8 100%)!important}.c10000::before{border-color:rgba(255,255,255,.85)!important}.bj-chip.c10000{font-size:10px;letter-spacing:-.06em;text-shadow:0 1px 2px rgba(0,40,90,.7);box-shadow:0 6px 14px rgba(0,0,0,.5),0 0 14px rgba(79,208,255,.55),inset 0 0 0 4px rgba(0,0,0,.15)}
+.cmax{--cc:linear-gradient(145deg,#ffe07a,#d99a00);color:#3a2600!important;font-weight:900!important}.c10{--cc:#3a3a42}.c25{--cc:#d81f35}.c100{--cc:#111}.c100::before{border-color:color-mix(in srgb,var(--acc) 85%,transparent)!important}.c500{--cc:#6b0d1a}.c1000{--cc:#12a150}.c1000::before{border-color:rgba(255,255,255,.7)!important}.bj-chip.c1000{font-size:10px;letter-spacing:-.06em}.c10000{--cc:#1aa7ec;background:radial-gradient(circle at 35% 30%,#bff0ff 0,#4fd0ff 30%,#1688d6 70%,#0b5fa8 100%)!important}.c10000::before{border-color:rgba(255,255,255,.85)!important}.bj-chip.c10000{font-size:10px;letter-spacing:-.06em;text-shadow:0 1px 2px rgba(0,40,90,.7);box-shadow:0 6px 14px rgba(0,0,0,.5),0 0 14px rgba(79,208,255,.55),inset 0 0 0 4px rgba(0,0,0,.15)}
 .bj-chip:disabled{opacity:.22;cursor:not-allowed}
 .bj-chip:not(:disabled):active{transform:translateY(-5px) scale(.94)}
 .bj-btn:focus-visible,.bj-chip:focus-visible,.bj-ico:focus-visible{outline:2px solid #fff;outline-offset:2px}
-.bj-betrow{display:grid;grid-template-columns:52px 52px 1fr;gap:6px}
+.bj-betrow{display:grid;grid-template-columns:52px 52px 52px 1fr;gap:6px}
+.bj-max{color:#ffd84a!important;font-weight:900;letter-spacing:.02em}
 .bj-table:not(.rl):not(.sl) .bj-foot{display:none}
 .bj-foot{text-align:center;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(246,241,242,.3)}
 .bj-fly{z-index:6;pointer-events:none;margin:0}
@@ -787,6 +788,7 @@ body.upd-new #tab-updates::after{content:'';position:absolute;top:8px;right:calc
 .ok-stakes{flex-wrap:nowrap}.ok-stake{border:0;border-radius:999px;padding:8px 10px;font:inherit;font-weight:800;font-size:12.5px;white-space:nowrap;color:#fff;background:rgba(255,255,255,.1);cursor:pointer}
 .ok-stake[aria-pressed=true]{background:var(--acc);box-shadow:0 0 0 2px rgba(255,255,255,.3)}
 .ok-stake:disabled{opacity:.35}
+.ok-max{color:#ffd84a}.ok-max[aria-pressed=true]{background:linear-gradient(145deg,#ffe07a,#d99a00);color:#3a2600}
 .ok-start{min-width:220px}
 .ok-help{min-width:220px;font-size:14px}
 .ok-q{width:22px;height:22px;border-radius:50%;border:0;background:var(--acc);color:#fff;font-weight:900;font-size:13px;cursor:pointer;margin-right:4px;vertical-align:middle}
@@ -1615,7 +1617,7 @@ function vBlackjack(){
     ctrl=`<div class="bj-hint">Kein Guthaben mehr.</div><button class="bj-btn" data-act="bj-refill">1.000 € nachfüllen</button>`;
   }else{const avail=st.bal-BJ.bet;
     ctrl=`<div class="bj-chips">${[5,10,25,100,500,1000,10000].map(v=>`<button class="bj-chip c${v}" data-act="bj-chip" data-v="${v}" ${v>avail?'disabled':''} aria-label="${v} Euro setzen">${v>=10000?'10K':v}€</button>`).join('')}</div>
-    <div class="bj-betrow"><button class="bj-btn dark" data-act="bj-clear" ${BJ.bet?'':'disabled'} aria-label="Einsatz löschen">${ic('x')}</button><button class="bj-btn dark" data-act="bj-x2" ${BJ.bet&&BJ.bet*2<=st.bal?'':'disabled'} aria-label="Einsatz verdoppeln">x2</button><button class="bj-btn" data-act="bj-deal" ${BJ.bet?'':'disabled'}>${ph==='done'?'Nächste Runde':'Austeilen'}</button></div>`;
+    <div class="bj-betrow"><button class="bj-btn dark" data-act="bj-clear" ${BJ.bet?'':'disabled'} aria-label="Einsatz löschen">${ic('x')}</button><button class="bj-btn dark" data-act="bj-x2" ${BJ.bet&&BJ.bet*2<=st.bal?'':'disabled'} aria-label="Einsatz verdoppeln">x2</button><button class="bj-btn dark bj-max" data-act="bj-max" ${st.bal>=1&&BJ.phase!=='play'&&BJ.phase!=='dealer'?'':'disabled'} aria-label="Ganzes Guthaben setzen">Max</button><button class="bj-btn" data-act="bj-deal" ${BJ.bet?'':'disabled'}>${ph==='done'?'Nächste Runde':'Austeilen'}</button></div>`;
   }
   const base=(play||busy)&&BJ.hands[0]?BJ.hands[0].bet:(BJ.bet||10);
   const bjRow=(l,r,v,k)=>`<div class="pt-row${ph==='done'&&BJ.hands.some(h=>h.result===k)?' won':''}"><span class="pt-lbl">${l}</span><span class="pt-val"><b>${r}</b><small>${v}</small></span></div>`;
@@ -1798,7 +1800,7 @@ function vOkey(){
     return `<section class="bj-table ok" style="${czVars()}" aria-label="Okey-Tisch">${czTop()}${czSwitch()}
       <div class="ok-intro"><div class="ok-logo">${[0,1,2,3].map(c=>`<span class="ok-t" style="--tc:${OK_COLS[c][1]}"><b>${[1,7,13,5][c]}</b><i></i></span>`).join('')}</div>
       <h3>Okey</h3><p>Das türkische Steinspiel gegen Mehmet, Ayşe und Can. Bilde Reihen (gleiche Farbe, fortlaufend) und Gruppen (gleiche Zahl, verschiedene Farben) aus deinen 14 Steinen oder sammle 7 Paare.</p>
-      <div class="ok-stakes">${[10,50,100,500,1000].map(v=>`<button class="ok-stake" data-act="ok-stake" data-v="${v}" aria-pressed="${OK.stake===v}" ${v>st.bal?'disabled':''}>${fmtC(v)}</button>`).join('')}</div>
+      <div class="ok-stakes">${[10,50,100,500,1000].map(v=>`<button class="ok-stake" data-act="ok-stake" data-v="${v}" aria-pressed="${OK.stake===v}" ${v>st.bal?'disabled':''}>${fmtC(v)}</button>`).join('')}<button class="ok-stake ok-max" data-act="ok-max" aria-pressed="${![10,50,100,500,1000].includes(OK.stake)}" ${st.bal<1?'disabled':''}>Max</button></div>
       <button class="bj-btn ghost ok-help" data-act="ok-help">Hilfe: So geht Okey</button>
       <button class="bj-btn ok-start" data-act="ok-new" ${OK.stake>st.bal?'disabled':''}>Spielen · ${fmtC(OK.stake)}</button>
       ${st.bal<10?`<button class="bj-btn" data-act="bj-refill">1.000 € nachfüllen</button>`:''}
@@ -1910,7 +1912,7 @@ function vRoulette(){
   const hist=RL.hist.length?RL.hist.map((n,i)=>`<span class="rl-h ${rlColor(n)}${i===0&&RL.pop?' new':''}">${n}</span>`).join(''):'<span class="bj-hint" style="min-height:0">Setz deine Chips und dreh das Rad</span>';
   const chips=`<div class="bj-chips">${[5,10,25,100,500,1000,10000].map(v=>`<button class="bj-chip c${v}" data-act="rl-chip" data-v="${v}" aria-pressed="${RL.chip===v}" ${spin?'disabled':''} aria-label="Chip ${v} Euro wählen">${v>=10000?'10K':v}€</button>`).join('')}</div>`;
   const acts=st.bal<5&&!tot&&!spin?`<button class="bj-btn" data-act="bj-refill">1.000 € nachfüllen</button>`
-    :`<div class="bj-betrow"><button class="bj-btn dark" data-act="rl-clear" ${tot&&!spin?'':'disabled'} aria-label="Einsätze löschen">${ic('x')}</button><button class="bj-btn dark" data-act="rl-repeat" ${RL.last&&!spin&&!tot?'':'disabled'} aria-label="Letzte Einsätze wiederholen">↺</button><button class="bj-btn" data-act="rl-spin" ${tot&&!spin?'':'disabled'}>${spin?'Kugel rollt…':'Drehen'}</button></div>`;
+    :`<div class="bj-betrow"><button class="bj-btn dark" data-act="rl-clear" ${tot&&!spin?'':'disabled'} aria-label="Einsätze löschen">${ic('x')}</button><button class="bj-btn dark" data-act="rl-repeat" ${RL.last&&!spin&&!tot?'':'disabled'} aria-label="Letzte Einsätze wiederholen">↺</button><button class="bj-btn dark bj-max" data-act="rl-max" ${!spin&&st.bal-tot>=1?'':'disabled'} aria-label="Ganzes Guthaben setzen">Max</button><button class="bj-btn" data-act="rl-spin" ${tot&&!spin?'':'disabled'}>${spin?'Kugel rollt…':'Drehen'}</button></div>`;
   return `<section class="bj-table rl" style="${czVars()}" aria-label="Roulette-Tisch">${czTop()}${czSwitch()}${wheel}<div class="rl-hist">${hist}</div>${board}<div class="rl-ctrl">${chips}${acts}</div>${payRow}<div class="bj-foot">Europäisches Roulette · Zahl zahlt 35 zu 1</div></section><div class="rl-float" style="${czVars()}">${chips}${acts}</div>`;
 }
 
@@ -1982,7 +1984,7 @@ function vSlots(){
   }else if(st.bal<5&&!spin){
     ctrl=`<button class="bj-btn" data-act="bj-refill">1.000 € nachfüllen</button>`;
   }else{
-    ctrl=`<div class="bj-chips">${bets.map(v=>`<button class="bj-chip c${v}" data-act="sl-bet" data-v="${v}" aria-pressed="${SL.bet===v}" ${spin||v>st.bal?'disabled':''} aria-label="Einsatz ${v} Euro">${v}€</button>`).join('')}</div>
+    ctrl=`<div class="bj-chips">${bets.map(v=>`<button class="bj-chip c${v}" data-act="sl-bet" data-v="${v}" aria-pressed="${SL.bet===v}" ${spin||v>st.bal?'disabled':''} aria-label="Einsatz ${v} Euro">${v}€</button>`).join('')}<button class="bj-chip cmax" data-act="sl-max" aria-pressed="${!bets.includes(SL.bet)}" ${spin||st.bal<1?'disabled':''} aria-label="Ganzes Guthaben setzen">Max</button></div>
     <button class="bj-btn sl-spin" data-act="sl-spin" ${spin||SL.bet>st.bal?'disabled':''}>${spin?'Walzen drehen…':'Drehen · '+fmtC(SL.bet)}</button>`;
   }
   const title=freeMode?`FREISPIELE <b>${SL.free}</b> <small>×2</small>`:'LARSENS <b>777</b>';
@@ -2760,6 +2762,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'3.3',d:'11.11.2026',t:'Max-Knopf',items:[['n','Neuer Max-Knopf bei Blackjack, Roulette, Slots und Okey: setzt dein ganzes Guthaben auf einmal.'],['n','Roulette: Tippe zuerst ein Feld an, dann auf Max, dann landet alles auf diesem Feld.']]},
   {v:'3.2',d:'11.11.2026',t:'Flying Bird: Stadt & neue Figuren',items:[['n','Neue Map Stadt: Hochhäuser aus Glas, Beton und Ziegeln, Straße mit Mittelstreifen und eine Skyline, deren Fenster nachts leuchten.'],['n','5 neue Figuren: Propeller-Frosch, Biene, Roboter, fliegende Pizza und Super-Katze mit Umhang. Alle mit Farbauswahl.'],['f','Flüssiger: Kein kurzes Ruckeln mehr, wenn neue Säulen erscheinen.'],['f','Kommt dein Handy nicht hinterher, passt das Spiel die Auflösung automatisch an, damit es weiter flüssig läuft.']]},
   {v:'3.1',d:'10.11.2026',t:'1-Million-Jackpot',items:[['n','Neues Feld am Glücksrad: der 1-Million-Jackpot. Sehr selten, aber wer ihn trifft, bekommt 1.000.000 €.']]},
   {v:'3.0',d:'10.11.2026',t:'Glücksrad: höhere Verluste',items:[['n','Nieten kosten jetzt deutlich mehr: zwischen 5.000 € und 100.000 €. Trostpreise gibt es nicht mehr.']]},
@@ -3313,6 +3316,7 @@ document.addEventListener('click',ev=>{
     case'preset':S.settings.preset=el.dataset.k;S.settings.custom=null;S.settings.czTheme='auto';applyTheme();saveSettings();render();break;
     case'bj-chip':{if(BJ.phase==='play'||BJ.phase==='dealer')break;const v=+el.dataset.v;if(BJ.bet+v>bjS().bal){toast('Nicht genug Guthaben');break}BJ.bet+=v;BJ.msg='';BJ.dropNew=true;sfx('chip');bjRender();flyChip(v);break}
     case'bj-x2':{if(BJ.phase==='play'||BJ.phase==='dealer')break;if(BJ.bet&&BJ.bet*2<=bjS().bal){BJ.bet*=2;BJ.msg='';BJ.dropNew=true;sfx('stack');bjRender()}break}
+    case'bj-max':{if(BJ.phase==='play'||BJ.phase==='dealer')break;const b=Math.floor(bjS().bal);if(b<1){toast('Kein Guthaben zum Setzen.');break}BJ.bet=b;BJ.msg='';BJ.dropNew=true;sfx('stack');bjRender();toast('Alles drin: '+fmtC(b));break}
     case'bj-clear':sfx('tap');BJ.bet=0;BJ.msg='';bjRender();break;
     case'bj-deal':bjDeal();break;
     case'bj-hit':bjHit();break;
@@ -3362,6 +3366,7 @@ document.addEventListener('click',ev=>{
     case'ch-go':go('chat');break;
     case'wf-spin':wfSpin();break;
     case'ok-help':go('chat');setTimeout(()=>chAsk('Wie spielt man Okey?'),350);break;
+    case'ok-max':{const b=Math.floor(bjS().bal);if(b<1){toast('Kein Guthaben zum Setzen.');break}OK.stake=b;sfx('stack');bjRender();break}
     case'ok-stake':OK.stake=+el.dataset.v;sfx('chip');bjRender();break;
     case'ok-new':okNew();break;
     case'ok-intro':OK.phase='intro';bjRender();break;
@@ -3376,12 +3381,14 @@ document.addEventListener('click',ev=>{
     case'cz-cards':S.settings.czCards=el.dataset.k;saveSettings();render();break;
     case'cz-reset':if(el.dataset.confirm){const s=bjS();Object.assign(s,{bal:1000,fbx:0,played:0,won:0,lost:0,push:0,bjs:0,streak:0,bestStreak:0});RL.hist=[];saveSettings();render();toast('Guthaben auf 1.000 € zurückgesetzt')}else{el.dataset.confirm='1';el.textContent='Wirklich zurücksetzen? Nochmal tippen'}break;
     case'rl-chip':RL.chip=+el.dataset.v;sfx('tap');bjRender();break;
-    case'rl-bet':{if(RL.phase==='spin')break;const k=el.dataset.k;if(RL.phase==='done')RL.phase='bet';if(rlTotal(RL.bets)+RL.chip>bjS().bal){toast('Nicht genug Guthaben');break}RL.bets[k]=(RL.bets[k]||0)+RL.chip;RL.lastK=k;sfx('chip');bjRender();break}
+    case'rl-bet':{if(RL.phase==='spin')break;const k=el.dataset.k;if(RL.phase==='done')RL.phase='bet';if(rlTotal(RL.bets)+RL.chip>bjS().bal){toast('Nicht genug Guthaben');break}RL.bets[k]=(RL.bets[k]||0)+RL.chip;RL.lastK=k;RL.maxK=k;sfx('chip');bjRender();break}
+    case'rl-max':{if(RL.phase==='spin')break;const k=RL.maxK;if(!k||RL.bets[k]==null){toast('Tippe zuerst auf ein Feld, dann auf Max.');break}if(RL.phase==='done')RL.phase='bet';const rest=Math.floor(bjS().bal-rlTotal(RL.bets));if(rest<1){toast('Dein ganzes Guthaben liegt schon auf dem Tisch.');break}RL.bets[k]+=rest;sfx('stack');bjRender();toast('Alles drin: '+fmtC(rlTotal(RL.bets)));break}
     case'rl-clear':RL.bets={};sfx('tap');bjRender();break;
     case'rl-repeat':{if(!RL.last||RL.phase==='spin')break;if(rlTotal(RL.last)>bjS().bal){toast('Nicht genug Guthaben');break}RL.bets=Object.assign({},RL.last);if(RL.phase==='done')RL.phase='bet';sfx('stack');bjRender();break}
     case'rl-spin':rlSpin();break;
     case'sl-bet':if(SL.phase!=='spin'){SL.bet=+el.dataset.v;sfx('chip');bjRender()}break;
     case'sl-spin':slSpin();break;
+    case'sl-max':if(SL.phase!=='spin'){const b=Math.floor(bjS().bal);if(b<1){toast('Kein Guthaben zum Setzen.');break}SL.bet=b;sfx('stack');bjRender();toast('Einsatz: '+fmtC(b))}break;
     case'refresh-offers':refreshNow('manuell angefordert');break;
     case'watch-del':{const l=watchList().slice();const n=l.splice(+el.dataset.i,1)[0];saveWatch(l);toast(n+' entfernt');break}
     case'reset-colors':S.settings.preset='auto';S.settings.custom=null;applyTheme();saveSettings();render();toast('Farben zurückgesetzt');break;
