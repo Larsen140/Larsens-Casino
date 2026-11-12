@@ -1918,8 +1918,8 @@ function rlSpin(){
   if(RL.phase==='spin')return;const st=bjS(),tot=rlTotal(RL.bets);
   if(!tot){toast('Setz zuerst auf ein Feld.');return}if(tot>st.bal){toast('Nicht genug Guthaben.');return}
   st.bal=Math.round((st.bal-tot)*100)/100;RL.last=Object.assign({},RL.bets);RL.phase='spin';RL.result=null;saveSettings();
-  /* Larsens Casino: the green zero comes up less often (about 1 in 100 instead of 1 in 37) */
-  let i=rndInt(37);if(RL_ORDER[i]===0&&rndInt(100)<63)i=1+rndInt(36);
+  /* echte Chancen wie im Casino: jede der 37 Zahlen gleich wahrscheinlich (europäisches Roulette) */
+  const i=rndInt(37);
   const n=RL_ORDER[i],step=360/37,cur=((RL.rot%360)+360)%360,target=(360-i*step)%360;
   const newRot=RL.rot+360*5+((target-cur+360)%360),newBall=RL.ball-360*8-(((RL.ball%360)+360)%360);
   bjRender();const m=$('#main');if(m){m.scrollTop=0;render.jump=true}
@@ -2749,7 +2749,7 @@ const CH_FAQ=[
   [['sound','ton','laut','leise','stumm','musik'],()=>'Den **Ton** schaltest du im Casino oben mit dem Lautsprecher-Symbol an oder aus, oder in den '+'Optionen'+' unter „Casino-Sounds“. Die Sounds sind auch hörbar, wenn dein iPhone auf lautlos steht, solange der Ton im Spiel an ist.'],
   [['tipp','strategie','trick','gewinnen','wie gewinne','beste'],()=>'Ein paar **Tipps:**\n• Blackjack: Schalte die Glühbirne an, sie zeigt dir den mathematisch besten Zug.\n• Bei 12–16 halten, wenn der Dealer 2–6 zeigt.\n• Bei 11 fast immer doppeln.\n• Setz nie alles auf einmal, so hältst du länger durch.\nAm Ende entscheidet aber das Glück.'],
   [['groesse','groesser','kleiner','zoom','pc','windows','laptop'],()=>'Auf dem PC kannst du die App in den '+'Optionen'+' größer oder kleiner machen (Plus/Minus bei der Größe). Auf dem Handy passt sie sich automatisch an.'],
-  [['chance','fair','betrug','manipul','zufall','gezinkt','quote','rtp'],()=>'Alle Spiele laufen mit echtem Zufall. Blackjack nutzt einen Schuh mit 6 Decks, die Slots zahlen im Schnitt etwa 94 % zurück. Beim Roulette kommt die grüne Null in Larsens Casino absichtlich seltener als im echten Casino (etwa 1 von 100 Drehungen), das ist gut für dich.'],
+  [['chance','fair','betrug','manipul','zufall','gezinkt','quote','rtp'],()=>'Alle Spiele laufen mit echtem Zufall. Blackjack nutzt einen Schuh mit 6 Decks, die Slots zahlen im Schnitt etwa 94 % zurück. Roulette läuft wie im echten Casino: Jede der 37 Zahlen, auch die grüne Null, kommt gleich oft.'],
   [['assistent','bot','chat','wer bist','was kannst'],()=>CH_MODE==='casino'
     ?'Ich bin der Hilfe-Assistent von Larsens Casino. Ich erkläre dir die Spiele, Einstellungen und deinen Spielstand. Für alles andere: '+CHAT_MAIL
     :'Ich bin der KI-Assistent von Larsens World. Ich erkläre dir die App und die Spiele. Für Fehler und Ideen: '+CHAT_MAIL],
@@ -2810,6 +2810,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'3.9',d:'12.11.2026',t:'Echte Casino-Chancen',items:[['f','Roulette hat jetzt echte Chancen: Die grüne 0 kommt wieder so oft wie im echten Casino (1 von 37), vorher war sie seltener.'],['n','Alle Casino-Spiele laufen mit realistischen Chancen: Blackjack nach echten Regeln (3 : 2, Dealer bleibt ab 17 stehen), Slots zahlen rund 94 % zurück.']]},
   {v:'3.8',d:'12.11.2026',t:'Blockwerk flüssiger am iPhone',items:[['f','Blockwerk ruckelt am iPhone nicht mehr: teure Grafikfilter beim Ziehen und Auflösen ersetzt, der bewegte Hintergrund pausiert während des Spiels.']]},
   {v:'3.7',d:'12.11.2026',t:'Blockwerk: 10 € pro Reihe',items:[['n','Blockwerk zahlt jetzt 10 € für jede aufgelöste Reihe oder Spalte. Das Ablegen von Steinen bringt kein Geld mehr.']]},
   {v:'3.6',d:'12.11.2026',t:'Blockwerk: größer, flüssiger & mit Geld',items:[['n','Blockwerk bringt jetzt Geld fürs Casino: 25 € pro Punkt, direkt aufs Konto. Wie bei Flying Bird zählt es nicht zum Casino-Highscore.'],['n','Größeres Spielfeld und größere Steine. Das Feld passt sich an deinen Bildschirm an, am PC liegen die Steine rechts daneben.'],['n','Besseres Ziehen: Steine rasten an der nächsten passenden Stelle ein, fliegen beim Loslassen sauber ins Feld und lassen sich am ganzen Platz anfassen. Am Handy schweben sie über dem Finger.'],['f','Flüssiger: Bei jedem Zug wird nur noch das Spielfeld neu gezeichnet statt der ganzen Seite.'],['f','Während sich eine Reihe auflöst, kannst du schon den nächsten Stein greifen.'],['f','Scrollen beim Ziehen verschiebt die Vorschau nicht mehr.']]},
