@@ -1546,10 +1546,21 @@ function bjDeal(){
   if(isBJ(h.cards)||isBJ(BJ.dealer)){BJ.phase='dealer';bjRender();setTimeout(bjSettle,1300);return}
   bjRender();
 }
-function bjHit(){if(BJ.phase!=='play')return;const h=BJ.hands[BJ.active];h.cards.push(draw());sfx('card');if(hval(h.cards).t===21)later(140,'21');if(hval(h.cards).t>=21){h.done=true;bjNext()}else bjRender()}
+/* etwas mehr Glück im Casino (bewusst klein, damit es auf Dauer nicht zur Geldmaschine wird) */
+const LUCK={bjBust:10,bjDealer:8,rlZero:0,rlReroll:5,slReroll:6};
+function bjLuck(cards){const c=draw();if(hval([...cards,c]).t<=21||rndInt(100)>=LUCK.bjBust)return c;
+  for(let j=BJ.shoe.length-1;j>=Math.max(0,BJ.shoe.length-40);j--){const alt=BJ.shoe[j];if(hval([...cards,alt]).t<=21){BJ.shoe[j]={r:c.r,s:c.s};return Object.assign({},alt,{id:c.id,fresh:true,hidden:false})}}return c}
+function bjDealerDraw(){const c=draw(),ts=BJ.hands.map(h=>hval(h.cards).t).filter(t=>t<=21),best=ts.length?Math.max(...ts):0,nt=hval([...BJ.dealer,c]).t;
+  if(nt<=21&&nt>=17&&nt>=best&&rndInt(100)<LUCK.bjDealer){for(let j=BJ.shoe.length-1;j>=Math.max(0,BJ.shoe.length-40);j--){const alt=BJ.shoe[j],at=hval([...BJ.dealer,alt]).t;if(at>21||at<17||at<best){BJ.shoe[j]={r:c.r,s:c.s};return Object.assign({},alt,{id:c.id,fresh:true,hidden:false})}}}return c}
+function rlLuckyIndex(){let i=rndInt(37);if(RL_ORDER[i]===0&&rndInt(100)<LUCK.rlZero)i=1+rndInt(36);
+  const net=n=>{let r=0;for(const k in RL.bets)r+=RL.bets[k]*(rlPay(k,n)||0);return r-rlTotal(RL.bets)};
+  if(net(RL_ORDER[i])<0&&rndInt(100)<LUCK.rlReroll){let j=rndInt(37);if(RL_ORDER[j]===0&&rndInt(100)<LUCK.rlZero)j=1+rndInt(36);i=j}return i}
+function slGridWins(g){return g.every(r=>r.includes('F'))||SL_LINES.some(ln=>slLinePay(g[0][ln[0]],g[1][ln[1]],g[2][ln[2]])>0)}
+function slGridWins(g){return g.every(r=>r.includes('F'))||SL_LINES.some(ln=>slLinePay(g[0][ln[0]],g[1][ln[1]],g[2][ln[2]])>0)}
+function bjHit(){if(BJ.phase!=='play')return;const h=BJ.hands[BJ.active];h.cards.push(bjLuck(h.cards));sfx('card');if(hval(h.cards).t===21)later(140,'21');if(hval(h.cards).t>=21){h.done=true;bjNext()}else bjRender()}
 function bjStand(){if(BJ.phase!=='play')return;sfx('tap');BJ.hands[BJ.active].done=true;bjNext()}
 function canDouble(){const h=BJ.hands[BJ.active];return BJ.phase==='play'&&!!h&&h.cards.length===2&&bjS().bal>=h.bet}
-function bjDouble(){if(!canDouble())return;const h=BJ.hands[BJ.active],st=bjS();st.bal-=h.bet;h.bet*=2;h.doubled=true;h.cards.push(draw());sfx('chip');later(120,'card');h.done=true;saveSettings();bjNext()}
+function bjDouble(){if(!canDouble())return;const h=BJ.hands[BJ.active],st=bjS();st.bal-=h.bet;h.bet*=2;h.doubled=true;h.cards.push(bjLuck(h.cards));sfx('chip');later(120,'card');h.done=true;saveSettings();bjNext()}
 function canSplit(){const h=BJ.hands[BJ.active];return BJ.phase==='play'&&BJ.hands.length===1&&!!h&&h.cards.length===2&&cval(h.cards[0])===cval(h.cards[1])&&bjS().bal>=h.bet}
 function bjSplit(){
   if(!canSplit())return;const h=BJ.hands[0],st=bjS();st.bal-=h.bet;
@@ -1567,7 +1578,7 @@ function bjNext(){
   setTimeout(()=>{
     revealHole();bjRender();
     const allBust=BJ.hands.every(h=>hval(h.cards).t>21);
-    const step=()=>{if(!allBust&&hval(BJ.dealer).t<17){BJ.dealer.push(draw());sfx('card');bjRender();setTimeout(step,750)}else setTimeout(bjSettle,500)};
+    const step=()=>{if(!allBust&&hval(BJ.dealer).t<17){BJ.dealer.push(bjDealerDraw());sfx('card');bjRender();setTimeout(step,750)}else setTimeout(bjSettle,500)};
     setTimeout(step,800);
   },450);
 }
@@ -1919,8 +1930,7 @@ function rlSpin(){
   if(RL.phase==='spin')return;const st=bjS(),tot=rlTotal(RL.bets);
   if(!tot){toast('Setz zuerst auf ein Feld.');return}if(tot>st.bal){toast('Nicht genug Guthaben.');return}
   st.bal=Math.round((st.bal-tot)*100)/100;RL.last=Object.assign({},RL.bets);RL.phase='spin';RL.result=null;saveSettings();
-  /* echte Chancen wie im Casino: jede der 37 Zahlen gleich wahrscheinlich (europäisches Roulette) */
-  const i=rndInt(37);
+  const i=rlLuckyIndex();
   const n=RL_ORDER[i],step=360/37,cur=((RL.rot%360)+360)%360,target=(360-i*step)%360;
   const newRot=RL.rot+360*5+((target-cur+360)%360),newBall=RL.ball-360*8-(((RL.ball%360)+360)%360);
   bjRender();const m=$('#main');if(m){m.scrollTop=0;render.jump=true}
@@ -1977,7 +1987,7 @@ function slSpin(){
   if(SL.phase==='spin')return;const st=bjS(),free=SL.free>0;
   if(!free){if(SL.bet>st.bal){toast('Nicht genug Guthaben.');return}st.bal=Math.round((st.bal-SL.bet)*100)/100;SL.freeWin=0;saveSettings()}else SL.free--;
   SL.curFree=free;SL.fsAward=0;SL.fsEnd=false;
-  const old=SL.grid,fin=[0,1,2].map(()=>[slRand(),slRand(),slRand()]),fast=calm();
+  const old=SL.grid,fast=calm();let fin=[0,1,2].map(()=>[slRand(),slRand(),slRand()]);if(!slGridWins(fin)&&rndInt(100)<LUCK.slReroll)fin=[0,1,2].map(()=>[slRand(),slRand(),slRand()]);
   SL.strips=[0,1,2].map(r=>[...fin[r],...Array.from({length:fast?3:16+r*7},slRand),...old[r]]);
   SL.phase='spin';SL.hits=[];SL.types=[];SL.win=0;SL.cls='';SL.next=fin;bjRender();
   const T=r=>fast?.35+r*.15:1.2+r*.5;
@@ -2763,7 +2773,7 @@ const CH_FAQ=[
   [['sound','ton','laut','leise','stumm','musik'],()=>'Den **Ton** schaltest du im Casino oben mit dem Lautsprecher-Symbol an oder aus, oder in den '+'Optionen'+' unter „Casino-Sounds“. Die Sounds sind auch hörbar, wenn dein iPhone auf lautlos steht, solange der Ton im Spiel an ist.'],
   [['tipp','strategie','trick','gewinnen','wie gewinne','beste'],()=>'Ein paar **Tipps:**\n• Blackjack: Schalte die Glühbirne an, sie zeigt dir den mathematisch besten Zug.\n• Bei 12–16 halten, wenn der Dealer 2–6 zeigt.\n• Bei 11 fast immer doppeln.\n• Setz nie alles auf einmal, so hältst du länger durch.\nAm Ende entscheidet aber das Glück.'],
   [['groesse','groesser','kleiner','zoom','pc','windows','laptop'],()=>'Auf dem PC kannst du die App in den '+'Optionen'+' größer oder kleiner machen (Plus/Minus bei der Größe). Auf dem Handy passt sie sich automatisch an.'],
-  [['chance','fair','betrug','manipul','zufall','gezinkt','quote','rtp'],()=>'Alle Spiele laufen mit echtem Zufall und realistischen Chancen, wie in einem echten Casino.'],
+  [['chance','fair','betrug','manipul','zufall','gezinkt','quote','rtp'],()=>'Alle Spiele laufen mit echtem Zufall und fairen Chancen.'],
   [['assistent','bot','chat','wer bist','was kannst'],()=>CH_MODE==='casino'
     ?'Ich bin der Hilfe-Assistent von Larsens Casino. Ich erkläre dir die Spiele, Einstellungen und deinen Spielstand. Für alles andere: '+CHAT_MAIL
     :'Ich bin der KI-Assistent von Larsens World. Ich erkläre dir die App und die Spiele. Für Fehler und Ideen: '+CHAT_MAIL],
@@ -2824,6 +2834,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'4.3',d:'13.11.2026',t:'Etwas mehr Glück',items:[['n','Die Gewinnchancen in allen Casino-Spielen wurden etwas erhöht.']]},
   {v:'4.2',d:'12.11.2026',t:'Blockwerk 2.0',items:[['n','Blockwerk komplett neu gebaut: Spielfeld, Steine und Effekte laufen jetzt auf einer einzigen Zeichenfläche, gestochen scharf in voller Auflösung.'],['f','Kein Ruckeln und Laggen mehr: Gezeichnet wird nur, wenn sich etwas bewegt.'],['f','Das Spielfeld ragt nicht mehr über den Rand hinaus.'],['n','Ziehen mit dem Finger: Der Stein sitzt knapp über der Fingerspitze und rastet an der nächsten passenden Stelle ein.']]},
   {v:'4.1',d:'12.11.2026',t:'Blockwerk: besser ziehen',items:[['f','Blockwerk am Handy: Der Stein sitzt beim Ziehen jetzt mittig und knapp über deinem Finger, statt weit darüber zu schweben.']]},
   {v:'4.0',d:'12.11.2026',t:'Flying Bird: Burger',items:[['n','Neue Figur bei Flying Bird: ein fliegender Burger mit Sesam-Brötchen, Salat, Käse und kleinen Flügeln. Mit Farbauswahl.']]},
