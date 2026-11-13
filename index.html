@@ -2834,6 +2834,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'4.4',d:'13.11.2026',t:'Glücksrad: etwas mehr Glück',items:[['n','Am Glücksrad landest du jetzt etwas öfter auf einem Gewinnfeld.']]},
   {v:'4.3',d:'13.11.2026',t:'Etwas mehr Glück',items:[['n','Die Gewinnchancen in allen Casino-Spielen wurden etwas erhöht.']]},
   {v:'4.2',d:'12.11.2026',t:'Blockwerk 2.0',items:[['n','Blockwerk komplett neu gebaut: Spielfeld, Steine und Effekte laufen jetzt auf einer einzigen Zeichenfläche, gestochen scharf in voller Auflösung.'],['f','Kein Ruckeln und Laggen mehr: Gezeichnet wird nur, wenn sich etwas bewegt.'],['f','Das Spielfeld ragt nicht mehr über den Rand hinaus.'],['n','Ziehen mit dem Finger: Der Stein sitzt knapp über der Fingerspitze und rastet an der nächsten passenden Stelle ein.']]},
   {v:'4.1',d:'12.11.2026',t:'Blockwerk: besser ziehen',items:[['f','Blockwerk am Handy: Der Stein sitzt beim Ziehen jetzt mittig und knapp über deinem Finger, statt weit darüber zu schweben.']]},
@@ -2960,7 +2961,7 @@ function gateLoad(raw){const data=bkParse(raw);if(!data){toast('Kein gültiger S
 if('serviceWorker' in navigator&&!ON_OLD_HOST&&location.protocol==='https:'){try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}}
 
 /* ---------- Glücksrad: 50 Felder (25 Gewinne inkl. 1-Mio-Jackpot, 25 Nieten), 5.000 € pro Dreh ---------- */
-const WF_COST=5000,WF_P=.15,WF_N=50,WF_STEP=360/WF_N;
+const WF_COST=5000,WF_P=.19,WF_N=50,WF_STEP=360/WF_N;
 /* good: [label, kind, value, weight]  kind: money | free | dbl */
 const WF_GOOD=[['+15K','money',15000,6],['+50K','money',50000,2],['+20K','money',20000,6],['+14K','money',14000,4],['+12K','money',12000,7],['+30K','money',30000,4],
   ['+100K','money',100000,.6],['+18K','money',18000,6],['×2','dbl',1,4],['+25K','money',25000,5],['+13K','money',13000,7],['+40K','money',40000,3],
