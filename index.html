@@ -767,6 +767,18 @@ body.fb-full .liquid,body.fb-full .app{visibility:hidden}
 .upd-k.f,.upd-tag.f{background:color-mix(in srgb,#ff9f1c 20%,transparent);color:#d97706}
 .upd-tag{font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px}
 .upd-badge{margin-left:auto;background:linear-gradient(90deg,#ffd84a,#ff9f1c);color:#3a2600;border-radius:999px;padding:3px 10px;font-weight:900}
+.upd-codes{border:1.5px dashed color-mix(in srgb,#ffd84a 70%,transparent)}
+.upd-tag.cd{background:linear-gradient(90deg,#ffd84a,#ff9f1c);color:#3a2600}
+.upd .cd-list{gap:8px;margin:2px 0 8px}
+.upd .cd-item{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--accent) 9%,transparent)}
+.cd-main{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.cd-code{font:800 16px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.06em;user-select:all}
+.cd-amt{font-weight:900;color:#16a34a}
+.cd-sub{grid-column:1;font-size:12.5px;color:var(--muted)}
+.cd-item>.btn,.cd-st{grid-column:2;grid-row:1/span 2}
+.cd-st{font-size:12px;font-weight:800;color:var(--muted)}.cd-st.ok{color:#16a34a}
+.cd-item.exp{opacity:.55}.cd-item.exp .cd-code{text-decoration:line-through}
+.cd-hint{margin:0;font-size:12.5px}
 .upd-top{box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 45%,transparent),0 18px 40px -18px rgba(0,0,0,.35)}
 body.upd-new #tab-updates{position:relative}
 body.upd-new #tab-updates::after{content:'';position:absolute;top:8px;right:calc(50% - 16px);width:9px;height:9px;border-radius:50%;background:#ff3b30;box-shadow:0 0 0 2px var(--glass-strong,#fff)}
@@ -2758,7 +2770,7 @@ const CH_FAQ=[
   [['okey','okay','oki','verschieb','sortier','antipp','tauschen','bewegen','platz','markier','auswaehl','reihen knopf','paare knopf'],()=>'**Bedienung bei Okey** 👆\n• **Stein antippen**, er hebt sich an. **Noch ein Feld oder Stein antippen**, und er wird dorthin verschoben oder getauscht.\n• Nochmal auf denselben Stein tippen hebt die Auswahl auf.\n• **„Reihen“** sortiert deine Steine automatisch nach Reihen und Gruppen, **„Paare“** nach Paaren.\n• Leuchtet links unten oder die Mitte, darfst du ziehen. Leuchtet rechts unten, darfst du abwerfen.'],
   [['okey','okay','oki','tipp','tipps','strategie','trick','besser','schwer','gegner','bots'],()=>'**Okey-Tipps** 💡\n1. Tippe nach jedem Ziehen auf **„Reihen“**. So siehst du sofort, was dir noch fehlt.\n2. Wirf zuerst **einzelne Steine** ab, die zu nichts passen, z. B. eine 🟡 2, wenn du keine anderen gelben Steine hast.\n3. **Okey-Steine nie abwerfen.** Sie füllen jede Lücke.\n4. Achte darauf, was deine Nachbarn abwerfen. Braucht der rechte Nachbar Rot, gib ihm lieber keine roten Steine.\n5. Hast du schon viele doppelte Steine, versuch es mit **7 Paaren**, das zahlt sogar 8×.'],
   [['okey','okay','oki','einsatz','setzen','kosten','wieviel','geld'],()=>'**Einsatz bei Okey:** Vor dem Spiel wählst du 10 €, 50 €, 100 €, 500 € oder 1.000 €. Er wird vom Guthaben abgezogen. Gewinnst du, bekommst du 4× (mit Okey oder 7 Paaren 8×) zurück. Okey lässt sich in den Optionen unter „Casino“ auch ausblenden.'],
-  [['code','einlös','einlos','gutschein','promo'],()=>'**Codes einlösen:** Geh zu **Optionen → Code einlösen**, tipp den Code ein und drück **Einlösen**. Das Geld landet sofort auf deinem Konto.\n• Jeder Code geht einmal pro Gerät.\n• Groß- und Kleinschreibung und Leerzeichen sind egal.\n• Codes gibt es von Larsen.'],
+  [['code','einlös','einlos','gutschein','promo'],()=>'**Codes einlösen:** Geh zu **Optionen → Code einlösen**, tipp den Code ein und drück **Einlösen**. Das Geld landet sofort auf deinem Konto.\n• Jeder Code geht einmal pro Gerät.\n• Groß- und Kleinschreibung und Leerzeichen sind egal.\n• Codes gibt es von Larsen. Alle aktuellen Codes stehen oben im **Updates**-Tab.'],
   [['gluecksrad','glucksrad','rad','drehen','wheel','10k','10.000'],()=>'**Glücksrad:** Ein Dreh kostet **5.000 €**. Das Rad hat 50 Felder: 25 Gewinne und 25 Nieten.\n• Gewinne: 11.000 € bis 100.000 € (goldene Felder sind die großen), der seltene **1-Million-Jackpot** (lila-rotes Feld) und **×2** (dein nächster Geldgewinn zählt doppelt).\n• Nieten: nichts oder 5.000 € bis 100.000 € Abzug.\n• Die Farben passen sich deinem App-Thema an.'],
   [['freispiel','free spin','freespin','free'],()=>'**Freispiele:** Landet das FREE-Symbol auf allen drei Walzen, bekommst du **10 Freispiele**. Sie kosten nichts und jeder Gewinn darin zählt **doppelt**. Sie laufen automatisch nacheinander ab.'],
   [['slot','automat','walze','spielautomat','symbol','gewinnlinie','linie','777','bar'],()=>'**Slots:** Wähle deinen Einsatz und tippe auf Drehen. Es gibt 5 Gewinnlinien (3 waagerecht, 2 schräg).\n• 7 7 7 zahlt am meisten, danach BAR, Ass und die Kartenfarben.\n• Drei gleiche Farben (z. B. ♥ ♥ ♥) zahlen ebenfalls.\n• 3× FREE startet 10 Freispiele mit doppeltem Gewinn.\nDie genauen Gewinne stehen neben den Walzen.'],
@@ -2834,6 +2846,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'4.5',d:'15.11.2026',t:'Aktuelle Codes',items:[['n','Oben im Updates-Tab stehen jetzt alle Codes, die du gerade einlösen kannst, mit Betrag und Ablaufdatum. Ein Tipp auf „Einlösen“ und das Geld ist sofort da.'],['n','Abgelaufene Codes werden noch kurz als abgelaufen angezeigt und verschwinden dann von selbst.']]},
   {v:'4.4',d:'13.11.2026',t:'Glücksrad: etwas mehr Glück',items:[['n','Am Glücksrad landest du jetzt etwas öfter auf einem Gewinnfeld.']]},
   {v:'4.3',d:'13.11.2026',t:'Etwas mehr Glück',items:[['n','Die Gewinnchancen in allen Casino-Spielen wurden etwas erhöht.']]},
   {v:'4.2',d:'12.11.2026',t:'Blockwerk 2.0',items:[['n','Blockwerk komplett neu gebaut: Spielfeld, Steine und Effekte laufen jetzt auf einer einzigen Zeichenfläche, gestochen scharf in voller Auflösung.'],['f','Kein Ruckeln und Laggen mehr: Gezeichnet wird nur, wenn sich etwas bewegt.'],['f','Das Spielfeld ragt nicht mehr über den Rand hinaus.'],['n','Ziehen mit dem Finger: Der Stein sitzt knapp über der Fingerspitze und rastet an der nächsten passenden Stelle ein.']]},
@@ -2874,7 +2887,9 @@ function updNew(){return (S.settings.seenUpd||'')!==UPDATES[0].v}
 function vUpdates(){
   const seen=S.settings.seenUpd||'';
   const html=`<div class="upd-view"><div class="upd-head"><h2>Updates</h2><p>Hier steht, was in Larsens Casino neu ist. Ideen oder Fehler? <a href="mailto:${CHAT_MAIL}">${CHAT_MAIL}</a></p></div>
+  <article class="panel glass upd upd-codes" id="upd-codes"><h3>Aktuelle Codes</h3><p class="note-txt">Codes werden geladen …</p></article>
   ${UPDATES.map((u,i)=>`<article class="panel glass upd${i===0?' upd-top':''}"><div class="upd-meta"><span class="upd-v">v${u.v}</span><span class="upd-d">${u.d}</span>${[...new Set(u.items.map(x=>Array.isArray(x)?x[0]:'n'))].map(k=>`<span class="upd-tag ${k}">${k==='f'?'Bugfix':'Feature'}</span>`).join('')}${i===0?'<span class="upd-badge">Neu</span>':''}</div><h3>${esc(u.t)}</h3><ul>${u.items.map(x=>{const [k,t]=Array.isArray(x)?x:['n',x];return `<li><span class="upd-k ${k}">${k==='f'?'Bugfix':'Feature'}</span>${chFmt(t)}</li>`}).join('')}</ul></article>`).join('')}</div>`;
+  setTimeout(codesFill,0);
   if(seen!==UPDATES[0].v){S.settings.seenUpd=UPDATES[0].v;saveSettings();setTimeout(()=>document.body.classList.remove('upd-new'),0)}
   return html;
 }
@@ -3187,7 +3202,10 @@ if(!ON_OLD_HOST&&location.protocol!=='file:'){setTimeout(updCheck,1500);setInter
 
 /* ---------- Codes einlösen: Larsen gibt Codes aus, jeder Code bringt Geld (einmal pro Gerät) ----------
    Codes stehen nur als SHA-256-Fingerabdruck hier ("LC-CODE:" + Code in Großbuchstaben, nur Buchstaben/Zahlen),
-   damit man sie im Quelltext nicht lesen kann. Neuer Code: {h:'<hash>',amt:<Euro>,until:'JJJJ-MM-TT' (optional)} */
+   damit man sie im Quelltext nicht lesen kann. Neuer Code: {h:'<hash>',amt:<Euro>,until:'JJJJ-MM-TT' (optional)}
+   Soll ein Code im Updates-Tab bei „Aktuelle Codes“ stehen: zusätzlich show:'<Code im Klartext>' und optional
+   desc:'<Text>' eintragen. Die Liste wird aus genau diesem Array erzeugt; ein Code erscheint nur, wenn sein
+   Klartext wirklich zum Fingerabdruck passt. Abgelaufene Codes stehen noch 7 Tage als „abgelaufen“ da, dann verschwinden sie. */
 const CODES=[
   {h:'da6dcadcf042b5f73b48e3148f4c9473cfa8c2d4440e73815fd76d1bcf6fa034',amt:15000},
   {h:'2561d48401c33897617fd8db0eb3438d644ee8db7a96c6abeee855e8ee11fe14',amt:10000},
@@ -3196,8 +3214,8 @@ const CODES=[
 function codeNorm(c){return String(c||'').toUpperCase().replace(/[^A-Z0-9ÄÖÜ]/g,'')}
 async function codeHash(c){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('LC-CODE:'+codeNorm(c)));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}
 let codeFails=0,codeWait=0,codeBusy=false;
-async function codeRedeem(){
-  if(codeBusy)return;const raw=val('code-in');const msg=document.getElementById('code-msg');const say=(t,ok)=>{if(msg){msg.textContent=t;msg.className='code-msg '+(ok?'ok':'bad')}};
+async function codeRedeem(given){
+  if(codeBusy)return;const raw=given!=null?given:val('code-in');const msg=given!=null?null:document.getElementById('code-msg');const say=(t,ok)=>{if(msg){msg.textContent=t;msg.className='code-msg '+(ok?'ok':'bad')}else toast(t)};
   if(!codeNorm(raw)){say('Gib zuerst einen Code ein.');return}
   if(Date.now()<codeWait){say('Zu viele falsche Versuche. Warte '+Math.ceil((codeWait-Date.now())/1000)+' Sekunden.');return}
   codeBusy=true;let h='';try{h=await codeHash(raw)}catch(e){codeBusy=false;say('Code konnte nicht geprüft werden.');return}codeBusy=false;
@@ -3209,6 +3227,25 @@ async function codeRedeem(){
   if(bjS().sound)unlockAudio();try{if(typeof wfSndWin==='function')wfSndWin(c.amt>=50000);else sfx('win')}catch(e){}
   const inp=document.getElementById('code-in');if(inp)inp.value='';say('Eingelöst! +'+fmtC(c.amt)+' sind auf deinem Konto.',true);toast('Code eingelöst: +'+fmtC(c.amt));
   const b=document.getElementById('code-bal');if(b)b.textContent=fmtC(st.bal);
+  if(document.getElementById('upd-codes'))codesFill();
+}
+function codeExpired(c,now){return !!c.until&&new Date(c.until+'T23:59:59')<(now||new Date())}
+function codeDate(d){const [y,m,t]=d.split('-');return t+'.'+m+'.'+y}
+let codesShown=null;
+async function codesVisible(){ /* nur Codes mit Klartext, der wirklich zum Fingerabdruck passt */
+  if(codesShown)return codesShown;const out=[];
+  for(const c of CODES){if(!c.show)continue;try{if(await codeHash(c.show)===c.h)out.push(c)}catch(e){}}
+  return codesShown=out;
+}
+async function codesFill(){
+  const box=document.getElementById('upd-codes');if(!box)return;
+  let list=[];try{list=await codesVisible()}catch(e){}
+  const now=new Date(),used=S.settings.codes||[],week=7*864e5;
+  const act=list.filter(c=>!codeExpired(c,now)),old=list.filter(c=>codeExpired(c,now)&&now-new Date(c.until+'T23:59:59')<week);
+  const row=(c,exp)=>{const done=used.includes(c.h);return `<li class="cd-item${exp?' exp':''}${done?' done':''}"><div class="cd-main"><code class="cd-code">${esc(c.show)}</code><span class="cd-amt">+${fmtC(c.amt)}</span></div><div class="cd-sub">${c.desc?esc(c.desc)+' · ':''}${exp?'abgelaufen am '+codeDate(c.until):c.until?'gültig bis '+codeDate(c.until):'ohne Ablaufdatum'}</div>${exp?'<span class="cd-st">Abgelaufen</span>':done?'<span class="cd-st ok">Eingelöst</span>':`<button class="btn sm" data-act="code-use" data-code="${esc(c.show)}">Einlösen</button>`}</li>`};
+  box.innerHTML=`<div class="upd-meta"><span class="upd-tag cd">Codes</span><span class="upd-d">${act.length?act.length+(act.length===1?' Code':' Codes')+' einlösbar':'gerade keine'}</span></div><h3>Aktuelle Codes</h3>`+
+    (act.length||old.length?`<ul class="cd-list">${act.map(c=>row(c,false)).join('')}${old.map(c=>row(c,true)).join('')}</ul>`:'<p class="note-txt">Gerade gibt es keine Codes. Neue Codes erscheinen automatisch hier.</p>')+
+    '<p class="note-txt cd-hint">Jeder Code geht einmal pro Gerät. Du kannst ihn hier oder unter Optionen → Code einlösen benutzen.</p>';
 }
 
 /* ---------- Blockwerk: Blöcke auf ein 8×8-Feld legen, volle Reihen und Spalten lösen sich auf ---------- */
@@ -3565,6 +3602,7 @@ document.addEventListener('click',ev=>{
       const fallback=()=>{const t=$('#bk-in');if(t){t.value=code;t.focus();t.select()}toast('Code markiert. Bitte jetzt kopieren.')};
       try{navigator.clipboard.writeText(code).then(()=>toast('Sicherungscode kopiert'),fallback)}catch(e){fallback()}break}
     case'code-redeem':codeRedeem();break;
+    case'code-use':codeRedeem(el.dataset.code||'');break;
     case'bk-load':{const data=bkParse(val('bk-in'));
       if(!data){toast('Das ist kein gültiger Sicherungscode. Kopiere ihn auf der alten Seite nochmal komplett.');break}
       if(!el.dataset.confirm){el.dataset.confirm='1';el.textContent='Aktuellen Spielstand ersetzen? Nochmal tippen';break}
