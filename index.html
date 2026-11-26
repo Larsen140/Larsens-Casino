@@ -2897,6 +2897,22 @@ function vUpdates(){
 /* ---------- Spielstand: Sicherungscode und Umzug auf die neue Adresse ---------- */
 const NEW_HOME='https://larsen140.github.io/Larsens-Casino/';
 const ON_OLD_HOST=/netlify\.app$/i.test(location.hostname);
+/* ---------- Update-Benachrichtigungen: OneSignal speichert nur die Geräte, verschickt wird per GitHub Action bei jedem neuen Update ---------- */
+const OS_APP='';
+const OS_ON=!!OS_APP&&/github\.io$/i.test(location.hostname)&&'serviceWorker' in navigator;
+const OS_IOS=/iPhone|iPad|iPod/i.test(navigator.userAgent),OS_STANDALONE=(()=>{try{return navigator.standalone===true||matchMedia('(display-mode: standalone)').matches}catch(e){return false}})();
+if(OS_ON){window.OneSignalDeferred=window.OneSignalDeferred||[];const sc=document.createElement('script');sc.src='https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js';sc.defer=true;document.head.appendChild(sc);
+  OneSignalDeferred.push(async OS=>{try{await OS.init({appId:OS_APP,serviceWorkerPath:'Larsens-Casino/sw.js',serviceWorkerParam:{scope:'/Larsens-Casino/'},notifyButton:{enable:false},promptOptions:{autoPrompt:false}});OS.User.PushSubscription.addEventListener('change',()=>osPaint());osPaint()}catch(e){}})}
+function osState(){try{const OS=window.OneSignal;if(!OS||!OS.User)return 'load';if(OS.User.PushSubscription.optedIn)return 'on';if(typeof Notification!=='undefined'&&Notification.permission==='denied')return 'denied';return 'off'}catch(e){return 'load'}}
+function osPaint(){const e=document.getElementById('os-box');if(e)e.innerHTML=osInner()}
+function osInner(){if(OS_IOS&&!OS_STANDALONE)return '<p class="note-txt">Am iPhone gehen Benachrichtigungen nur in der installierten App: unten auf Teilen ⬆︎ → „Zum Home-Bildschirm“, dann die App von dort öffnen.</p>';
+  const st=osState();
+  if(st==='on')return '<p class="note-txt"><b>Ist an.</b> Du bekommst eine Nachricht, sobald es ein neues Update gibt.</p><div class="chips"><button class="btn ghost sm" data-act="os-off">Ausschalten</button></div>';
+  if(st==='denied')return '<p class="note-txt">Benachrichtigungen sind für diese App blockiert. Erlaube sie in den Einstellungen deines Geräts bzw. Browsers, dann hier nochmal tippen.</p><div class="chips"><button class="btn sm" data-act="os-on">Nochmal versuchen</button></div>';
+  if(st==='load')return '<p class="note-txt">Wird geladen…</p>';
+  return '<p class="note-txt">Lass dich benachrichtigen, sobald es ein neues Update gibt.</p><div class="chips"><button class="btn sm" data-act="os-on">Benachrichtigungen an</button></div>'}
+async function osOn(){const OS=window.OneSignal;if(!OS){toast('Lädt noch, versuch es gleich nochmal.');return}try{await OS.Notifications.requestPermission();if(OS.User.PushSubscription.optedIn===false&&Notification.permission==='granted')await OS.User.PushSubscription.optIn()}catch(e){}osPaint();if(osState()==='on')toast('Update-Benachrichtigungen sind an.')}
+async function osOff(){try{await window.OneSignal.User.PushSubscription.optOut()}catch(e){}osPaint();toast('Update-Benachrichtigungen aus.')}
 function bkCode(){return 'LC1:'+btoa(unescape(encodeURIComponent(JSON.stringify({v:1,at:Date.now(),settings:S.settings}))))}
 /* forgiving reader: ignores spaces, line breaks, quotes and text around the code, accepts URL-safe characters and missing padding */
 function bkParse(raw){
@@ -3420,6 +3436,7 @@ function vSettings(){
     <p class="note-txt">Der Highscore bleibt auch erhalten, wenn du dein Guthaben zurücksetzt.</p>
     <div class="chips"><button class="btn ghost sm" data-act="cz-reset">Guthaben auf 1.000 € zurücksetzen</button></div>
   </section>
+  ${OS_ON?`<section class="panel glass set-sec"><h3>Update-Benachrichtigungen</h3><div id="os-box">${osInner()}</div></section>`:''}
   <section class="panel glass set-sec"><h3>Code einlösen</h3>
     <p class="note-txt">Hast du einen Code von Larsen bekommen? Gib ihn hier ein und das Geld landet sofort auf deinem Konto. Jeder Code geht einmal pro Gerät. Guthaben: <b id="code-bal">${fmtC(bjS().bal)}</b></p>
     <div class="code-row"><input id="code-in" class="code-in" type="text" placeholder="CODE EINGEBEN" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="40"><button class="btn sm" data-act="code-redeem">Einlösen</button></div>
@@ -3602,6 +3619,8 @@ document.addEventListener('click',ev=>{
       const fallback=()=>{const t=$('#bk-in');if(t){t.value=code;t.focus();t.select()}toast('Code markiert. Bitte jetzt kopieren.')};
       try{navigator.clipboard.writeText(code).then(()=>toast('Sicherungscode kopiert'),fallback)}catch(e){fallback()}break}
     case'code-redeem':codeRedeem();break;
+    case'os-on':osOn();break;
+    case'os-off':osOff();break;
     case'code-use':codeRedeem(el.dataset.code||'');break;
     case'bk-load':{const data=bkParse(val('bk-in'));
       if(!data){toast('Das ist kein gültiger Sicherungscode. Kopiere ihn auf der alten Seite nochmal komplett.');break}
