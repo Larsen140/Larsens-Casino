@@ -2846,6 +2846,7 @@ function fbSettings(){const b=fbS();
   </section>`}
 /* ---------- Updates tab (only Larsens Casino): newest first, one entry per release ---------- */
 const UPDATES=[
+  {v:'4.6',d:'26.11.2026',t:'Update-Benachrichtigungen',items:[['n','Neu in den Optionen: Update-Benachrichtigungen. Einmal einschalten und du bekommst eine Nachricht aufs Handy, sobald es ein neues Update gibt.']]},
   {v:'4.5',d:'15.11.2026',t:'Aktuelle Codes',items:[['n','Oben im Updates-Tab stehen jetzt alle Codes, die du gerade einlösen kannst, mit Betrag und Ablaufdatum. Ein Tipp auf „Einlösen“ und das Geld ist sofort da.'],['n','Abgelaufene Codes werden noch kurz als abgelaufen angezeigt und verschwinden dann von selbst.']]},
   {v:'4.4',d:'13.11.2026',t:'Glücksrad: etwas mehr Glück',items:[['n','Am Glücksrad landest du jetzt etwas öfter auf einem Gewinnfeld.']]},
   {v:'4.3',d:'13.11.2026',t:'Etwas mehr Glück',items:[['n','Die Gewinnchancen in allen Casino-Spielen wurden etwas erhöht.']]},
@@ -2897,22 +2898,49 @@ function vUpdates(){
 /* ---------- Spielstand: Sicherungscode und Umzug auf die neue Adresse ---------- */
 const NEW_HOME='https://larsen140.github.io/Larsens-Casino/';
 const ON_OLD_HOST=/netlify\.app$/i.test(location.hostname);
-/* ---------- Update-Benachrichtigungen: OneSignal speichert nur die Geräte, verschickt wird per GitHub Action bei jedem neuen Update ---------- */
-const OS_APP='';
-const OS_ON=!!OS_APP&&/github\.io$/i.test(location.hostname)&&'serviceWorker' in navigator;
+/* ---------- Update-Benachrichtigungen (wie bei Lenas Tagebuch): Gerät meldet sich mit Larsens eigenem Token im privaten Daten-Repo an,
+   die GitHub Action .github/workflows/update-push.yml schickt bei jedem neuen Update die Push. Kein Token im Code. ---------- */
+const PUSH_VAPID='BPfRIMWOxFVTUl8x0I298fSs924Esn1B-4v12Ecocvq0qOOTqVSy8y_Xj6IQwsTiOlurZJMMUKJjGMHD2s7fS0s',PUSH_REPO='Larsen140/Larsens-World-Daten',PUSH_FILE='casino-push-abos.json';
+const OS_ON=/github\.io$/i.test(location.hostname)&&'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window;
 const OS_IOS=/iPhone|iPad|iPod/i.test(navigator.userAgent),OS_STANDALONE=(()=>{try{return navigator.standalone===true||matchMedia('(display-mode: standalone)').matches}catch(e){return false}})();
-if(OS_ON){window.OneSignalDeferred=window.OneSignalDeferred||[];const sc=document.createElement('script');sc.src='https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js';sc.defer=true;document.head.appendChild(sc);
-  OneSignalDeferred.push(async OS=>{try{await OS.init({appId:OS_APP,serviceWorkerPath:'Larsens-Casino/sw.js',serviceWorkerParam:{scope:'/Larsens-Casino/'},notifyButton:{enable:false},promptOptions:{autoPrompt:false}});OS.User.PushSubscription.addEventListener('change',()=>osPaint());osPaint()}catch(e){}})}
-function osState(){try{const OS=window.OneSignal;if(!OS||!OS.User)return 'load';if(OS.User.PushSubscription.optedIn)return 'on';if(typeof Notification!=='undefined'&&Notification.permission==='denied')return 'denied';return 'off'}catch(e){return 'load'}}
+const osLS=(k,v)=>{try{if(v===undefined)return localStorage.getItem('lc:'+k)||'';if(v===null)localStorage.removeItem('lc:'+k);else localStorage.setItem('lc:'+k,v)}catch(e){return ''}};
+function osTok(){const t=osLS('pushtok');if(t)return t;try{const c=JSON.parse(localStorage.getItem('lw:sync')||'null');return c&&c.tok||''}catch(e){return ''}}
+let osSt='load';
+async function osSub(){try{const reg=await navigator.serviceWorker.ready;return await reg.pushManager.getSubscription()}catch(e){return null}}
+async function osRefresh(){if(!OS_ON)return;const sub=Notification.permission==='granted'?await osSub():null;
+  osSt=Notification.permission==='denied'?'denied':(sub&&osLS('pushep')===sub.endpoint)?'on':'off';
+  if(sub&&Notification.permission==='granted'&&osLS('pushwant')==='1'&&osLS('pushep')!==sub.endpoint&&osTok()){try{await osSave(sub);osSt='on'}catch(e){}}
+  osPaint()}
+const osB64=str=>{const u=new TextEncoder().encode(str);let b='';for(let i=0;i<u.length;i+=0x8000)b+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(b)};
+const osUn64=b=>{const s=atob(String(b||'').replace(/\s/g,'')),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return new TextDecoder().decode(u)};
+function osErr(r){return new Error(r.status===401?'Token ungültig oder abgelaufen':r.status===403?'Token hat keine Schreibrechte für Larsens-World-Daten':r.status===404?'Token hat keinen Zugriff auf Larsens-World-Daten':'GitHub-Fehler '+r.status)}
+async function osEdit(change){const tok=osTok(),url='https://api.github.com/repos/'+PUSH_REPO+'/contents/'+PUSH_FILE,h={'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'};
+  for(let i=0;i<4;i++){const r=await fetch(url,{headers:h,cache:'no-store'});let list=[],sha;
+    if(r.ok){const j=await r.json();sha=j.sha;try{list=JSON.parse(osUn64(j.content))}catch(e){}}else if(r.status!==404)throw osErr(r);
+    const body={message:'Casino: Benachrichtigungs-Geräte aktualisiert',content:osB64(JSON.stringify(change(Array.isArray(list)?list:[]),null,1))};if(sha)body.sha=sha;
+    const w=await fetch(url,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},h),body:JSON.stringify(body)});if(w.ok)return;if(w.status!==409&&w.status!==422)throw osErr(w)}
+  throw new Error('Gleichzeitige Änderung, bitte nochmal versuchen')}
+function osDevId(){let d=osLS('pushdev');if(!d){d=Math.random().toString(36).slice(2,10);osLS('pushdev',d)}return d}
+function osDevName(){const u=navigator.userAgent;return /iPhone/.test(u)?'iPhone':/iPad/.test(u)?'iPad':/Android/.test(u)?'Handy':/Windows/.test(u)?'PC':/Mac/.test(u)?'Mac':'Gerät'}
+async function osSave(sub){const j=sub.toJSON(),id=osDevId();await osEdit(l=>[...l.filter(x=>x.id!==id&&x.endpoint!==j.endpoint),{id,device:osDevName(),endpoint:j.endpoint,keys:j.keys,added:new Date().toISOString()}]);osLS('pushep',j.endpoint)}
 function osPaint(){const e=document.getElementById('os-box');if(e)e.innerHTML=osInner()}
 function osInner(){if(OS_IOS&&!OS_STANDALONE)return '<p class="note-txt">Am iPhone gehen Benachrichtigungen nur in der installierten App: unten auf Teilen ⬆︎ → „Zum Home-Bildschirm“, dann die App von dort öffnen.</p>';
-  const st=osState();
-  if(st==='on')return '<p class="note-txt"><b>Ist an.</b> Du bekommst eine Nachricht, sobald es ein neues Update gibt.</p><div class="chips"><button class="btn ghost sm" data-act="os-off">Ausschalten</button></div>';
-  if(st==='denied')return '<p class="note-txt">Benachrichtigungen sind für diese App blockiert. Erlaube sie in den Einstellungen deines Geräts bzw. Browsers, dann hier nochmal tippen.</p><div class="chips"><button class="btn sm" data-act="os-on">Nochmal versuchen</button></div>';
-  if(st==='load')return '<p class="note-txt">Wird geladen…</p>';
-  return '<p class="note-txt">Lass dich benachrichtigen, sobald es ein neues Update gibt.</p><div class="chips"><button class="btn sm" data-act="os-on">Benachrichtigungen an</button></div>'}
-async function osOn(){const OS=window.OneSignal;if(!OS){toast('Lädt noch, versuch es gleich nochmal.');return}try{await OS.Notifications.requestPermission();if(OS.User.PushSubscription.optedIn===false&&Notification.permission==='granted')await OS.User.PushSubscription.optIn()}catch(e){}osPaint();if(osState()==='on')toast('Update-Benachrichtigungen sind an.')}
-async function osOff(){try{await window.OneSignal.User.PushSubscription.optOut()}catch(e){}osPaint();toast('Update-Benachrichtigungen aus.')}
+  if(osSt==='on')return '<p class="note-txt"><b>Ist an.</b> Du bekommst eine Nachricht, sobald es ein neues Update gibt.</p><div class="chips"><button class="btn ghost sm" data-act="os-off">Ausschalten</button></div>';
+  if(osSt==='denied')return '<p class="note-txt">Mitteilungen sind für diese App blockiert. Schalte sie in den Einstellungen deines Geräts bzw. Browsers ein und tipp dann nochmal.</p><div class="chips"><button class="btn sm" data-act="os-on">Nochmal versuchen</button></div>';
+  if(osSt==='load')return '<p class="note-txt">Wird geladen…</p>';
+  const need=!osTok();
+  return `<p class="note-txt">Lass dich benachrichtigen, sobald es ein neues Update gibt.${need?' Trag dafür einmal deinen GitHub-Token ein (derselbe wie bei Larsens World).':''}</p>${need?'<input id="os-tok" class="code-in" type="password" placeholder="GitHub-Token" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" style="text-transform:none">':''}<div class="chips"><button class="btn sm" data-act="os-on">Benachrichtigungen an</button></div>`}
+async function osOn(){const ti=document.getElementById('os-tok');if(ti&&ti.value.trim())osLS('pushtok',ti.value.trim());
+  if(!osTok()){toast('Bitte zuerst deinen GitHub-Token eintragen.');return}
+  let perm;try{perm=await Notification.requestPermission()}catch(e){perm='denied'}
+  if(perm!=='granted'){osSt=perm==='denied'?'denied':'off';osPaint();toast('Ohne Erlaubnis gehen keine Benachrichtigungen.');return}
+  try{const reg=await navigator.serviceWorker.ready;let sub=await reg.pushManager.getSubscription();
+    if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:Uint8Array.from(atob(PUSH_VAPID.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-PUSH_VAPID.length%4)%4)),c=>c.charCodeAt(0))});
+    osLS('pushwant','1');await osSave(sub);osSt='on';osPaint();toast('Update-Benachrichtigungen sind an.')}
+  catch(e){toast('Hat nicht geklappt: '+(e.message||e))}}
+async function osOff(){osLS('pushwant',null);try{const sub=await osSub();const ep=sub&&sub.endpoint,id=osDevId();if(osTok())await osEdit(l=>l.filter(x=>x.id!==id&&x.endpoint!==ep));if(sub)await sub.unsubscribe()}catch(e){}
+  osLS('pushep',null);osSt='off';osPaint();toast('Update-Benachrichtigungen aus.')}
+if(OS_ON)setTimeout(osRefresh,1500);
 function bkCode(){return 'LC1:'+btoa(unescape(encodeURIComponent(JSON.stringify({v:1,at:Date.now(),settings:S.settings}))))}
 /* forgiving reader: ignores spaces, line breaks, quotes and text around the code, accepts URL-safe characters and missing padding */
 function bkParse(raw){

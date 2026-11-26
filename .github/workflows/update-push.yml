@@ -1,44 +1,28 @@
+# Schickt eine Push-Nachricht an alle angemeldeten Geräte, sobald oben in der Update-Liste eine neue Version steht.
 name: Update-Benachrichtigung
-# Schickt bei jedem neuen Eintrag oben in der Update-Liste eine Push-Nachricht an alle, die sie in der App eingeschaltet haben.
 on:
   push:
     branches: [main]
-    paths: [index.html]
+    paths: ['index.html']
+  workflow_dispatch:   # zum Testen: Tab "Actions" → "Update-Benachrichtigung" → "Run workflow"
 jobs:
-  push:
+  benachrichtigen:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
-      - name: Neues Update erkennen und senden
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: web-push installieren
+        run: npm i --no-save web-push@3.6.7
+      - name: Warten, bis die neue Version auf GitHub Pages online ist
+        if: github.event_name == 'push'
+        run: sleep 75
+      - name: Nachricht senden
+        run: node .github/scripts/update-push.mjs
         env:
-          ONESIGNAL_KEY: ${{ secrets.ONESIGNAL_KEY }}
-        run: |
-          python3 - <<'PY'
-          import json, os, re, subprocess, time, urllib.request
-          top = lambda t: re.search(r"const UPDATES=\[\s*\{v:'([^']+)',d:'[^']*',t:'((?:[^'\\]|\\.)*)'", t)
-          now = open('index.html', encoding='utf-8').read()
-          try:
-              old = subprocess.run(['git', 'show', 'HEAD~1:index.html'], capture_output=True, text=True, check=True).stdout
-          except Exception:
-              old = ''
-          app = (re.search(r"const OS_APP='([^']*)'", now) or [None, ''])[1]
-          n, o = top(now), top(old)
-          key = os.environ.get('ONESIGNAL_KEY', '')
-          if not n or (o and o[1] == n[1]):
-              print('Kein neues Update, nichts zu senden.'); raise SystemExit
-          if not app or not key:
-              print('OneSignal noch nicht eingerichtet (App-ID oder Secret fehlt).'); raise SystemExit
-          time.sleep(90)  # GitHub Pages braucht kurz, bis die neue Version online ist
-          title = n[2].replace("\\'", "'")
-          body = {
-              'app_id': app, 'target_channel': 'push', 'included_segments': ['Total Subscriptions'],
-              'headings': {'en': 'Larsens Casino', 'de': 'Larsens Casino'},
-              'contents': {'en': 'Neues Update: ' + title, 'de': 'Neues Update: ' + title},
-              'web_url': 'https://larsen140.github.io/Larsens-Casino/',
-          }
-          req = urllib.request.Request('https://api.onesignal.com/notifications', data=json.dumps(body).encode(),
-              headers={'Content-Type': 'application/json', 'Authorization': 'Key ' + key})
-          print(urllib.request.urlopen(req).read().decode())
-          PY
+          DATA_TOKEN: ${{ secrets.DATA_TOKEN }}
+          BEFORE: ${{ github.event.before }}
+          MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
